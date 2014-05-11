@@ -1,4 +1,4 @@
 require 'opal'
 require 'fron/version'
 
-Opal.append_path File.expand_path('../opal', __FILE__).untaint
+Opal.append_path File.expand_path('../../opal', __FILE__).untaint
