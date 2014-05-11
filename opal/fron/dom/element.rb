@@ -1,6 +1,5 @@
 module DOM
-  class Element
-    include Node
+  class Element < NODE
     include ClassList
     include Dimensions
 

@@ -1,7 +1,11 @@
 module DOM
-  module Node
+  class NODE
     include Events
 
+    def initialize(node = nil)
+      raise "A node must be provided" unless node
+      @el = node
+    end
     # Cloning
     # ---------------------------------------
     def dup
@@ -15,11 +19,11 @@ module DOM
     # Hierarchy
     # ---------------------------------------
     def parentNode
-      DOM::Node.new `#{@el}.parentNode`
+      DOM::NODE.new `#{@el}.parentNode`
     end
 
     def parent
-      DOM::Node.new `#{@el}.parentElement`
+      DOM::NODE.new `#{@el}.parentElement`
     end
 
     def empty?
@@ -73,7 +77,7 @@ module DOM
     private
 
     def getEl(obj)
-      obj.is_a?(Node) ? obj.instance_variable_get('@el') : obj
+      obj.is_a?(NODE) ? obj.instance_variable_get('@el') : obj
     end
   end
 end

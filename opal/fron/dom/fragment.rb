@@ -1,7 +1,5 @@
 module DOM
-  class Fragment
-    include Node
-
+  class Fragment < NODE
     def initialize
       @el = `document.createDocumentFragment()`
     end
