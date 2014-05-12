@@ -8,6 +8,10 @@ module DOM
       find 'body'
     end
 
+    def self.title
+      `document.title`
+    end
+
     def self.title=(value)
       `document.title = #{value}`
     end

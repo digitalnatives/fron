@@ -1,10 +1,11 @@
 class Event
-  def initialize(e)
+  def initialize(e,targetClass)
     @e = e
+    @targetClass = targetClass
   end
 
   def target
-    DOM::Element.new `#{@e}.target`
+    @targetClass.new `#{@e}.target`
   end
 
   def charCode
