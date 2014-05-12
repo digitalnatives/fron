@@ -4,7 +4,7 @@ class Event
   end
 
   def target
-    `#{@e}.target`
+    DOM::Element.new `#{@e}.target`
   end
 
   def charCode

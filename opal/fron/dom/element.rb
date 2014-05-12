@@ -5,9 +5,10 @@ module DOM
 
     attr_reader :style
 
-    ATTRIBUTE_REGEXP = /\[(.*?)=(.*?)\]/
-    TAG_REGEXP       = /(^[A-Za-z_\-0-9]+)(.*)/
-    MODIFIER_REGEXP  = /(#|\.)(.+?)(?=#|\.| |$)/
+    EVENT_TARGET_CLASS = self
+    ATTRIBUTE_REGEXP   = /\[(.*?)=(.*?)\]/
+    TAG_REGEXP         = /(^[A-Za-z_\-0-9]+)(.*)/
+    MODIFIER_REGEXP    = /(#|\.)(.+?)(?=#|\.| |$)/
 
     def initialize(data)
       if `typeof #{data} === 'string'`
@@ -35,6 +36,18 @@ module DOM
         @el = data
       end
       @style = Style.new @el
+    end
+
+    def matches(selector)
+      %x{
+        var proto = Element.prototype
+        var matches = proto.matchesSelector ||
+        proto.mozMatchesSelector ||
+        proto.msMatchesSelector ||
+        proto.oMatchesSelector ||
+        proto.webkitMatchesSelector
+        return matches.call(#{@el},#{selector})
+      }
     end
 
     # Visiblity

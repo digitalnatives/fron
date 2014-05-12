@@ -1,19 +1,59 @@
 module DOM
   module Events
-    def on(event, &listener)
-    `#{@el}.addEventListener(#{event},function(e){#{ listener.call Event.new(`e`)}})`
-    self
+    def trigger(type, data = {})
+      %x{
+        event = document.createEvent("HTMLEvents");
+        event.initEvent(#{type}, true, true);
+        for (key in #{data}) {
+          value = #{data}[key];
+          event[key] = value;
+        }
+        #{@el}.dispatchEvent(event);
+      }
     end
 
-    def delegate(event,selector, &listener)
-      %x{
-        #{@el}.addEventListener(#{event},function(e){
-          if(e.target.webkitMatchesSelector(#{selector})){
-            #{ listener.call Event.new(`e`)}
-          }
-        },true)
-      }
-      self
+    def on(type, &listener)
+      method = `function(e){#{ listener.call Event.new(`e`,self.class::EVENT_TARGET_CLASS)}}`
+
+      @listeners       ||= {}
+      @listeners[type] ||= []
+      @listeners[type] << method
+
+      `#{@el}.addEventListener(#{type},#{method})`
+      method
+    end
+
+    def off(type = nil, method = nil)
+      return unless @listeners
+
+      if type == nil
+        @listeners.keys.each do |type|
+          removeListeners type
+        end
+      elsif method == nil
+        removeListeners type
+      else
+        return unless @listeners[type].index(method)
+        @listeners[type].delete method
+        `#{@el}.removeEventListener(#{type},#{method})`
+      end
+    end
+
+    def delegate(type,selector, &listener)
+      on type do |event|
+        if event.target.matches selector
+          listener.call event
+        end
+      end
+    end
+
+    private
+
+    def removeListeners(type)
+      @listeners[type].each do |method|
+        @listeners[type].delete method
+        `#{@el}.removeEventListener(#{type},#{method})`
+      end
     end
   end
 end

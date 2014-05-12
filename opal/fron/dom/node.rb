@@ -1,5 +1,7 @@
 module DOM
   class NODE
+    EVENT_TARGET_CLASS = self
+
     include Events
     include Comparable
 
