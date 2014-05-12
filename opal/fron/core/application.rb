@@ -8,25 +8,27 @@ module Fron
 
     def initialize
       @routeMap = []
-      DOM::Document.title = config.title
-      instance_eval &config.routeBlock
+      instance_eval &config.routeBlock if config.routeBlock
       @router = Router.new @routeMap, config
 
-      DOM::Window.on 'load' do
-        config.stylesheets.map do |sheet|
-          link = DOM::Element.new("link[rel=stylesheet][type=text/css][href=#{sheet}]")
-          link.on 'load' do
-            config.logger.info "External stylesheet loaded: #{sheet}"
-          end
-          DOM::Document.head << link
-        end
-      end
+      DOM::Window.on('load') { loadExternalStylesheets }
+
       config.logger.info "Initialized Applicationation!"
       config.logger.info "Inserting application to DOM!"
+
+      DOM::Document.title = config.title
       DOM::Document.body << config.app
     end
 
     private
+
+    def loadExternalStylesheets
+      config.stylesheets.map do |sheet|
+        link = DOM::Element.new "link[rel=stylesheet][type=text/css][href=#{sheet}]"
+        link.on('load') { config.logger.info "External stylesheet loaded: #{sheet}" }
+        DOM::Document.head << link
+      end
+    end
 
     def map(*args)
       @routeMap << Router.map(*args)

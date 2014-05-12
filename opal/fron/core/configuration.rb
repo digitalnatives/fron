@@ -9,8 +9,9 @@ module Fron
     attr_reader :routeBlock, :main, :app
 
     def initialize
-      @main = Yield.new
-      @app = App.new
+      @app    = App.new
+      @main   = Yield.new
+      @logger = Fron::Logger.new
 
       DOM::Document.body.empty
     end
