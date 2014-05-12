@@ -1,7 +1,7 @@
 require './core/logger'
 require './core/component'
 require './core/adapters/rails'
-require './core/adapters/local-storage'
+require './core/adapters/local'
 require './core/configuration'
 require './core/eventable'
 require './core/model'

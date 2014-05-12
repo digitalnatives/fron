@@ -9,18 +9,18 @@ module Fron
       end
 
       def all(&block)
-        block.call LocalStorage.all
+        block.call Fron::Storage::LocalStorage.all
       end
 
       def get(id, &block)
-        block.call LocalStorage.get id
+        block.call Fron::Storage::LocalStorage.get id
       end
 
       def set(id, data, &block)
         id = SecureRandom.uuid unless id
         data[:id] = id
         unless (errors = validate data)
-          LocalStorage.set id, data
+          Fron::Storage::LocalStorage.set id, data
           block.call nil
         else
           block.call errors
