@@ -1,6 +1,7 @@
 require './dom/modules/events'
 require './dom/modules/classlist'
 require './dom/modules/dimensions'
+require './dom/nodelist'
 require './dom/style'
 require './dom/node'
 require './dom/text'

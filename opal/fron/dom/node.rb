@@ -1,11 +1,13 @@
 module DOM
   class NODE
     include Events
+    include Comparable
 
     def initialize(node = nil)
       raise "A node must be provided!" unless node
       @el = node
     end
+
     # Cloning
     # ---------------------------------------
     def dup
@@ -33,7 +35,7 @@ module DOM
     end
 
     def children
-      `Array.prototype.slice.call(#{@el}.childNodes)`
+      NodeList.new `Array.prototype.slice.call(#{@el}.childNodes)`
     end
 
     # Remove
@@ -51,7 +53,6 @@ module DOM
     # ---------------------------------------
     def << el
       `#{@el}.appendChild(#{getEl el})`
-      self
     end
 
     def >> el
@@ -72,8 +73,24 @@ module DOM
       `#{@el}.textContent = #{text}`
     end
 
-    def normalize
+    def normalize!
       `#{@el}.normalize()`
+    end
+
+    # Comparabe methods
+    # ---------------------------------------
+    def ==(obj)
+      `#{getEl(obj)} === #{@el}`
+    end
+
+    def <=>(obj)
+      if obj == self then return 0 end
+      if obj.parent != parent then raise 'Nodes not Comparable!' end
+      obj.index <=> index
+    end
+
+    def index
+      parent.children.index self
     end
 
     private
