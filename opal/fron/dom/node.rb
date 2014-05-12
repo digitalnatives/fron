@@ -1,3 +1,5 @@
+require 'native'
+
 module DOM
   class NODE
     EVENT_TARGET_CLASS = self
@@ -7,6 +9,7 @@ module DOM
 
     def initialize(node = nil)
       raise "A node must be provided!" unless node
+      raise "Not a HTML Node given!" unless `#{node} instanceof Node`
       @el = node
     end
 
@@ -43,7 +46,7 @@ module DOM
     # Remove
     # ---------------------------------------
     def remove(el)
-      `#{@el}.removeChild(#{getEl el})`
+      `#{@el}.removeChild(#{NODE.getElement el})`
     end
 
     def remove!
@@ -54,11 +57,11 @@ module DOM
     # Hierarchy Manipulation
     # ---------------------------------------
     def << el
-      `#{@el}.appendChild(#{getEl el})`
+      `#{@el}.appendChild(#{NODE.getElement el})`
     end
 
     def >> el
-      `#{getEl el}.appendChild(#{@el})`
+      `#{NODE.getElement el}.appendChild(#{@el})`
     end
 
     def insertBefore(what,where)
@@ -82,7 +85,7 @@ module DOM
     # Comparabe methods
     # ---------------------------------------
     def ==(obj)
-      `#{getEl(obj)} === #{@el}`
+      `#{NODE.getElement(obj)} === #{@el}`
     end
 
     def <=>(obj)
@@ -97,8 +100,14 @@ module DOM
 
     private
 
-    def getEl(obj)
-      obj.is_a?(NODE) ? obj.instance_variable_get('@el') : obj
+    def self.getElement(obj)
+      if `#{obj} instanceof Node`
+        obj
+      elsif obj.is_a?(NODE)
+        obj.instance_variable_get('@el')
+      else
+        nil
+      end
     end
   end
 end

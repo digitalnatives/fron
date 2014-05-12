@@ -33,7 +33,7 @@ module DOM
           self.text = m[0].strip
         end
       else
-        @el = data
+        super data
       end
       @style = Style.new @el
     end
@@ -109,6 +109,10 @@ module DOM
 
     def tag
       `#{@el}.tagName`.downcase
+    end
+
+    def id
+      self['id']
     end
   end
 end
