@@ -24,7 +24,6 @@ module DOM
     end
 
     def height
-
       clientRect[:height]
     end
 
