@@ -16,8 +16,8 @@ module DOM
       `#{@el}.classList.contains(#{cls})`
     end
 
-    def toggleClass(cls,value)
-      if value
+    def toggleClass(cls,value = nil)
+      if value || (value == nil && !hasClass(cls))
         addClass cls
       else
         removeClass cls
