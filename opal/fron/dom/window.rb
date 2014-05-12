@@ -1,8 +1,7 @@
 module DOM
   module Window
-    def self.on(event, &listener)
-      `window.addEventListener(#{event},#{listener})`
-    end
+    extend Events
+    @el = `window`
 
     def self.hash
       `window.location.hash.slice(1)`

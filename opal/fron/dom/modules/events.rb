@@ -13,7 +13,12 @@ module DOM
     end
 
     def on(type, &listener)
-      method = `function(e){#{ listener.call Event.new(`e`,self.class::EVENT_TARGET_CLASS)}}`
+      klass = if defined? self.class::EVENT_TARGET_CLASS
+        self.class::EVENT_TARGET_CLASS
+      else
+        Hash
+      end
+      method = `function(e){#{ listener.call Event.new(`e`,klass)}}`
 
       @listeners       ||= {}
       @listeners[type] ||= []
