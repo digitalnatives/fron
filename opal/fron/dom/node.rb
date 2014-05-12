@@ -3,7 +3,7 @@ module DOM
     include Events
 
     def initialize(node = nil)
-      raise "A node must be provided" unless node
+      raise "A node must be provided!" unless node
       @el = node
     end
     # Cloning
@@ -19,11 +19,13 @@ module DOM
     # Hierarchy
     # ---------------------------------------
     def parentNode
-      DOM::NODE.new `#{@el}.parentNode`
+      el = `#{@el}.parentNode || false`
+      el ? DOM::NODE.new(el) : nil
     end
 
     def parent
-      DOM::NODE.new `#{@el}.parentElement`
+      el = `#{@el}.parentElement || false`
+      el ? DOM::NODE.new(el) : nil
     end
 
     def empty?
