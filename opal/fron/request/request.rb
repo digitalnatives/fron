@@ -11,26 +11,16 @@ module Fron
       self
     end
 
-    def handle_state_change
-      if ready_state == 4
-        response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
-        @callback.call response
-      end
-    end
-
-    def ready_state
-      `#{@request}.readyState`
-    end
-
-    def request( method = 'GET',data = nil, &callback)
+    def request( method = 'GET', data = nil, &callback)
       if ready_state == 0 or ready_state == 4
+        @callback = callback
         if method.upcase == "GET" && data
           `#{@request}.open(#{method},#{@url+"?"+data.to_query_string})`
+          `#{@request}.send()`
         else
           `#{@request}.open(#{method},#{@url})`
+          `#{@request}.send(#{data.to_form_data if data})`
         end
-        @callback = callback
-        `#{@request}.send(#{data.to_form_data if data})`
       else
         raise "The request is already running!"
       end
@@ -46,6 +36,19 @@ module Fron
 
     def put(data, &callback)
       request 'PUT', data, &callback
+    end
+
+    private
+
+    def ready_state
+      `#{@request}.readyState`
+    end
+
+    def handle_state_change
+      if ready_state == 4
+        response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
+        @callback.call response if @callback
+      end
     end
   end
 end
