@@ -1,7 +1,7 @@
 module Fron
   class Controller
     class << self
-      attr_accessor :baseComponent, :routes, :beforeFilters, :events
+      attr_reader :baseComponent, :routes, :beforeFilters, :events
 
       def base(component)
         @baseComponent = component
@@ -17,7 +17,7 @@ module Fron
         @events << {name: name, action: action}
       end
 
-      def beforeFilter(method,actions)
+      def before(method,actions)
         @beforeFilters ||= []
         @beforeFilters << {method: method, actions: actions}
       end

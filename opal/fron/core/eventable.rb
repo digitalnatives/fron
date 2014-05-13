@@ -6,12 +6,13 @@ module Fron
       @events ||= {}
       @events[event] ||= []
       @events[event] << block
+      block
     end
 
     def trigger(event, triggerGlobal = true)
-      Eventable.trigger event, false if triggerGlobal
       return unless @events
       return unless @events[event]
+      Eventable.trigger event, false if triggerGlobal && self != Fron::Eventable
       @events[event].each do |block|
         block.call
       end
@@ -24,7 +25,9 @@ module Fron
       elsif event
         @events[event] = []
       else
-        @events = {}
+        @events.keys.each do |key|
+          @events.delete key
+        end
       end
     end
   end
