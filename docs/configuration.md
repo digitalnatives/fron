@@ -15,15 +15,15 @@ For using routes see the [routing documentation]().
 ## Example
 ```ruby
 class TestApplication < Application
-	config.title = 'Test Application'
+  config.title = 'Test Application'
 
-	config.layout do |main|
-		component :header, 'header'
-		self << main
-	end
+  config.layout do |main|
+    component :header, 'header'
+    self << main
+  end
 
-	config.routes do
-		map SiteController
-	end
+  config.routes do
+    map SiteController
+  end
 end
 ```
