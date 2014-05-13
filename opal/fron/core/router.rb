@@ -35,7 +35,7 @@ module Fron
     end
 
     def route(hash = DOM::Window.hash, controller = nil)
-      routes = controller ? controller.class.routes : @routes
+      routes = controller ? (controller.class.routes || []) : @routes
       routes.each do |r|
         if r[:path] == '*'
           if r[:controller]
