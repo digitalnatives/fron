@@ -25,12 +25,13 @@ module Fron
         else
           block.call errors
         end
+        data
       end
 
-      def validate(data)
+      def validate(data = {})
         errors = {}
-        @options[:fields].map do |field|
-          next unless data[field] == ""
+        @options[:fields].reject{|field| field == :id}.map do |field|
+          next if data[field] && data[field] != ""
           errors[field] = ["can't be blank"]
           valid = false
         end
