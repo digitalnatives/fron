@@ -5,11 +5,11 @@ module Fron
 
     class << self
       attr_accessor :fields
-      attr_accessor :adapter
+      attr_accessor :adapterObject
 
       def adapter(adapter, options = {})
-        options.merge! fields: @fields
-        @adapter = adapter.new options
+        options.merge! fields: @fields if @fields
+        @adapterObject = adapter.new options
       end
 
       def field(name)
@@ -25,14 +25,15 @@ module Fron
       end
 
       def all(&block)
-        @adapter.all do |items|
+        @adapterObject.all do |items|
+          break unless block_given?
           block.call items.map{ |item| self.new item }
         end
       end
 
       def find(id, &block)
         user = self.new
-        @adapter.get id do |data|
+        @adapterObject.get id do |data|
           user.merge data
           block.call user
         end
@@ -41,12 +42,13 @@ module Fron
     end
 
     def initialize(data = {})
-      @data  = data
+      self.class.field :id
+      @data = data
     end
 
-    def update(attributes, &block)
+    def update(attributes = {}, &block)
       data = @data.dup.merge! attributes
-      self.class.instance_variable_get("@adapter").set id, data do |errors|
+      self.class.instance_variable_get("@adapterObject").set id, data do |errors|
         @errors = errors
         merge data
         block.call if block_given?

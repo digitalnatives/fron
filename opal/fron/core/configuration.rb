@@ -12,8 +12,6 @@ module Fron
       @app    = App.new
       @main   = Yield.new
       @logger = Fron::Logger.new
-
-      DOM::Document.body.empty
     end
 
     def routes(&block)
