@@ -7,6 +7,17 @@ module Fron
       attr_accessor :tagname
       attr_accessor :components
 
+      def inherited(subclass)
+        if @components
+          subclass.components ||= []
+          subclass.components.unshift *@components
+        end
+        if @events
+          subclass.events ||= []
+          subclass.events.unshift *@events
+        end
+      end
+
       def tag(tag)
         @tagname = tag
       end
@@ -39,6 +50,8 @@ module Fron
         @model = args[0]
       when 2
         tag, @model = args
+      when 3
+        tag, options, @model = args
       end
 
       super tag || self.class.tagname || self.class.name.split("::").last
@@ -46,13 +59,19 @@ module Fron
       applyEvents
       createComponents
 
+      if options
+        options.each do |method,value|
+          self.send(method+"=",value) if self.respond_to?(method+"=")
+        end
+      end
+
       return if !respond_to?(:render) || !@model
       @model.on 'change' do render end
       render
     end
 
-    def component(name,comp,&block)
-      c = comp.is_a?(Class) ? comp.new(@model) : Component.new(comp, @model)
+    def component(name,comp,options,&block)
+      c = comp.is_a?(Class) ? comp.new(nil,options,@model) : Component.new(comp, options, @model)
       c.instance_eval(&block) if block
       self << c
       self.instance_variable_set "@#{name}", c
@@ -63,7 +82,9 @@ module Fron
     def createComponents
       return unless self.class.components
       self.class.components.each do |args|
-        component args[0], args[1], &args[2]
+        arguments = args.dup
+        block = arguments.last.is_a?(Proc) ? arguments.pop : nil
+        component *arguments, &block
       end
     end
 

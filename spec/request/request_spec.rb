@@ -32,13 +32,13 @@ describe Fron::Request do
 
     it 'should call #to_query_string on data if it is a GET' do
       expect(data).to receive(:to_query_string)
-      expect(data).not_to receive(:to_form_data)
+      expect(data).not_to receive(:to_json)
       subject.get data
     end
 
-    it 'should call #to_form_data on data if it is a GET' do
+    it 'should call #to_json on data if it is a GET' do
       expect(data).not_to receive(:to_query_string)
-      expect(data).to receive(:to_form_data)
+      expect(data).to receive(:to_json)
       subject.post data
     end
 

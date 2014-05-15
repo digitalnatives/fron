@@ -6,6 +6,7 @@ module Fron
 
     def initialize(url, headers = {})
       @url = url
+      @headers = headers
       @request = `new XMLHttpRequest()`
       `#{@request}.addEventListener('readystatechange' , function(){#{handle_state_change}})`
       self
@@ -16,10 +17,12 @@ module Fron
         @callback = callback
         if method.upcase == "GET" && data
           `#{@request}.open(#{method},#{@url+"?"+data.to_query_string})`
+          setHeaders
           `#{@request}.send()`
         else
           `#{@request}.open(#{method},#{@url})`
-          `#{@request}.send(#{data.to_form_data if data})`
+          setHeaders
+          `#{@request}.send(#{data.to_json if data})`
         end
       else
         raise "The request is already running!"
@@ -39,6 +42,11 @@ module Fron
     end
 
     private
+    def setHeaders
+      @headers.each_pair do |header,value|
+        `#{@request}.setRequestHeader(#{header},#{value})`
+      end
+    end
 
     def ready_state
       `#{@request}.readyState`

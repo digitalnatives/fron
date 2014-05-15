@@ -5,6 +5,7 @@ module Fron
       def initialize(options)
         @options = options
         @request = Request.new
+        @request.headers = {'Content-Type' => 'application/json'}
       end
 
       def all(&block)
@@ -39,8 +40,8 @@ module Fron
       end
 
       def transform(data)
-        newdata = data.dup
-        newdata.keys.each{ |key| newdata["#{@options[:resource]}[#{key}]"] = newdata.delete key}
+        newdata = {}
+        newdata[@options[:resource]] = data.dup
         newdata
       end
     end
