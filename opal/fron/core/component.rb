@@ -53,6 +53,7 @@ module Fron
 
       applyEvents
       createComponents
+      applyDelegates
 
       if options
         options.each do |method,value|
@@ -84,14 +85,14 @@ module Fron
     end
 
     def applyDelegates
-      return unless self.class.events
-      self.class.events.each do |args|
+      return unless self.class.delegates
+      self.class.delegates.each do |args|
         method, target = args
-        define_method(method) do
+        self.class.define_method(method) do
           instance_variable_get("@#{target}").send(method)
         end
 
-        define_method(method+"=") do |value|
+        self.class.define_method(method+"=") do |value|
           instance_variable_get("@#{target}").send(method+"=",value)
         end
       end
