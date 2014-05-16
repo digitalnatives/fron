@@ -52,8 +52,8 @@ describe Fron::Component do
     describe '#delegate' do
       it 'should create delegated methods' do
         subject.delegate :text, :test
-        subject.instance_methods.include?(:text).should be true
-        subject.instance_methods.include?(:text=).should be true
+        subject.delegates.should_not be nil
+        subject.delegates[0].should eq [:text,:test]
       end
     end
   end

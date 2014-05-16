@@ -3,18 +3,18 @@ module Fron
     attr_reader :model
 
     class << self
-      attr_accessor :events
-      attr_accessor :tagname
-      attr_accessor :components
+      attr_reader :events
+      attr_reader :tagname
+      attr_reader :components
+      attr_reader :delegates
 
       def inherited(subclass)
-        if @components
-          subclass.components ||= []
-          subclass.components.unshift *@components
-        end
-        if @events
-          subclass.events ||= []
-          subclass.events.unshift *@events
+        [:components,:events,:delegates].each do |type|
+          if (var = instance_variable_get("@#{type}"))
+            inst_var = subclass.instance_variable_get('@#{type}')
+            subclass.instance_variable_set("@#{type}", []) unless inst_var
+            subclass.send(type).concat var
+          end
         end
       end
 
@@ -33,14 +33,9 @@ module Fron
         @components << ( args << block )
       end
 
-      def delegate(method,target)
-        define_method(method) do
-          instance_variable_get("@#{target}").send(method)
-        end
-
-        define_method(method+"=") do |value|
-          instance_variable_get("@#{target}").send(method+"=",value)
-        end
+      def delegate(*args)
+        @delegates ||= []
+        @delegates << args
       end
     end
 
@@ -85,6 +80,20 @@ module Fron
         arguments = args.dup
         block = arguments.last.is_a?(Proc) ? arguments.pop : nil
         component *arguments, &block
+      end
+    end
+
+    def applyDelegates
+      return unless self.class.events
+      self.class.events.each do |args|
+        method, target = args
+        define_method(method) do
+          instance_variable_get("@#{target}").send(method)
+        end
+
+        define_method(method+"=") do |value|
+          instance_variable_get("@#{target}").send(method+"=",value)
+        end
       end
     end
 
