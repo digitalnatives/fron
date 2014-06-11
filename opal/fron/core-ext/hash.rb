@@ -14,4 +14,18 @@ class Hash
     end
     r
   end
+
+  def deepDiff(b)
+    a = self
+    (a.keys + b.keys).uniq.inject({}) do |diff, k|
+      if a[k] != b[k]
+        if a[k].respond_to?(:deepDiff) && b[k].respond_to?(:deepDiff)
+          diff[k] = a[k].deepDiff(b[k])
+        else
+          diff[k] = [a[k], b[k]]
+        end
+      end
+      diff
+    end
+  end
 end

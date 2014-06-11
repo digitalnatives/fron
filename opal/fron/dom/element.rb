@@ -111,6 +111,14 @@ module DOM
       `#{@el}.disabled = #{value}`
     end
 
+    def focus
+      `#{@el}.focus()`
+    end
+
+    def files
+      Native `#{@el}.files`
+    end
+
     def tag
       `#{@el}.tagName`.downcase
     end

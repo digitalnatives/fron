@@ -17,6 +17,7 @@ describe DOM::Event do
     metaKey: false,
     preventDefault: function(){return 1},
     stopPropagation: function(){return 2},
+    stopImmediatePropagation: function(){},
     target: {test: 'data'} }
   }}
 

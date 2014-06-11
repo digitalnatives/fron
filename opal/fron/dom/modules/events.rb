@@ -1,8 +1,10 @@
 module DOM
   module Events
+    attr_reader :listeners
+
     def trigger(type, data = {})
       %x{
-        event = document.createEvent("HTMLEvents");
+        var event = document.createEvent("HTMLEvents");
         event.initEvent(#{type}, true, true);
         for (key in #{data}) {
           value = #{data}[key];
@@ -12,28 +14,20 @@ module DOM
       }
     end
 
+    def on!(type, &listener)
+      _on type, true, &listener
+    end
+
     def on(type, &listener)
-      klass = if defined? self.class::EVENT_TARGET_CLASS
-        self.class::EVENT_TARGET_CLASS
-      else
-        Hash
-      end
-      method = `function(e){#{ listener.call Event.new(`e`,klass)}}`
-
-      @listeners       ||= {}
-      @listeners[type] ||= []
-      @listeners[type] << method
-
-      `#{@el}.addEventListener(#{type},#{method})`
-      method
+      _on type, &listener
     end
 
     def off(type = nil, method = nil)
       return unless @listeners
 
       if type == nil
-        @listeners.keys.each do |type|
-          removeListeners type
+        @listeners.keys.each do |ltype|
+          removeListeners ltype
         end
       elsif method == nil
         removeListeners type
@@ -41,6 +35,7 @@ module DOM
         return unless @listeners[type].index(method)
         @listeners[type].delete method
         `#{@el}.removeEventListener(#{type},#{method})`
+        `#{@el}.removeEventListener(#{type},#{method},true)`
       end
     end
 
@@ -53,6 +48,22 @@ module DOM
     end
 
     private
+
+    def _on(type, capture = false, &listener)
+      klass = if defined? self.class::EVENT_TARGET_CLASS
+                self.class::EVENT_TARGET_CLASS
+              else
+                Hash
+              end
+      method = `function(e){#{ listener.call Event.new(`e`,klass)}}`
+
+      @listeners       ||= {}
+      @listeners[type] ||= []
+      @listeners[type] << method
+
+      `#{@el}.addEventListener(#{type},#{method},#{capture})`
+      method
+    end
 
     def removeListeners(type)
       @listeners[type].each do |method|

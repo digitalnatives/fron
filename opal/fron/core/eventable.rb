@@ -9,12 +9,12 @@ module Fron
       block
     end
 
-    def trigger(event, triggerGlobal = true)
+    def trigger(event, data = {}, triggerGlobal = true)
       return unless @events
       return unless @events[event]
-      Eventable.trigger event, false if triggerGlobal && self != Fron::Eventable
+      Eventable.trigger event, data, false if triggerGlobal && self != Fron::Eventable
       @events[event].each do |block|
-        block.call
+        block.call data
       end
     end
 

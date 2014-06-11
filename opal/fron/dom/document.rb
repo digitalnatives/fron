@@ -1,11 +1,15 @@
 module DOM
   module Document
+    def self.activeElement
+      find ':focus'
+    end
+
     def self.head
-      find 'head'
+      @head ||= find 'head'
     end
 
     def self.body
-      find 'body'
+      @body ||= find 'body'
     end
 
     def self.title

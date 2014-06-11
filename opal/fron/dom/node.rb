@@ -69,6 +69,7 @@ module DOM
     end
 
     def insertBefore(what,where)
+      return what >> self unless where # Fir for firefox...
       `#{@el}.insertBefore(#{NODE.getElement what},#{NODE.getElement where})`
     end
 
