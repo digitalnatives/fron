@@ -16,7 +16,8 @@ module Fron
         block.call Fron::Storage::LocalStorage.get id
       end
 
-      def set(id, data, &block)
+      def set(model, data, &block)
+        id = model.id
         id = SecureRandom.uuid unless id
         data[:id] = id
         unless (errors = validate data)

@@ -33,21 +33,21 @@ describe Fron::Adapters::LocalAdapter do
   describe "#set" do
     it "should call localStorage#set" do
       Fron::Storage::LocalStorage.should receive(:set).once
-      subject.set 0, {name: 'test'}, &proc
+      subject.set double(id: 0), {name: 'test'}, &proc
     end
 
     it "should run the block with nil if there are no errors" do
       proc.should receive(:call).with nil
-      subject.set 0, {name: 'test'}, &proc
+      subject.set double(id: 0), {name: 'test'}, &proc
     end
 
     it "should run the block with erros if ther are any" do
       proc.should receive(:call).with({name: ["can't be blank"]})
-      subject.set 0, {name: ''}, &proc
+      subject.set double(id: 0), {name: ''}, &proc
     end
 
     it "should add id if there isn't any" do
-      result = subject.set nil, {name: ''}, &proc
+      result = subject.set double(id: nil), {name: ''}, &proc
       result[:id].should_not be nil
     end
   end

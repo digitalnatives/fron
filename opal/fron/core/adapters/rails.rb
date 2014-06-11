@@ -8,9 +8,16 @@ module Fron
         @request.headers = {'Content-Type' => 'application/json'}
       end
 
-      def all(&block)
+      def del(model,&block)
+        setUrl model
+        @request.request 'DELETE', transform({})  do
+          block.call
+        end
+      end
+
+      def all(data = nil, &block)
         setUrl nil
-        @request.get { |response| block.call response.json }
+        @request.get(data) { |response| block.call response.json }
       end
 
       def get(id,&block)
@@ -18,29 +25,38 @@ module Fron
         @request.get { |response| block.call response.json }
       end
 
-      def set(id,data,&block)
-        setUrl id
-        method = id ? 'put' : 'post'
+      def set(model,data,&block)
+        setUrl model
+        method = model.id ? 'put' : 'post'
         @request.send(method,transform(data)) do |response|
-          block.call case response.status
+          error = case response.status
           when 201, 204
             nil
           when 422
             response.json
           end
+          block.call error, response.json
         end
       end
 
       private
 
-      def setUrl(id)
-        base = @options[:endpoint] + "/" + @options[:resources]
+      def setUrl(model)
+        id = model.is_a?(Fron::Model) ? model.id : model
+        endpoint = if @options[:endpoint].is_a? Proc
+            model.instance_eval &@options[:endpoint]
+          else
+            @options[:endpoint]
+          end
+        base = endpoint + "/" + @options[:resources]
         base += id ? "/" + id.to_s : ".json"
         @request.url = base
       end
 
       def transform(data)
         newdata = {}
+        meta = DOM::Document.head.find("meta[name=csrf-token]")
+        newdata[:authenticity_token] = meta['content'] if meta
         newdata[@options[:resource]] = data.dup
         newdata
       end

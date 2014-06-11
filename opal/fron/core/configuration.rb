@@ -5,7 +5,7 @@ module Fron
     class Yield < Component
     end
 
-    attr_accessor :title, :stylesheets, :logger
+    attr_accessor :title, :stylesheets, :logger, :injectBlock
     attr_reader :routeBlock, :main, :app
 
     def initialize
@@ -20,6 +20,13 @@ module Fron
 
     def layout(&block)
       @app.instance_exec @main, &block
+    end
+
+    def layout(&block)
+    end
+
+    def customInject(&block)
+      @injectBlock = block
     end
   end
 end

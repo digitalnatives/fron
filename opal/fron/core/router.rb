@@ -31,17 +31,17 @@ module Fron
 
     def self.pathToRegexp(path)
       return path if path == "*"
-      {regexp: Regexp.new('^'+path.gsub(/:(.+)/, '(.+)')), map: path.match(/:(.+)/).to_a[1..-1] }
+      {regexp: Regexp.new('^'+path.gsub(/:([^\/]+)/, '([^\/]+)')), map: path.scan(/:([^\/]+)/).flatten }
     end
 
-    def route(hash = DOM::Window.hash, controller = nil)
+    def route(hash = DOM::Window.hash, controller = nil, startParams = {})
       routes = controller ? (controller.class.routes || []) : @routes
       routes.each do |r|
         if r[:path] == '*'
           if r[:controller]
-            break route(hash,r[:controller])
+            break route(hash,r[:controller],startParams)
           else
-            break applyRoute(controller,r)
+            break applyRoute(controller,r,startParams)
           end
         else
           matches = hash.match(r[:path][:regexp]).to_a[1..-1]
@@ -53,9 +53,9 @@ module Fron
               end
             end
             if r[:action]
-              break applyRoute(controller,r,params)
+              break applyRoute(controller,r,startParams.merge(params))
             else
-              break route hash.gsub(r[:path][:regexp],''), r[:controller]
+              break route hash.gsub(r[:path][:regexp],''), r[:controller], startParams.merge(params)
             end
           end
         end
@@ -72,10 +72,15 @@ module Fron
           end
         end
       end
+      controller.send(:empty) if controller.respond_to?(:empty)
       controller.send(route[:action], params)
       @config.logger.info "Navigate >> #{controller.class}##{route[:action]} with params #{params}"
       @config.main.empty
-      @config.main << controller.base
+      if @config.injectBlock
+        @config.injectBlock.call controller.base
+      else
+        @config.main << controller.base
+      end
     end
   end
 end

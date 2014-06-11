@@ -12,11 +12,11 @@ class MockAdapter
     block.call({name: 'User'})
   end
 
-  def set(id,&block)
-    if id == 0
-      block.call
+  def set(model,data,&block)
+    if model.id == 0
+      block.call(nil, data)
     else
-      block.call({errors: true})
+      block.call({errors: true}, {})
     end
   end
 end

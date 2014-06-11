@@ -35,6 +35,10 @@ module DOM
       el ? DOM::NODE.new(el) : nil
     end
 
+    def empty
+      children.each { |node| node.remove! }
+    end
+
     def empty?
       `#{@el}.childNodes.length === 0`
     end
@@ -65,7 +69,7 @@ module DOM
     end
 
     def insertBefore(what,where)
-      `#{@el}.insertBefore(#{what},#{where})`
+      `#{@el}.insertBefore(#{NODE.getElement what},#{NODE.getElement where})`
     end
 
     # Text manipulation

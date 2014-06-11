@@ -87,10 +87,6 @@ module DOM
       `#{@el}.innerHTML = #{value}`
     end
 
-    def empty
-      self.html = ''
-    end
-
     def value
       `#{@el}.value`
     end
@@ -105,6 +101,14 @@ module DOM
 
     def checked=(value)
       `#{@el}.checked = #{value}`
+    end
+
+    def disabled
+      `#{@el}.disabled`
+    end
+
+    def disabled=(value)
+      `#{@el}.disabled = #{value}`
     end
 
     def tag

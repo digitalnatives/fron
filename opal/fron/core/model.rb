@@ -24,8 +24,8 @@ module Fron
         end
       end
 
-      def all(&block)
-        @adapterObject.all do |items|
+      def all(data = nil, &block)
+        @adapterObject.all data do |items|
           break unless block_given?
           block.call items.map{ |item| self.new item }
         end
@@ -47,8 +47,8 @@ module Fron
     end
 
     def update(attributes = {}, &block)
-      data = @data.dup.merge! attributes
-      self.class.instance_variable_get("@adapterObject").set id, data do |errors|
+      data = gather.merge! attributes
+      self.class.instance_variable_get("@adapterObject").set self, data do |errors,data|
         @errors = errors
         merge data
         block.call if block_given?
@@ -61,9 +61,29 @@ module Fron
 
     private
 
+    def clone(data = {})
+      cl = self.class.new @data.merge data
+      cl.instance_variable_set "@errors", self.errors
+      cl
+    end
+
+    def destroy(&block)
+      self.class.instance_variable_get("@adapterObject").del self do
+        block.call if block_given?
+      end
+    end
+
+    def gather
+      @data.dup.reject{|key| !self.class.fields.include?(key)}
+    end
+
     def merge(data)
       data.each_pair do |key,value|
-        self.send(key+"=", value) if self.respond_to?(key+"=")
+        if self.respond_to?(key+"=")
+          self.send(key+"=", value)
+        else
+          @data[key] = value
+        end
       end
     end
   end

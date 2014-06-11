@@ -1,6 +1,9 @@
 require 'fron/core'
 require 'fron/storage'
 
+class TestModel < Fron::Model
+end
+
 describe Fron::Adapters::RailsAdapter do
 
   subject do
@@ -14,6 +17,8 @@ describe Fron::Adapters::RailsAdapter do
 
   let(:proc) { Proc.new {} }
   let(:request) { double :request }
+  let(:model) { TestModel.new({ id: 0 }) }
+  let(:newModel) { TestModel.new }
 
   before do
     subject.instance_variable_set "@request", request
@@ -45,19 +50,19 @@ describe Fron::Adapters::RailsAdapter do
     it "should call POST request for new record" do
       request.should receive(:url=).with "test/users.json"
       request.should receive(:post) do |&block|
-        block.call double status: 201
+        block.call double status: 201, json: ''
       end
       proc.should receive(:call)
-      subject.set nil, {}, &proc
+      subject.set newModel, {}, &proc
     end
 
     it "should call PUT request for exsistsing record" do
       request.should receive(:url=).with "test/users/0"
       request.should receive(:put) do |&block|
-        block.call double status: 201
+        block.call double status: 201, json: ''
       end
       proc.should receive(:call)
-      subject.set 0, {}, &proc
+      subject.set model, {}, &proc
     end
 
     it "should call block with error" do
@@ -65,8 +70,8 @@ describe Fron::Adapters::RailsAdapter do
       request.should receive(:put) do |&block|
         block.call double status: 422, json: 'error'
       end
-      proc.should receive(:call).with 'error'
-      subject.set 0, {}, &proc
+      proc.should receive(:call).with 'error', 'error'
+      subject.set model, {}, &proc
     end
   end
 end

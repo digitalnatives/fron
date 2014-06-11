@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fron (0.1.1)
+    fron (0.1.2)
       opal (~> 0.6.2)
 
 GEM

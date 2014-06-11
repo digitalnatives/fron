@@ -10,10 +10,6 @@ class TestRouteController < Fron::Controller
   route "show/:id", :show
   route "*", :test
 
-  before :empty, [:show]
-
-  def empty
-  end
   def show
   end
   def test
@@ -27,6 +23,7 @@ describe Fron::Router do
   let(:window_listeners) {window.instance_variable_get("@listeners")}
   let(:controller) { TestRouteController.new }
   let(:config) { double :config, {
+      injectBlock: nil,
       logger: double(:logger,info:  true),
       main: double(:main, :"<<" => true, "empty" => true)
     }
@@ -45,7 +42,7 @@ describe Fron::Router do
       it "should return regexp for path" do
         result = described_class.map "/test", :test
         result[:path][:regexp].should eq Regexp.new "^/test"
-        result[:path][:map].should eq nil
+        result[:path][:map].should eq []
         result[:action].should eq :test
       end
 
