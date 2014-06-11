@@ -22,9 +22,9 @@ module Fron
         data[:id] = id
         unless (errors = validate data)
           Fron::Storage::LocalStorage.set id, data
-          block.call nil
+          block.call nil, data
         else
-          block.call errors
+          block.call errors, {}
         end
         data
       end

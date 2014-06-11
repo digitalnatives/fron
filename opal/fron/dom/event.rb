@@ -135,7 +135,6 @@ module DOM
     def stop
       preventDefault
       stopPropagation
-      stopImmediatePropagation
     end
 
     def preventDefault

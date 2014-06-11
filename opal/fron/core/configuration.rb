@@ -22,9 +22,6 @@ module Fron
       @app.instance_exec @main, &block
     end
 
-    def layout(&block)
-    end
-
     def customInject(&block)
       @injectBlock = block
     end

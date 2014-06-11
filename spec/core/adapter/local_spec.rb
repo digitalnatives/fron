@@ -37,12 +37,12 @@ describe Fron::Adapters::LocalAdapter do
     end
 
     it "should run the block with nil if there are no errors" do
-      proc.should receive(:call).with nil
+      proc.should receive(:call).with nil, {name: 'test', id: 0}
       subject.set double(id: 0), {name: 'test'}, &proc
     end
 
     it "should run the block with erros if ther are any" do
-      proc.should receive(:call).with({name: ["can't be blank"]})
+      proc.should receive(:call).with({name: ["can't be blank"]}, {})
       subject.set double(id: 0), {name: ''}, &proc
     end
 
