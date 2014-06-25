@@ -23,6 +23,7 @@ module Fron
     private
 
     def loadExternalStylesheets
+      return unless config.stylesheets
       config.stylesheets.map do |sheet|
         link = DOM::Element.new "link[rel=stylesheet][type=text/css][href=#{sheet}]"
         link.on('load') { config.logger.info "External stylesheet loaded: #{sheet}" }
