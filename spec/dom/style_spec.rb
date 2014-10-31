@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe DOM::Style do
 
   subject { DOM::Element.new 'div' }

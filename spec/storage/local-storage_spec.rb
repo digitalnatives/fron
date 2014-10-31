@@ -1,5 +1,3 @@
-require 'fron/storage'
-
 describe Fron::Storage::LocalStorage do
 
   subject { described_class }

@@ -1,5 +1,3 @@
-require 'fron/request'
-
 describe Fron::Request do
 
   subject { described_class.new 'url' }

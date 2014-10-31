@@ -1,4 +1,4 @@
-require 'fron/request'
+require 'spec_helper'
 
 describe Fron::Response do
 
