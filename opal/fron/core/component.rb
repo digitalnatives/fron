@@ -9,6 +9,10 @@ module Fron
       attr_reader :components
       attr_reader :delegates
 
+      # Handles inherited componets passing self
+      # components, events, etc...
+      #
+      # @param subclass [Class] The subclass
       def inherited(subclass)
         [:components, :events, :delegates].each do |type|
           next unless (var = instance_variable_get("@#{type}"))
@@ -18,27 +22,43 @@ module Fron
         end
       end
 
+      # Sets the tag name of the component
+      #
+      # @param tag [String] The tag name
       def tag(tag)
         @tagname = tag
       end
 
+      # Adds events to the event array
+      #
+      # @param args [Array] The arguments
       def on(*args)
         @events ||= []
         @events << args
       end
 
+      # Adds components to the component array
+      #
+      # @param args [Array] The arguments
+      # @param block [Proc] The block
       def component(*args, &block)
         attr_reader args[0]
         @components ||= []
         @components << (args << block)
       end
 
+      # Adds events to the delegates array
+      #
+      # @param args [Array] The arguments
       def delegate(*args)
         @delegates ||= []
         @delegates << args
       end
     end
 
+    # Initalizs the component
+    #
+    # @param args [Array] The arguments
     def initialize(*args)
       case args.length
       when 1
@@ -66,6 +86,12 @@ module Fron
       render
     end
 
+    # Creates a child component
+    #
+    # @param name [String] The name of the component
+    # @param comp [Class] The component
+    # @param options [Hash] The options
+    # @param block [Proc] The block to eval on the new component
     def component(name, comp, options, &block)
       component = comp.is_a?(Class) ? comp.new(nil, options, @model) : Component.new(comp, options, @model)
       component.instance_eval(&block) if block
@@ -75,6 +101,7 @@ module Fron
 
     private
 
+    # Creates components
     def createComponents
       return unless self.class.components
       self.class.components.each do |args|
@@ -84,6 +111,7 @@ module Fron
       end
     end
 
+    # Applies delegated events
     def applyDelegates
       klass = self.class
       return unless klass.delegates
@@ -99,6 +127,7 @@ module Fron
       end
     end
 
+    # Applies events
     def applyEvents
       return unless self.class.events
       self.class.events.each do |args|

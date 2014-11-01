@@ -4,7 +4,7 @@ require 'fron'
 
 QualityControl::Rubycritic.directories += %w(opal)
 QualityControl::Rubycritic.rating_threshold = 'C'
-QualityControl::Yard.threshold = 60
+QualityControl::Yard.threshold = 100
 QualityControl::OpalRspec.files = /^opal\/fron\/.*\.rb/
 QualityControl::OpalRspec.threshold = 85
 

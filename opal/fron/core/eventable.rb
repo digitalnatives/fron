@@ -5,6 +5,12 @@ module Fron
   module Eventable
     extend self
 
+    # Add an event listener
+    #
+    # @param event [String] The type of the event
+    # @param block [Proc] The listener body
+    #
+    # @return [Proc] The block
     def on(event, &block)
       @events ||= {}
       @events[event] ||= []
@@ -12,6 +18,11 @@ module Fron
       block
     end
 
+    # Triggers an event
+    #
+    # @param event [String] The type of the event
+    # @param data = {} [type] The data
+    # @param triggerGlobal [Boolean] Whether or not to trigger a global event
     def trigger(event, data = {}, triggerGlobal = true)
       return unless @events
       return unless @events[event]
@@ -21,6 +32,10 @@ module Fron
       end
     end
 
+    # Removes event listeners
+    #
+    # @param event [String] The type of the event
+    # @param block [Proc] The listener body
     def off(event = nil, &block)
       return unless @events
       if block_given?

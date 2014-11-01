@@ -1,6 +1,12 @@
 module Fron
   # Router
   class Router
+    # Initializes the router
+    #
+    # @param routes [Array] The routes
+    # @param config [Configuration] The configuration
+    #
+    # @return [type] [description]
     def initialize(routes, config)
       @config = config
       @routes = routes
@@ -13,6 +19,11 @@ module Fron
       end
     end
 
+    # Maps the arguments into a route
+    #
+    # @param args [Array] The arguments
+    #
+    # @return [Hash] The route
     def self.map(*args)
       data = case args.length
              when 1
@@ -30,11 +41,21 @@ module Fron
       data
     end
 
+    # Converts a string representation of the route into a route
+    #
+    # @param path [String] The path
+    #
+    # @return [Hash] The route
     def self.pathToRegexp(path)
       return path if path == '*'
       { regexp: Regexp.new('^' + path.gsub(/:([^\/]+)/, '([^\/]+)')), map: path.scan(/:([^\/]+)/).flatten }
     end
 
+    # Finds an action to take from the given arguments
+    #
+    # @param hash [String] The route string to route to
+    # @param controller [Fron::Controller] The controller that has the action
+    # @param startParams [Hash] The parameters to pass along
     def route(hash = DOM::Window.hash, controller = nil, startParams = {})
       routes = controller ? (controller.class.routes || []) : @routes
       routes.each do |route|
@@ -68,6 +89,11 @@ module Fron
 
     private
 
+    # Applies a route to a controller
+    #
+    # @param controller [Fron::Controller] The controller
+    # @param route [Hash] The route
+    # @param params [Hash] The parameters to pass along
     def applyRoute(controller, route, params = {})
       klass = controller.class
       action = route[:action]
