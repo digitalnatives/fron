@@ -1,6 +1,12 @@
+require 'bundler'
 require 'quality_control'
-require 'quality_control/all'
+require 'quality_control/rubycritic'
+require 'quality_control/rubocop'
+require 'quality_control/yard'
+require 'quality_control/opal_rspec'
 require 'fron'
+
+Bundler::GemHelper.install_tasks
 
 QualityControl::Rubycritic.directories += %w(opal)
 QualityControl::Rubycritic.rating_threshold = 'C'
