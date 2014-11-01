@@ -1,4 +1,7 @@
+# rubocop:disable ModuleFunction
+
 module Fron
+  # Eventable
   module Eventable
     extend self
 

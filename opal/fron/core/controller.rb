@@ -1,4 +1,5 @@
 module Fron
+  # Controller
   class Controller
     class << self
       attr_reader :baseComponent, :routes, :beforeFilters, :events
@@ -12,14 +13,14 @@ module Fron
         @routes << Router.map(*args)
       end
 
-      def on(name,action)
+      def on(name, action)
         @events ||= []
-        @events << {name: name, action: action}
+        @events << { name: name, action: action }
       end
 
-      def before(method,actions)
+      def before(method, actions)
         @beforeFilters ||= []
-        @beforeFilters << {method: method, actions: actions}
+        @beforeFilters << { method: method, actions: actions }
       end
     end
 
@@ -34,7 +35,7 @@ module Fron
 
       return unless self.class.events
       self.class.events.each do |event|
-        Eventable.on event[:name] do self.send(event[:action]) end
+        Eventable.on event[:name] do send(event[:action]) end
       end
     end
   end

@@ -1,16 +1,16 @@
-require 'fron/dom'
+require 'spec_helper'
 
 describe DOM::Document do
 
   subject { DOM::Document }
 
-  describe "head" do
+  describe 'head' do
     it 'should return the head element' do
       DOM::Element.new(`document.head`).should eq subject.head
     end
   end
 
-  describe "body" do
+  describe 'body' do
     it 'should return the body element' do
       DOM::Element.new(`document.body`).should eq subject.body
     end
@@ -18,7 +18,7 @@ describe DOM::Document do
 
   describe 'title' do
     it 'should return the title of the document' do
-      subject.title.should eq "Opal Server"
+      subject.title.should eq 'Opal Server'
     end
   end
 

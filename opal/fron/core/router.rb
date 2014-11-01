@@ -1,6 +1,7 @@
 module Fron
+  # Router
   class Router
-    def initialize(routes,config)
+    def initialize(routes, config)
       @config = config
       @routes = routes
 
@@ -14,13 +15,13 @@ module Fron
 
     def self.map(*args)
       data = case args.length
-      when 1
-        action = args[0]
-        {path: "*"}
-      when 2
-        action = args[1]
-        {path: Router.pathToRegexp(args[0]) }
-      end
+             when 1
+               action = args[0]
+               { path: '*' }
+             when 2
+               action = args[1]
+               { path: Router.pathToRegexp(args[0]) }
+             end
       if action.is_a? Class
         data[:controller] = action.new
       else
@@ -30,8 +31,8 @@ module Fron
     end
 
     def self.pathToRegexp(path)
-      return path if path == "*"
-      {regexp: Regexp.new('^'+path.gsub(/:([^\/]+)/, '([^\/]+)')), map: path.scan(/:([^\/]+)/).flatten }
+      return path if path == '*'
+      { regexp: Regexp.new('^' + path.gsub(/:([^\/]+)/, '([^\/]+)')), map: path.scan(/:([^\/]+)/).flatten }
     end
 
     def route(hash = DOM::Window.hash, controller = nil, startParams = {})
@@ -39,9 +40,9 @@ module Fron
       routes.each do |r|
         if r[:path] == '*'
           if r[:controller]
-            break route(hash,r[:controller],startParams)
+            break route(hash, r[:controller], startParams)
           else
-            break applyRoute(controller,r,startParams)
+            break applyRoute(controller, r, startParams)
           end
         else
           matches = hash.match(r[:path][:regexp]).to_a[1..-1]
@@ -53,9 +54,9 @@ module Fron
               end
             end
             if r[:action]
-              break applyRoute(controller,r,startParams.merge(params))
+              break applyRoute(controller, r, startParams.merge(params))
             else
-              break route hash.gsub(r[:path][:regexp],''), r[:controller], startParams.merge(params)
+              break route hash.gsub(r[:path][:regexp], ''), r[:controller], startParams.merge(params)
             end
           end
         end
@@ -64,12 +65,11 @@ module Fron
 
     private
 
-    def applyRoute(controller,route, params = {})
+    def applyRoute(controller, route, params = {})
       if controller.class.beforeFilters
         controller.class.beforeFilters.each do |filter|
-          if filter[:actions].include?(route[:action])
-            controller.send(filter[:method], params)
-          end
+          next unless filter[:actions].include?(route[:action])
+          controller.send(filter[:method], params)
         end
       end
       controller.send(:empty) if controller.respond_to?(:empty)

@@ -1,4 +1,5 @@
 module DOM
+  # Text
   class Text < NODE
     def initialize(data)
       @el = `typeof #{data} === 'string'` ? `document.createTextNode(#{data})` : data

@@ -1,4 +1,5 @@
 module DOM
+  # Element
   class Element < NODE
     include ClassList
     include Dimensions
@@ -12,25 +13,25 @@ module DOM
 
     def initialize(data)
       if `typeof #{data} === 'string'`
-        match, tag, rest = data.match(TAG_REGEXP).to_a
+        tag, rest = data.match(TAG_REGEXP).to_a[1..2]
         @el = `document.createElement(#{tag})`
         rest = rest.gsub ATTRIBUTE_REGEXP do |match|
-          m,key,value = match.match(ATTRIBUTE_REGEXP).to_a
+          key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
           self[key] = value
           ''
         end
         rest = rest.gsub MODIFIER_REGEXP do |match|
-          m,type,value = match.match(MODIFIER_REGEXP).to_a
+          type, value = match.match(MODIFIER_REGEXP).to_a[1..2]
           case type
-          when "#"
+          when '#'
             self['id'] = value
-          when "."
+          when '.'
             addClass value
           end
           ''
         end
-        if (m = rest.match /\s(.+)$/)
-          self.text = m[0].strip
+        if (match = rest.match(/\s(.+)$/))
+          self.text = match[0].strip
         end
       else
         super data
@@ -66,7 +67,7 @@ module DOM
       `#{@el}.getAttribute(#{name})`
     end
 
-    def []=(name,value)
+    def []=(name, value)
       `#{@el}.setAttribute(#{name},#{value})`
     end
 

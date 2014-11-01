@@ -1,5 +1,6 @@
 module Fron
   module Storage
+    # Local Storage
     module LocalStorage
       def self.get(key)
         value = `window.localStorage.getItem(#{key}) || false`
@@ -23,7 +24,7 @@ module Fron
       end
 
       def self.all
-        self.keys.map{ |key| self.get key }
+        keys.map { |key| get key }
       end
 
       def self.clear

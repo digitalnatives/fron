@@ -1,5 +1,6 @@
-require 'fron/dom'
+require 'spec_helper'
 
+# Test Node
 class TestNode < DOM::NODE
   attr_reader :el
 end
@@ -15,7 +16,7 @@ describe TestNode do
     el.remove!
   end
 
-  describe "#dup" do
+  describe '#dup' do
 
     let(:node) { subject.dup }
 
@@ -28,7 +29,7 @@ describe TestNode do
     end
   end
 
-  describe "#dup!" do
+  describe '#dup!' do
     it 'should clone with children' do
       subject << el
       subject.children.length.should eq 1
@@ -48,7 +49,7 @@ describe TestNode do
     end
   end
 
-  describe "#parentNode" do
+  describe '#parentNode' do
     it 'should return nil if there is no parent node' do
       subject.parentNode.should eq nil
     end
@@ -120,19 +121,19 @@ describe TestNode do
     it 'should insert given node before the other given node' do
       subject << el
       subject << otherEl
-      el.should > otherEl
+      (el > otherEl).should eq true
       otherEl.should < el
     end
   end
 
-  describe "#text" do
+  describe '#text' do
     it 'should return the nodes textContent' do
       `#{subject.el}.textContent = 'Test'`
       subject.text.should eq 'Test'
     end
   end
 
-  describe "#text=" do
+  describe '#text=' do
     it 'should set the nodes textContent' do
       subject.text = 'Asd'
       `#{subject.el}.textContent`.should eq 'Asd'
@@ -160,7 +161,7 @@ describe TestNode do
     end
   end
 
-  describe "<=>" do
+  describe '<=>' do
     it 'should return 0 if nodes are the same' do
       subject >> el
       expect(el.children[0] <=> subject).to eq 0
@@ -168,13 +169,13 @@ describe TestNode do
 
     it 'should throw if the nodes are not in the same parent' do
       subject >> body
-      expect(Proc.new { el <=> subject } ).to raise_error
+      expect(proc { el <=> subject }).to raise_error
     end
 
     it 'should compare indexes if the nodes are in the same parent' do
       subject >> body
       el >> body
-      expect(el <=> subject).to eq -1
+      expect(el <=> subject).to eq(-1)
       expect(subject <=> el).to eq 1
     end
   end

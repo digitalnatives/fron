@@ -1,8 +1,8 @@
 require 'native'
 
 module DOM
+  # Dimensions
   module Dimensions
-
     def top
       `#{clientRect}.top` + Window.scrollY
     end

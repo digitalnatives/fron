@@ -1,4 +1,5 @@
 module DOM
+  # ClassList
   module ClassList
     def addClass(*classes)
       classes.each do |cls|
@@ -16,8 +17,8 @@ module DOM
       `#{@el}.classList.contains(#{cls})`
     end
 
-    def toggleClass(cls,value = nil)
-      if value || (value == nil && !hasClass(cls))
+    def toggleClass(cls, value = nil)
+      if value || (!value && !hasClass(cls))
         addClass cls
       else
         removeClass cls

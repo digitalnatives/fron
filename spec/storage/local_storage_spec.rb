@@ -1,13 +1,15 @@
+require 'spec_helper'
+
 describe Fron::Storage::LocalStorage do
 
   subject { described_class }
 
   before do
     subject.clear
-    subject.set 'key', { data: 'value' }
+    subject.set 'key', data: 'value'
   end
 
-  describe "#get" do
+  describe '#get' do
     it 'should get the data for the key' do
       data = subject.get('key')
       data.class.should eq Hash
@@ -15,9 +17,9 @@ describe Fron::Storage::LocalStorage do
     end
   end
 
-  describe "#set" do
+  describe '#set' do
     it 'should set data for the key' do
-      subject.set 'key2', { data: 'value' }
+      subject.set 'key2', data: 'value'
       subject.keys.include?('key2').should be true
       subject.all.length.should be 2
     end
@@ -38,7 +40,7 @@ describe Fron::Storage::LocalStorage do
     end
   end
 
-  describe "#all" do
+  describe '#all' do
     it 'should get the data for all key' do
       data = subject.all[0]
       data.class.should eq Hash

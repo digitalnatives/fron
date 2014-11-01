@@ -1,5 +1,0 @@
-require 'fron/core-ext/hash'
-require 'fron/core-ext/kernel'
-require 'fron/core-ext/numeric'
-require 'fron/core-ext/proc'
-require 'fron/core-ext/string'

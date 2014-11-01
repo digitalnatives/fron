@@ -1,6 +1,7 @@
 require 'forwardable'
 
 module DOM
+  # Node List
   class NodeList
     include Enumerable
     extend Forwardable

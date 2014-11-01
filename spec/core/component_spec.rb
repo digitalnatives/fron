@@ -1,5 +1,6 @@
-require 'fron/core'
+require 'spec_helper'
 
+# Test Component
 class TestComponent < Fron::Component
   attr_reader :rendered
 
@@ -11,20 +12,20 @@ end
 describe Fron::Component do
 
   subject  { TestComponent.new }
-  let(:listeners) { subject.instance_variable_get("@listeners") }
+  let(:listeners) { subject.instance_variable_get '@listeners' }
 
-  describe "DSL" do
+  describe 'DSL' do
 
     subject { TestComponent }
 
-    describe "#tag" do
+    describe '#tag' do
       it 'should set the tagname' do
         subject.tag 'td'
         subject.tagname.should eq 'td'
       end
     end
 
-    describe "#on" do
+    describe '#on' do
       it 'should create events array' do
         subject.on :click, :test
         subject.events.should_not be nil
@@ -53,12 +54,12 @@ describe Fron::Component do
       it 'should create delegated methods' do
         subject.delegate :text, :test
         subject.delegates.should_not be nil
-        subject.delegates[0].should eq [:text,:test]
+        subject.delegates[0].should eq [:text, :test]
       end
     end
   end
 
-  describe "#initialize" do
+  describe '#initialize' do
     it 'should create element' do
       subject.tag.should eq 'td'
     end
@@ -81,20 +82,20 @@ describe Fron::Component do
     end
   end
 
-  describe "#component" do
+  describe '#component' do
     it 'should create a component from a Class' do
       subject.component 'b', TestComponent
-      subject.instance_variable_get("@b").class.should eq TestComponent
+      subject.instance_variable_get('@b').class.should eq TestComponent
     end
 
     it 'should create a component from a String' do
       subject.component 'e', 'i'
-      subject.instance_variable_get("@e").class.should eq Fron::Component
+      subject.instance_variable_get('@e').class.should eq Fron::Component
     end
 
     it 'should append component' do
       subject.component 'd', TestComponent
-      comp = subject.instance_variable_get("@d")
+      comp = subject.instance_variable_get('@d')
       comp.parent.should eq subject
     end
 

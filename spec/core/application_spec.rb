@@ -1,5 +1,6 @@
-require 'fron/core'
+require 'spec_helper'
 
+# Test Application
 class TestApplication < Fron::Application
   config.title = 'Test Application'
   config.logger.level = :error
@@ -13,7 +14,7 @@ describe Fron::Application do
     subject.config.app.remove!
   end
 
-  describe "#initialize" do
+  describe '#initialize' do
     it 'should insert the application into the DOM' do
       subject.config.app.parent.should_not be nil
     end
@@ -23,7 +24,7 @@ describe Fron::Application do
     end
   end
 
-  describe "#loadExternalStylesheets" do
+  describe '#loadExternalStylesheets' do
     it 'should load external stylesheets' do
       subject.config.stylesheets = ['test']
       subject.send(:loadExternalStylesheets)

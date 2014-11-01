@@ -1,4 +1,5 @@
 module Fron
+  # Response
   class Response
     attr_reader :body, :headers, :status
 
@@ -13,7 +14,7 @@ module Fron
       end
     end
 
-    def content_type
+    def contentType
       @headers['Content-Type']
     end
 
@@ -26,11 +27,11 @@ module Fron
     end
 
     def dom
-      d = DOM::Element.new 'div'
-      d.html = @body
-      f = DOM::Fragment.new()
-      f << d
-      f
+      div = DOM::Element.new 'div'
+      div.html = @body
+      fragment = DOM::Fragment.new
+      fragment << div
+      fragment
     end
   end
 end

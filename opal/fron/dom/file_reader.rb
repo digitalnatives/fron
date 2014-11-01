@@ -1,4 +1,5 @@
 module DOM
+  # File Reader
   class FileReader
     include Events
 

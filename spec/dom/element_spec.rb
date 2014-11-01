@@ -1,13 +1,13 @@
-require 'fron/dom'
+require 'spec_helper'
 
 describe DOM::Element do
 
   subject  { described_class.new 'div' }
-  let(:el) { subject.instance_variable_get("@el") }
+  let(:el) { subject.instance_variable_get('@el') }
   let(:a)  { described_class.new 'a' }
 
-  describe "#initailize" do
-    context "string argument" do
+  describe '#initailize' do
+    context 'string argument' do
       it 'should create an element with tagname' do
         described_class.new('div').tag.should eq 'div'
       end
@@ -30,16 +30,16 @@ describe DOM::Element do
       end
     end
 
-    context "node argument" do
+    context 'node argument' do
       it 'should link given node' do
         el = described_class.new `document.body`
         el.tag.should eq 'body'
       end
     end
 
-    context "other argument" do
-      it "should throw error" do
-        expect(Proc.new { described_class.new({}) } ).to raise_error
+    context 'other argument' do
+      it 'should throw error' do
+        expect(proc { described_class.new({}) }).to raise_error
       end
     end
   end
@@ -93,7 +93,7 @@ describe DOM::Element do
     end
   end
 
-  describe "#html" do
+  describe '#html' do
     it 'should get the html of the element' do
       `#{el}.innerHTML = 'test'`
       subject.html.should eq 'test'
@@ -112,11 +112,11 @@ describe DOM::Element do
       subject << a
       subject.empty
       subject.children.length.should eq 0
-      subject.html.should eq ""
+      subject.html.should eq ''
     end
   end
 
-  describe "#value" do
+  describe '#value' do
     it 'should get the value of the element' do
       `#{el}.value = 'test'`
       subject.value.should eq 'test'

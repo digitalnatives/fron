@@ -1,13 +1,13 @@
-require 'fron/dom'
+require 'spec_helper'
 
 describe DOM::Events do
 
   let(:element) { DOM::Element.new 'div' }
-  subject { element.instance_variable_get("@listeners") }
+  subject { element.instance_variable_get '@listeners' }
 
   describe '#on' do
     async 'should register for event' do
-      listener = element.on 'click' do |event|
+      listener = element.on 'click' do
         run_async do
           subject.should_not be nil
           subject[:click].should_not be nil
@@ -21,7 +21,7 @@ describe DOM::Events do
   end
 
   describe '#off' do
-    context "two arguments" do
+    context 'two arguments' do
       it 'should unregister for event' do
         listener = element.on 'click' do end
         subject[:click].include?(listener).should eq true
@@ -30,7 +30,7 @@ describe DOM::Events do
       end
     end
 
-    context "one argument" do
+    context 'one argument' do
       it 'should unregister all events for type' do
         listener = element.on 'click' do end
         subject[:click].include?(listener).should eq true
@@ -39,7 +39,7 @@ describe DOM::Events do
       end
     end
 
-    context "no argument" do
+    context 'no argument' do
       it 'should unregister all events' do
         listener = element.on 'click' do end
         subject[:click].include?(listener).should eq true
@@ -62,7 +62,7 @@ describe DOM::Events do
 
   describe '#trigger' do
     async 'should trigger the event' do
-      element.on 'click' do |event|
+      element.on 'click' do
         run_async do
           element.off 'click'
         end

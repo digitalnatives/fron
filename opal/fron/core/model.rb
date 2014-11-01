@@ -1,4 +1,5 @@
 module Fron
+  # Model
   class Model
     include Eventable
     attr_reader :errors
@@ -15,10 +16,12 @@ module Fron
       def field(name)
         @fields ||= []
         @fields << name
+
         define_method(name) do
           @data[name]
         end
-        define_method(name+"=") do |value|
+
+        define_method(name + '=') do |value|
           @data[name] = value
           trigger 'change'
         end
@@ -27,12 +30,12 @@ module Fron
       def all(data = nil, &block)
         @adapterObject.all data do |items|
           break unless block_given?
-          block.call items.map{ |item| self.new item }
+          block.call items.map { |item| new item }
         end
       end
 
       def find(id, &block)
-        user = self.new
+        user = new
         @adapterObject.get id do |data|
           user.merge data
           block.call user
@@ -48,39 +51,39 @@ module Fron
 
     def update(attributes = {}, &block)
       data = gather.merge! attributes
-      self.class.instance_variable_get("@adapterObject").set self, data do |errors,data|
+      self.class.instance_variable_get('@adapterObject').set self, data do |errors, newData|
         @errors = errors
-        merge data
+        merge newData
         block.call if block_given?
       end
     end
 
     def dirty?
-      !self.id
+      !id
     end
 
     private
 
     def clone(data = {})
       cl = self.class.new @data.merge data
-      cl.instance_variable_set "@errors", self.errors
+      cl.instance_variable_set '@errors', errors
       cl
     end
 
     def destroy(&block)
-      self.class.instance_variable_get("@adapterObject").del self do
+      self.class.instance_variable_get('@adapterObject').del self do
         block.call if block_given?
       end
     end
 
     def gather
-      @data.dup.reject{|key| !self.class.fields.include?(key)}
+      @data.dup.reject { |key| !self.class.fields.include?(key) }
     end
 
     def merge(data)
-      data.each_pair do |key,value|
-        if self.respond_to?(key+"=")
-          self.send(key+"=", value)
+      data.each_pair do |key, value|
+        if self.respond_to?(key + '=')
+          send(key + '=', value)
         else
           @data[key] = value
         end

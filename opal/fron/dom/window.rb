@@ -1,4 +1,5 @@
 module DOM
+  # Window
   module Window
     extend Events
     @el = `window`

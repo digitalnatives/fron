@@ -1,4 +1,5 @@
 module Fron
+  # Logger
   class Logger
     attr_accessor :level
 
@@ -9,7 +10,7 @@ module Fron
     def info(message)
       return if ENV == 'test'
       return if @level == :error
-      puts Time.now.strftime("[%H:%M] ") + message
+      puts Time.now.strftime('[%H:%M] ') + message
     end
   end
 end

@@ -1,1 +1,1 @@
-require 'fron/storage/local-storage'
+require 'fron/storage/local_storage'

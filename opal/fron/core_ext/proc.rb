@@ -1,3 +1,4 @@
+# Proc
 class Proc
   def throttle(ms)
     Native `throttle(#{self},#{ms}, {leading: false})`

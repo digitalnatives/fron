@@ -1,3 +1,4 @@
+# String
 class String
   def camelize
     `#{self}.replace(/(?:-|_|(\/))([a-z\d]*)/gi,function(m,first,second){

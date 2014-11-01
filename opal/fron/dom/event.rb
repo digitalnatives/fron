@@ -1,6 +1,6 @@
 module DOM
+  # Event
   class Event
-
     SPECIAL_KEYS = {
       8 => 'backspace',
       9 => 'tab',
@@ -94,12 +94,12 @@ module DOM
       221 => ']',
       222 => '\'',
       224 => 'cmd',
-      57392 => 'ctrl',
-      63289 => 'num'
+      57_392 => 'ctrl',
+      63_289 => 'num'
     }
 
-    def initialize(e,targetClass)
-      @e = e
+    def initialize(event, targetClass)
+      @event = event
       @targetClass = targetClass
     end
 
@@ -109,27 +109,27 @@ module DOM
     end
 
     def stopImmediatePropagation
-      `#{@e}.stopImmediatePropagation()`
+      `#{@event}.stopImmediatePropagation()`
     end
 
     def dataTransfer
-      Native `#{@e}.dataTransfer`
+      Native `#{@event}.dataTransfer`
     end
 
     def button
-      `#{@e}.button`
+      `#{@event}.button`
     end
 
     def target
-      @targetClass.new `#{@e}.target`
+      @targetClass.new `#{@event}.target`
     end
 
     def charCode
-      `#{@e}.charCode`
+      `#{@event}.charCode`
     end
 
     def keyCode
-      `#{@e}.keyCode`
+      `#{@event}.keyCode`
     end
 
     def stop
@@ -138,51 +138,51 @@ module DOM
     end
 
     def preventDefault
-      `#{@e}.preventDefault()`
+      `#{@event}.preventDefault()`
     end
 
     def stopPropagation
-      `#{@e}.stopPropagation()`
+      `#{@event}.stopPropagation()`
     end
 
     def pageX
-      `#{@e}.pageX`
+      `#{@event}.pageX`
     end
 
     def pageY
-      `#{@e}.pageY`
+      `#{@event}.pageY`
     end
 
     def screenX
-      `#{@e}.screenX`
+      `#{@event}.screenX`
     end
 
     def screenY
-      `#{@e}.screenY`
+      `#{@event}.screenY`
     end
 
     def clientX
-      `#{@e}.clientX`
+      `#{@event}.clientX`
     end
 
     def clientY
-      `#{@e}.clientY`
+      `#{@event}.clientY`
     end
 
     def alt?
-      `#{@e}.altKey`
+      `#{@event}.altKey`
     end
 
     def shift?
-      `#{@e}.shiftKey`
+      `#{@event}.shiftKey`
     end
 
     def ctrl?
-      `#{@e}.ctrlKey`
+      `#{@event}.ctrlKey`
     end
 
     def meta?
-      `#{@e}.metaKey`
+      `#{@event}.metaKey`
     end
   end
 end

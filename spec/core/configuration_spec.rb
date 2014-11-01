@@ -1,4 +1,4 @@
-require 'fron'
+require 'spec_helper'
 
 describe Fron::Configuration do
 

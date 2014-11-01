@@ -1,10 +1,13 @@
+# rubocop:disable MethodName
+
 module DOM
+  # Style
   class Style
     def initialize(el)
       @el = el
     end
 
-    def method_missing(name,value)
+    def method_missing(name, value)
       if name =~ /\=$/
         self[name[0..-2]] = value
       else
@@ -16,7 +19,7 @@ module DOM
       `#{@el}.style[#{prop}]`
     end
 
-    def []=(prop,value)
+    def []=(prop, value)
       `#{@el}.style[#{prop}] = #{value}`
     end
   end

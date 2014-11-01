@@ -1,4 +1,5 @@
 module Fron
+  # Configuration
   class Configuration
     class App < Component
     end

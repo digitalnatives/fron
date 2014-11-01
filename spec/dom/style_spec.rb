@@ -3,9 +3,9 @@ require 'spec_helper'
 describe DOM::Style do
 
   subject { DOM::Element.new 'div' }
-  let(:el) { subject.instance_variable_get("@el") }
+  let(:el) { subject.instance_variable_get('@el') }
 
-  describe "method_missing" do
+  describe 'method_missing' do
     it 'should call []= if the methods ends with =' do
       expect(subject.style).to receive(:[]=).with 'display', 'none'
       subject.style.display = 'none'
@@ -17,14 +17,14 @@ describe DOM::Style do
     end
   end
 
-  describe "[]=" do
+  describe '[]=' do
     it 'should set the given style' do
       subject.style['display'] = 'none'
       `#{el}.style.display`.should eq 'none'
     end
   end
 
-  describe "[]" do
+  describe '[]"'do
     it 'should return with the value of the given style' do
       `#{el}.style.display = 'block'`
       subject.style['display'].should eq 'block'

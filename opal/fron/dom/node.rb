@@ -1,6 +1,7 @@
 require 'native'
 
 module DOM
+  # Node
   class NODE
     EVENT_TARGET_CLASS = self
 
@@ -8,8 +9,8 @@ module DOM
     include Comparable
 
     def initialize(node = nil)
-      raise "A node must be provided!" unless node
-      raise "Not a HTML Node given!" unless `#{node} instanceof Node`
+      fail 'A node must be provided!' unless node
+      fail 'Not a HTML Node given!' unless `#{node} instanceof Node`
       @el = node
     end
 
@@ -60,15 +61,15 @@ module DOM
 
     # Hierarchy Manipulation
     # ---------------------------------------
-    def << el
-      `#{@el}.appendChild(#{NODE.getElement el})`
+    def <<(other)
+      `#{@el}.appendChild(#{NODE.getElement other})`
     end
 
-    def >> el
-      `#{NODE.getElement el}.appendChild(#{@el})`
+    def >>(other)
+      `#{NODE.getElement other}.appendChild(#{@el})`
     end
 
-    def insertBefore(what,where)
+    def insertBefore(what, where)
       return what >> self unless where # Fir for firefox...
       `#{@el}.insertBefore(#{NODE.getElement what},#{NODE.getElement where})`
     end
@@ -89,21 +90,19 @@ module DOM
 
     # Comparabe methods
     # ---------------------------------------
-    def ==(obj)
-      `#{NODE.getElement(obj)} === #{@el}`
+    def ==(other)
+      `#{NODE.getElement(other)} === #{@el}`
     end
 
-    def <=>(obj)
-      if obj == self then return 0 end
-      if obj.parent != parent then raise 'Nodes not Comparable!' end
-      obj.index <=> index
+    def <=>(other)
+      return 0 if other == self
+      fail 'Nodes not Comparable!' if other.parent != parent
+      other.index <=> index
     end
 
     def index
       parent.children.index self
     end
-
-    private
 
     def self.getElement(obj)
       if `#{obj} instanceof Node`

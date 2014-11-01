@@ -1,4 +1,5 @@
 module DOM
+  # Document
   module Document
     def self.activeElement
       find ':focus'
