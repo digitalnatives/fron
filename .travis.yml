@@ -1,4 +1,6 @@
 language: ruby
-script: bundle exec rake opal:rspec:coverage:runner
+script:
+	- phantomjs -v
+	- bundle exec rake opal:rspec
 rvm:
   - 2.0
