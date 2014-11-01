@@ -1,4 +1,4 @@
 language: ruby
-script: bundle exec rake ci
+script: bundle exec rake opal:rspec:coverage:runner
 rvm:
   - 2.0
