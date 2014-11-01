@@ -1,5 +1,6 @@
 # Fron
 [![Code Climate](https://codeclimate.com/github/digitalnatives/fron/badges/gpa.svg)](https://codeclimate.com/github/digitalnatives/fron)
+[![Inline docs](http://inch-ci.org/github/digitalnatives/fron.svg?branch=master)](http://inch-ci.org/github/digitalnatives/fron)
 
 # Rake Tasks
 ```
