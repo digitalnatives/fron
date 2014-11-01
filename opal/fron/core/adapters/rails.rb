@@ -43,10 +43,11 @@ module Fron
 
       def setUrl(model)
         id = model.is_a?(Fron::Model) ? model.id : model
-        endpoint = if @options[:endpoint].is_a? Proc
-                     model.instance_eval(&@options[:endpoint])
+        endpoint = @options[:endpoint]
+        endpoint = if endpoint.is_a? Proc
+                     model.instance_eval(&endpoint)
                    else
-                     @options[:endpoint]
+                     endpoint
                    end
         base = endpoint + '/' + @options[:resources]
         base += id ? '/' + id.to_s : '.json'

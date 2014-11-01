@@ -27,14 +27,16 @@ module Fron
     attr_reader :base
 
     def initialize
-      if self.class.baseComponent
-        @base = self.class.baseComponent.new
-      else
-        @base = DOM::Element.new 'div'
-      end
+      klass = self.class
 
-      return unless self.class.events
-      self.class.events.each do |event|
+      @base = if klass.baseComponent
+                klass.baseComponent.new
+              else
+                DOM::Element.new 'div'
+              end
+
+      return unless klass.events
+      klass.events.each do |event|
         Eventable.on event[:name] do send(event[:action]) end
       end
     end

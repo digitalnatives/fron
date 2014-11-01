@@ -1,0 +1,11 @@
+---
+ControlParameter:
+  enabled: false
+BooleanParameter:
+  enabled: false
+NilCheck:
+  enabled: false
+FeatureEnvy:
+  enabled: false
+PrimaDonnaMethod:
+  enabled: false

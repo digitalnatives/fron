@@ -85,14 +85,15 @@ module Fron
     end
 
     def applyDelegates
-      return unless self.class.delegates
-      self.class.delegates.each do |args|
+      klass = self.class
+      return unless klass.delegates
+      klass.delegates.each do |args|
         method, target = args
-        self.class.define_method(method) do
+        klass.define_method(method) do
           instance_variable_get("@#{target}").send(method)
         end
 
-        self.class.define_method(method + '=') do |value|
+        klass.define_method(method + '=') do |value|
           instance_variable_get("@#{target}").send(method + '=', value)
         end
       end
@@ -102,9 +103,9 @@ module Fron
       return unless self.class.events
       self.class.events.each do |args|
         if args.length == 3
-          delegate(args[0], args[1]) { |e| method(args[2]).call e }
+          delegate(args[0], args[1]) { |event| method(args[2]).call event }
         else
-          on(args[0]) { |e| method(args[1]).call e }
+          on(args[0]) { |event| method(args[1]).call event }
         end
       end
     end

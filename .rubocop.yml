@@ -37,3 +37,6 @@ UnneededPercentX:
 
 CyclomaticComplexity:
   Enabled: false
+
+RegexpLiteral:
+  Enabled: false

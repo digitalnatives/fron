@@ -2,11 +2,15 @@ module Fron
   # Application
   class Application
     class << self
+      # Returns the configuration for the application
+      #
+      # @return [Configuration] The configuration
       def config
         @configuration ||= Configuration.new
       end
     end
 
+    # Initializes the application
     def initialize
       @routeMap = []
       instance_eval(&config.routeBlock) if config.routeBlock
@@ -23,6 +27,8 @@ module Fron
 
     private
 
+    # Load external stylesheets that are
+    # set in the configuration.
     def loadExternalStylesheets
       return unless config.stylesheets
       config.stylesheets.map do |sheet|
@@ -32,10 +38,16 @@ module Fron
       end
     end
 
+    # Adds the map to the route map
+    #
+    # @param args [Array] Array of maps
     def map(*args)
       @routeMap << Router.map(*args)
     end
 
+    # Returns the configuration
+    #
+    # @return [Configuration] The configuration
     def config
       self.class.config
     end

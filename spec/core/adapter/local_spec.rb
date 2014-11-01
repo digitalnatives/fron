@@ -3,50 +3,45 @@ require 'spec_helper'
 describe Fron::Adapters::LocalAdapter do
 
   subject { described_class.new fields: [:name] }
-  let(:proc) { proc {} }
 
   describe '#all' do
     it 'should call localStorage#all' do
       Fron::Storage::LocalStorage.should receive(:all).once
-      subject.all(&proc)
+      expect { |b| subject.all(&b) }.to yield_control
     end
 
     it 'should run the block' do
-      proc.should receive(:call)
-      subject.all(&proc)
+      expect { |b| subject.all(&b) }.to yield_control
     end
   end
 
   describe '#get' do
     it 'should call localStorage#get' do
       Fron::Storage::LocalStorage.should receive(:get).once
-      subject.get 0, &proc
+      expect { |b| subject.get(0, &b) }.to yield_control
     end
 
     it 'should run the block' do
-      proc.should receive(:call)
-      subject.get 0, &proc
+      expect { |b| subject.get(0, &b) }.to yield_control
     end
   end
 
   describe '#set' do
     it 'should call localStorage#set' do
       Fron::Storage::LocalStorage.should receive(:set).once
-      subject.set double(id: 0), { name: 'test' }, &proc
+      expect { |b| subject.set(double(id: 0), { name: 'test' }, &b) }.to yield_with_args
     end
 
     it 'should run the block with nil if there are no errors' do
-      proc.should receive(:call).with nil, name: 'test', id: 0
-      subject.set double(id: 0), { name: 'test' }, &proc
+      expect { |b| subject.set(double(id: 0), { name: 'test' }, &b) }.to yield_with_args nil, name: 'test', id: 0
     end
 
     it 'should run the block with erros if ther are any' do
-      proc.should receive(:call).with({ name: ["can't be blank"] }, {})
-      subject.set double(id: 0), { name: '' }, &proc
+      expect { |b| subject.set(double(id: 0), { name: '' }, &b) }.to yield_with_args({ name: ["can't be blank"] }, {})
     end
 
     it "should add id if there isn't any" do
-      result = subject.set double(id: nil), { name: '' }, &proc
+      result = subject.set(double(id: nil), name: '') {}
       result[:id].should_not be nil
     end
   end

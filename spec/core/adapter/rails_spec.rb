@@ -14,7 +14,6 @@ describe Fron::Adapters::RailsAdapter do
     )
   end
 
-  let(:proc) { proc {} }
   let(:request) { double :request }
   let(:model) { TestModel.new id: 0 }
   let(:newModel) { TestModel.new }
@@ -29,8 +28,7 @@ describe Fron::Adapters::RailsAdapter do
       request.should receive(:get) do |&block|
         block.call double json: true
       end
-      proc.should receive(:call)
-      subject.all(&proc)
+      expect { |b| subject.all(&b) }.to yield_control
     end
   end
 
@@ -40,8 +38,7 @@ describe Fron::Adapters::RailsAdapter do
       request.should receive(:get) do |&block|
         block.call double json: true
       end
-      proc.should receive(:call)
-      subject.get '0', &proc
+      expect { |b| subject.get('0', &b) }.to yield_control
     end
   end
 
@@ -51,8 +48,7 @@ describe Fron::Adapters::RailsAdapter do
       request.should receive(:post) do |&block|
         block.call double status: 201, json: ''
       end
-      proc.should receive(:call)
-      subject.set newModel, {}, &proc
+      expect { |b| subject.set(newModel, {}, &b) }.to yield_control
     end
 
     it 'should call PUT request for exsistsing record' do
@@ -60,8 +56,7 @@ describe Fron::Adapters::RailsAdapter do
       request.should receive(:put) do |&block|
         block.call double status: 201, json: ''
       end
-      proc.should receive(:call)
-      subject.set model, {}, &proc
+      expect { |b| subject.set(model, {}, &b) }.to yield_control
     end
 
     it 'should call block with error' do
@@ -69,8 +64,7 @@ describe Fron::Adapters::RailsAdapter do
       request.should receive(:put) do |&block|
         block.call double status: 422, json: 'error'
       end
-      proc.should receive(:call).with 'error', 'error'
-      subject.set model, {}, &proc
+      expect { |b| subject.set(model, {}, &b) }.to yield_with_args 'error', 'error'
     end
   end
 end

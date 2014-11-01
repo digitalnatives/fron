@@ -37,26 +37,29 @@ module Fron
 
     def route(hash = DOM::Window.hash, controller = nil, startParams = {})
       routes = controller ? (controller.class.routes || []) : @routes
-      routes.each do |r|
-        if r[:path] == '*'
-          if r[:controller]
-            break route(hash, r[:controller], startParams)
+      routes.each do |route|
+        path = route[:path]
+        routeController = route[:controller]
+
+        if path == '*'
+          if routeController
+            break self.route(hash, routeController, startParams)
           else
-            break applyRoute(controller, r, startParams)
+            break applyRoute(controller, route, startParams)
           end
         else
-          matches = hash.match(r[:path][:regexp]).to_a[1..-1]
+          matches = hash.match(path[:regexp]).to_a[1..-1]
           if matches
             params = {}
-            if r[:path][:map]
-              r[:path][:map].each_with_index do |key, index|
+            if path[:map]
+              path[:map].each_with_index do |key, index|
                 params[key.to_sym] = matches[index]
               end
             end
-            if r[:action]
-              break applyRoute(controller, r, startParams.merge(params))
+            if route[:action]
+              break applyRoute(controller, route, startParams.merge(params))
             else
-              break route hash.gsub(r[:path][:regexp], ''), r[:controller], startParams.merge(params)
+              break self.route hash.gsub(path[:regexp], ''), routeController, startParams.merge(params)
             end
           end
         end
@@ -66,15 +69,18 @@ module Fron
     private
 
     def applyRoute(controller, route, params = {})
-      if controller.class.beforeFilters
-        controller.class.beforeFilters.each do |filter|
-          next unless filter[:actions].include?(route[:action])
+      klass = controller.class
+      action = route[:action]
+
+      if klass.beforeFilters
+        klass.beforeFilters.each do |filter|
+          next unless filter[:actions].include?(action)
           controller.send(filter[:method], params)
         end
       end
       controller.send(:empty) if controller.respond_to?(:empty)
-      controller.send(route[:action], params)
-      @config.logger.info "Navigate >> #{controller.class}##{route[:action]} with params #{params}"
+      controller.send(action, params)
+      @config.logger.info "Navigate >> #{klass}##{action} with params #{params}"
       @config.main.empty
       if @config.injectBlock
         @config.injectBlock.call controller.base

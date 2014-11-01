@@ -1,6 +1,7 @@
 module DOM
   # Event
   class Event
+    # Special keys for converions
     SPECIAL_KEYS = {
       8 => 'backspace',
       9 => 'tab',
@@ -98,89 +99,145 @@ module DOM
       63_289 => 'num'
     }
 
+    # Initializes the event
+    #
+    # @param event [Event] The native event
+    # @param targetClass [DOM::Node] The target class for the events target
     def initialize(event, targetClass)
       @event = event
       @targetClass = targetClass
     end
 
+    # Returns the string represenation of the pressed key
+    #
+    # @return [String] The pressed key
     def key
       return SPECIAL_KEYS[keyCode] if SPECIAL_KEYS[keyCode]
       `String.fromCharCode(#{keyCode}).toLowerCase()`
     end
 
+    # Stops the immediate propagation of the event
     def stopImmediatePropagation
       `#{@event}.stopImmediatePropagation()`
     end
 
+    # Returns the native dataTransfrer object
+    #
+    # @return [Object] The object
     def dataTransfer
       Native `#{@event}.dataTransfer`
     end
 
+    # Returns the index of the pressed mouse button
+    #
+    # @return [Numeric] The index
     def button
       `#{@event}.button`
     end
 
+    # Returns the target of the event
+    #
+    # @return [DOM::Node] The target
     def target
       @targetClass.new `#{@event}.target`
     end
 
+    # Returns the character code of the pressed key
+    #
+    # @return [Numeric] The code
     def charCode
       `#{@event}.charCode`
     end
 
+    # Returns the key code of the pressed key
+    #
+    # @return [Numeric] The code
     def keyCode
       `#{@event}.keyCode`
     end
 
+    # Stops the event
     def stop
       preventDefault
       stopPropagation
     end
 
+    # Prevents the default action of the event
     def preventDefault
       `#{@event}.preventDefault()`
     end
 
+    # Stops the propagation of the event
     def stopPropagation
       `#{@event}.stopPropagation()`
     end
 
+    # Returns the pageX coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def pageX
       `#{@event}.pageX`
     end
 
+    # Returns the pageY coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def pageY
       `#{@event}.pageY`
     end
 
+    # Returns the screenX coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def screenX
       `#{@event}.screenX`
     end
 
+    # Returns the screenY coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def screenY
       `#{@event}.screenY`
     end
 
+    # Returns the clientX coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def clientX
       `#{@event}.clientX`
     end
 
+    # Returns the clientY coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def clientY
       `#{@event}.clientY`
     end
 
+    # Returns whether the alt key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def alt?
       `#{@event}.altKey`
     end
 
+    # Returns whether the shift key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def shift?
       `#{@event}.shiftKey`
     end
 
+    # Returns whether the control key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def ctrl?
       `#{@event}.ctrlKey`
     end
 
+    # Returns whether the meta (apple) key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def meta?
       `#{@event}.metaKey`
     end
