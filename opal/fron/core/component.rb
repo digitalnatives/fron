@@ -56,9 +56,11 @@ module Fron
     #
     # @param args [Array] The arguments
     def initialize(tag = nil)
-      super tag || self.class.tagname || self.class.name.split('::').last
+      klass = self.class
 
-      self.class.behaviors.each do |mod, methods|
+      super tag || klass.tagname || klass.name.split('::').last
+
+      klass.behaviors.each do |mod, methods|
         methods.each do |name|
           next unless mod.respond_to?(name)
           registry = self.class.instance_variable_get("@#{name}")
