@@ -1,4 +1,4 @@
 language: ruby
-script: rake syntax:ruby
+script: bundle exec rake syntax:ruby
 rvm:
   - 2.0
