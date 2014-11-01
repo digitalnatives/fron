@@ -17,7 +17,7 @@ QualityControl::OpalRspec.threshold = 85
 
 QualityControl.tasks += %w(
   syntax:ruby
-  opal:rspec:coverage
+  opal:rspec
   documentation:coverage
   rubycritic:coverage
 )
