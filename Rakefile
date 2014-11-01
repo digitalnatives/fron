@@ -1,4 +1,5 @@
-require 'bundler'
+require 'rubygems'
+require 'bundler/setup'
 require 'quality_control'
 require 'quality_control/rubycritic'
 require 'quality_control/rubocop'
