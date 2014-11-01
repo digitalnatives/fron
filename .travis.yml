@@ -1,6 +1,6 @@
 language: ruby
 script:
-	- phantomjs -v
-	- bundle exec rake opal:rspec
+  - phantomjs -v
+  - bundle exec rake opal:rspec
 rvm:
   - 2.0
