@@ -102,7 +102,7 @@ module DOM
     # Initializes the event
     #
     # @param event [Event] The native event
-    # @param targetClass [DOM::Node] The target class for the events target
+    # @param targetClass [DOM::NODE] The target class for the events target
     def initialize(event, targetClass)
       @event = event
       @targetClass = targetClass
@@ -137,7 +137,7 @@ module DOM
 
     # Returns the target of the event
     #
-    # @return [DOM::Node] The target
+    # @return [DOM::NODE] The target
     def target
       @targetClass.new `#{@event}.target`
     end

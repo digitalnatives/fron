@@ -4,18 +4,30 @@ module DOM
     extend Events
     @el = `window`
 
+    # Returns the locations hash
+    #
+    # @return [String] The hash
     def self.hash
       `window.location.hash.slice(1)`
     end
 
+    # Sets the locations hash with the given value
+    #
+    # @param value [String] The value
     def self.hash=(value)
       `window.location.hash = #{value}`
     end
 
+    # Returns the Y scroll position of the window
+    #
+    # @return [Numeric] The position
     def self.scrollY
       `window.scrollY || document.documentElement.scrollTop`
     end
 
+    # Returns the X scroll position of the window
+    #
+    # @return [Numeric] The position
     def self.scrollX
       `window.scrollX || document.documentElement.scrollTop`
     end

@@ -2,8 +2,9 @@ module DOM
   # This module is a wrapper for the native *document* object.
   module Document
     extend SingleForwardable
+    @doc = DOM::Element.new `document`
 
-    def_delegators :doc, :find
+    def_delegators :@doc, :find
 
     # Returns the active element
     #
@@ -38,15 +39,6 @@ module DOM
     # @param value [String] The title
     def self.title=(value)
       `document.title = #{value}`
-    end
-
-    private
-
-    # Returns the document element
-    #
-    # @return [DOM::Element] The document element
-    def self.doc
-      @doc ||= DOM::Element.new `document`
     end
   end
 end
