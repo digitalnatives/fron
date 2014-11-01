@@ -1,18 +1,18 @@
-require 'fron/core-ext/hash'
+require 'spec_helper'
 
 describe Hash do
 
   subject { { a: 'test', b: 'user' } }
 
-  describe "#to_query_string" do
+  describe '#toQueryString' do
     it 'should return the hash in query string format' do
-      subject.to_query_string.should eq 'a=test&b=user'
+      subject.toQueryString.should eq 'a=test&b=user'
     end
   end
 
-  describe '#to_form_data' do
+  describe '#toFormData' do
     it 'should return the hash in FormData format' do
-      `#{subject.to_form_data} instanceof FormData`.should be true
+      `#{subject.toFormData} instanceof FormData`.should be true
     end
   end
 end

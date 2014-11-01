@@ -1,0 +1,42 @@
+AllCops:
+  Exclude:
+    - spec/spec_helper.rb
+
+VariableName:
+  EnforcedStyle: camelCase
+
+MethodName:
+  EnforcedStyle: camelCase
+
+HandleExceptions:
+  Enabled: false
+
+Blocks:
+  Enabled: true
+
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+
+LineLength:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+Blocks:
+  Enabled: false
+
+TrivialAccessors:
+  Enabled: false
+
+ClassLength:
+  Enabled: false
+
+UnneededPercentX:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false

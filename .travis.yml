@@ -1,0 +1,4 @@
+language: ruby
+script: rake syntax:ruby
+rvm:
+  - 2.0

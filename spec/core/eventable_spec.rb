@@ -1,5 +1,6 @@
-require 'fron/core'
+require 'spec_helper'
 
+# Test Eventable
 class TestEventable
   include Fron::Eventable
 end
@@ -7,50 +8,50 @@ end
 describe Fron::Eventable do
 
   subject { described_class }
-  let(:events) { subject.instance_variable_get("@events") }
+  let(:events) { subject.instance_variable_get '@events' }
   let(:instance) { TestEventable.new }
 
-  describe "#on" do
-    it "should add to events array" do
+  describe '#on' do
+    it 'should add to events array' do
       subject.on 'event' do end
       events.should_not be nil
       events[:event].should_not be nil
     end
 
-    it "should add block to events array" do
-      a = Proc.new {}
-      subject.on 'event', &a
-      events[:event].last.should eq a
+    it 'should add block to events array' do
+      proc = proc {}
+      subject.on 'event', &proc
+      events[:event].last.should eq proc
     end
   end
 
-  describe "#trigger" do
-    it "should not trigger global event if called on self" do
+  describe '#trigger' do
+    it 'should not trigger global event if called on self' do
       expect(subject).to receive(:trigger).once.and_call_original
       subject.trigger 'test'
     end
 
-    it "should trigger global event if specified and not self" do
+    it 'should trigger global event if specified and not self' do
       expect(subject).to receive(:trigger).once.and_call_original
       instance.on 'test' do end
       instance.trigger 'test'
     end
 
-    it "should not trigger global event if not specified" do
+    it 'should not trigger global event if not specified' do
       expect(subject).not_to receive(:trigger)
       instance.trigger 'test', false
     end
 
-    it "should call listeners" do
-      a = Proc.new {}
-      expect(a).to receive(:call)
-      instance.on 'test', &a
+    it 'should call listeners' do
+      proc = proc {}
+      expect(proc).to receive(:call)
+      instance.on 'test', &proc
       instance.trigger 'test'
     end
   end
 
-  describe "#off" do
-    it "should remove the block from the events array" do
+  describe '#off' do
+    it 'should remove the block from the events array' do
       block = subject.on 'test' do end
       events['test'].last.should eq block
       subject.off 'test', block

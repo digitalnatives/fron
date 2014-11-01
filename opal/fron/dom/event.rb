@@ -1,6 +1,7 @@
 module DOM
+  # Event
   class Event
-
+    # Special keys for converions
     SPECIAL_KEYS = {
       8 => 'backspace',
       9 => 'tab',
@@ -94,95 +95,151 @@ module DOM
       221 => ']',
       222 => '\'',
       224 => 'cmd',
-      57392 => 'ctrl',
-      63289 => 'num'
+      57_392 => 'ctrl',
+      63_289 => 'num'
     }
 
-    def initialize(e,targetClass)
-      @e = e
+    # Initializes the event
+    #
+    # @param event [Event] The native event
+    # @param targetClass [DOM::NODE] The target class for the events target
+    def initialize(event, targetClass)
+      @event = event
       @targetClass = targetClass
     end
 
+    # Returns the string represenation of the pressed key
+    #
+    # @return [String] The pressed key
     def key
       return SPECIAL_KEYS[keyCode] if SPECIAL_KEYS[keyCode]
       `String.fromCharCode(#{keyCode}).toLowerCase()`
     end
 
+    # Stops the immediate propagation of the event
     def stopImmediatePropagation
-      `#{@e}.stopImmediatePropagation()`
+      `#{@event}.stopImmediatePropagation()`
     end
 
+    # Returns the native dataTransfrer object
+    #
+    # @return [Object] The object
     def dataTransfer
-      Native `#{@e}.dataTransfer`
+      Native `#{@event}.dataTransfer`
     end
 
+    # Returns the index of the pressed mouse button
+    #
+    # @return [Numeric] The index
     def button
-      `#{@e}.button`
+      `#{@event}.button`
     end
 
+    # Returns the target of the event
+    #
+    # @return [DOM::NODE] The target
     def target
-      @targetClass.new `#{@e}.target`
+      @targetClass.new `#{@event}.target`
     end
 
+    # Returns the character code of the pressed key
+    #
+    # @return [Numeric] The code
     def charCode
-      `#{@e}.charCode`
+      `#{@event}.charCode`
     end
 
+    # Returns the key code of the pressed key
+    #
+    # @return [Numeric] The code
     def keyCode
-      `#{@e}.keyCode`
+      `#{@event}.keyCode`
     end
 
+    # Stops the event
     def stop
       preventDefault
       stopPropagation
     end
 
+    # Prevents the default action of the event
     def preventDefault
-      `#{@e}.preventDefault()`
+      `#{@event}.preventDefault()`
     end
 
+    # Stops the propagation of the event
     def stopPropagation
-      `#{@e}.stopPropagation()`
+      `#{@event}.stopPropagation()`
     end
 
+    # Returns the pageX coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def pageX
-      `#{@e}.pageX`
+      `#{@event}.pageX`
     end
 
+    # Returns the pageY coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def pageY
-      `#{@e}.pageY`
+      `#{@event}.pageY`
     end
 
+    # Returns the screenX coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def screenX
-      `#{@e}.screenX`
+      `#{@event}.screenX`
     end
 
+    # Returns the screenY coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def screenY
-      `#{@e}.screenY`
+      `#{@event}.screenY`
     end
 
+    # Returns the clientX coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def clientX
-      `#{@e}.clientX`
+      `#{@event}.clientX`
     end
 
+    # Returns the clientY coordinate of the event
+    #
+    # @return [Numeric] The coordinate
     def clientY
-      `#{@e}.clientY`
+      `#{@event}.clientY`
     end
 
+    # Returns whether the alt key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def alt?
-      `#{@e}.altKey`
+      `#{@event}.altKey`
     end
 
+    # Returns whether the shift key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def shift?
-      `#{@e}.shiftKey`
+      `#{@event}.shiftKey`
     end
 
+    # Returns whether the control key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def ctrl?
-      `#{@e}.ctrlKey`
+      `#{@event}.ctrlKey`
     end
 
+    # Returns whether the meta (apple) key has been pressed
+    #
+    # @return [Boolan] True if pressed false if not
     def meta?
-      `#{@e}.metaKey`
+      `#{@event}.metaKey`
     end
   end
 end

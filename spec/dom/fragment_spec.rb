@@ -1,4 +1,4 @@
-require 'fron/dom'
+require 'spec_helper'
 
 describe DOM::Fragment do
 
@@ -6,8 +6,8 @@ describe DOM::Fragment do
 
   describe '#initailize' do
     it 'should create a document fragment' do
-      el = subject.instance_variable_get("@el")
-      `el instanceof DocumentFragment`.should be true
+      el = subject.instance_variable_get('@el')
+      `#{el} instanceof DocumentFragment`.should be true
     end
   end
 end

@@ -1,2 +1,2 @@
-require './request/response'
-require './request/request'
+require 'fron/request/response'
+require 'fron/request/request'

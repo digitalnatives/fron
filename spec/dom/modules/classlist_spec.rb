@@ -1,4 +1,4 @@
-require 'fron/dom'
+require 'spec_helper'
 
 describe DOM::ClassList do
 

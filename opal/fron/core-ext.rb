@@ -1,5 +1,0 @@
-require './core-ext/hash'
-require './core-ext/kernel'
-require './core-ext/numeric'
-require './core-ext/proc'
-require './core-ext/string'

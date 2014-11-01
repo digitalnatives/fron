@@ -3,38 +3,59 @@ require 'securerandom'
 
 module Fron
   module Adapters
+    # Local Adapter
     class LocalAdapter
+      # Initializes the adapter with options
+      #
+      # @param options [Hash] The options
       def initialize(options)
         @options = options
       end
 
-      def all(&block)
-        block.call Fron::Storage::LocalStorage.all
+      # Returns all values
+      #
+      # @return [Array] The values
+      def all
+        yield Fron::Storage::LocalStorage.all
       end
 
-      def get(id, &block)
-        block.call Fron::Storage::LocalStorage.get id
+      # Gets the data with the given id
+      #
+      # @param id [String] The id
+      #
+      # @return [Hash] The data
+      def get(id)
+        yield Fron::Storage::LocalStorage.get id
       end
 
-      def set(model, data, &block)
+      # Sets the given data for the given model
+      #
+      # @param model [Fron::Model] The model
+      # @param data [Hash] The data
+      def set(model, data)
         id = model.id
         id = SecureRandom.uuid unless id
         data[:id] = id
-        unless (errors = validate data)
-          Fron::Storage::LocalStorage.set id, data
-          block.call nil, data
+        errors = validate data
+        if errors
+          yield errors, {}
         else
-          block.call errors, {}
+          Fron::Storage::LocalStorage.set id, data
+          yield nil, data
         end
         data
       end
 
+      # Validates the given data
+      #
+      # @param data [Hash] The data
+      #
+      # @return [Array] The errors after the validation or nil
       def validate(data = {})
         errors = {}
-        @options[:fields].reject{|field| field == :id}.map do |field|
-          next if data[field] && data[field] != ""
+        @options[:fields].reject { |field| field == :id }.map do |field|
+          next if data[field] && data[field] != ''
           errors[field] = ["can't be blank"]
-          valid = false
         end
         errors.keys.length == 0 ? nil : errors
       end
