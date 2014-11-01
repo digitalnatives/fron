@@ -12,7 +12,10 @@ end
 describe Fron::Component do
 
   subject  { TestComponent.new }
+
   let(:listeners) { subject.instance_variable_get '@listeners' }
+  let(:components) { subject.instance_variable_get('@component') }
+  let(:events) { subject.instance_variable_get('@on') }
 
   describe 'DSL' do
 
@@ -28,33 +31,25 @@ describe Fron::Component do
     describe '#on' do
       it 'should create events array' do
         subject.on :click, :test
-        subject.events.should_not be nil
+        events.should_not be nil
       end
 
       it 'should push event into the events array' do
         subject.on :click, :test
-        subject.events.length.should be 2
+        events.length.should be 2
       end
     end
 
     describe '#component' do
       it 'should create components array' do
         subject.component :test, 'test'
-        subject.components.should_not be nil
-        subject.components.length.should be 1
+        components.should_not be nil
+        components.length.should be 1
       end
 
       it 'should create attr_reader for component' do
         subject.component :a, 'a'
-        subject.instance_methods.include?(:a).should be true
-      end
-    end
-
-    describe '#delegate' do
-      it 'should create delegated methods' do
-        subject.delegate :text, :test
-        subject.delegates.should_not be nil
-        subject.delegates[0].should eq [:text, :test]
+        subject.new.methods.include?(:a).should be true
       end
     end
   end
@@ -74,11 +69,6 @@ describe Fron::Component do
 
       subject.test.should_not be nil
       subject.test.tag.should be 'test'
-    end
-
-    it 'should call render if model given' do
-      comp = TestComponent.new(Fron::Model.new)
-      comp.rendered.should be true
     end
   end
 

@@ -1,10 +1,18 @@
 require 'spec_helper'
 
+# Bevahviors
+module Dummy
+  def self.included(base)
+    base.register self, [:dummy]
+  end
+end
+
 # Base Component
 class BaseComponent < Fron::Component
   component :text, 'text'
   on :click, :render
-  delegate :text, :text
+
+  include Dummy
 end
 
 # Inherited Component
@@ -18,28 +26,28 @@ end
 describe SuperComponent do
   subject { described_class }
 
+  let(:components) { subject.instance_variable_get('@component') }
+
   it 'should inherit components in order' do
-    subject.components.should_not be nil
-    subject.components[0].should eq [:text, 'text', nil]
-    subject.components[1].should eq [:title, 'title', nil]
+    components.should_not be nil
+    components[0].should eq [:text, 'text', nil]
+    components[1].should eq [:title, 'title', nil]
   end
 end
 
 describe InheritedComponent do
   subject { described_class }
 
+  let(:components) { subject.instance_variable_get('@component') }
+  let(:events) { subject.instance_variable_get('@on') }
+
   it 'should inherit components' do
-    subject.components.should_not be nil
-    subject.components[0].should eq [:text, 'text', nil]
+    components.should_not be nil
+    components[0].should eq [:text, 'text', nil]
   end
 
   it 'should inherit events' do
-    subject.events.should_not be nil
-    subject.events[0].should eq [:click, :render]
-  end
-
-  it 'should inherit delegates' do
-    subject.delegates.should_not be nil
-    subject.delegates[0].should eq [:text, :text]
+    events.should_not be nil
+    events[0].should eq [:click, :render, nil]
   end
 end
