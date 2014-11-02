@@ -13,8 +13,8 @@ describe DOM::Window do
 
   describe '#hash=' do
     it 'should set the hash of the url' do
-      subject.hash = 'test'
-      `window.location.hash.slice(1)`.should eq 'test'
+      subject.hash = 'test2'
+      `window.location.hash.slice(1)`.should eq 'test2'
     end
   end
 

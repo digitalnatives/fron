@@ -1,5 +1,6 @@
 require 'fron/core/behaviors/components'
 require 'fron/core/behaviors/events'
+require 'fron/core/behaviors/routes'
 
 module Fron
   # Component
@@ -31,7 +32,7 @@ module Fron
       # @param subclass [Class] The subclass
       def inherited(subclass)
         # Copy behaviours
-        subclass.instance_variable_set '@behaviors', @behaviors
+        subclass.instance_variable_set '@behaviors', @behaviors.dup
 
         # Copy registries
         @behaviors.values.reduce(&:+).each do |type|
