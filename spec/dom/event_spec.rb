@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe DOM::Event do
 
-  subject { described_class.new data, Hash }
+  subject { described_class.new data }
+  let(:target) { DOM::Element.new('div') }
 
   let(:data) {
     %x{
@@ -22,7 +23,7 @@ describe DOM::Event do
         preventDefault: function(){return 1},
         stopPropagation: function(){return 2},
         stopImmediatePropagation: function(){},
-        target: {test: 'data'}
+        target: #{target.instance_variable_get('@el')}
       }
     }
   }
@@ -49,8 +50,7 @@ describe DOM::Event do
 
   describe '#target' do
     it 'should return the target' do
-      subject.target['test'].should eq 'data'
-      subject.target.class.should eq Hash
+      subject.target.should equal target
     end
   end
 

@@ -8,9 +8,6 @@ module DOM
 
     attr_reader :style
 
-    # Target class for events
-    EVENT_TARGET_CLASS = self
-
     # Attribute regexp
     ATTRIBUTE_REGEXP   = /\[(.*?)=(.*?)\]/
 
@@ -27,6 +24,7 @@ module DOM
       if `typeof #{data} === 'string'`
         tag, rest = data.match(TAG_REGEXP).to_a[1..2]
         @el = `document.createElement(#{tag})`
+        `#{@el}._instance = #{self}`
         rest = rest.gsub ATTRIBUTE_REGEXP do |match|
           key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
           self[key] = value
@@ -104,7 +102,7 @@ module DOM
     # @return [DOM::Element] The element
     def find(selector)
       value = `#{@el}.querySelector(#{selector}) || false`
-      value ? DOM::Element.new(value) : nil
+      value ? DOM::Element.fromNode(value) : nil
     end
 
     # Returns the elements innerHTML

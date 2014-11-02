@@ -102,10 +102,8 @@ module DOM
     # Initializes the event
     #
     # @param event [Event] The native event
-    # @param targetClass [DOM::NODE] The target class for the events target
-    def initialize(event, targetClass)
+    def initialize(event)
       @event = event
-      @targetClass = targetClass
     end
 
     # Returns the string represenation of the pressed key
@@ -139,7 +137,7 @@ module DOM
     #
     # @return [DOM::NODE] The target
     def target
-      @targetClass.new `#{@event}.target`
+      DOM::Element.fromNode `#{@event}.target`
     end
 
     # Returns the character code of the pressed key

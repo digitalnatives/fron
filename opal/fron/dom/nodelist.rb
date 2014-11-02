@@ -12,7 +12,7 @@ module DOM
     #
     # @param nodes [Array] Array of nodes
     def initialize(nodes)
-      @nodes = nodes.map { |node| DOM::NODE.new node }
+      @nodes = nodes.map { |node| DOM::Element.fromNode node }
     end
   end
 end

@@ -92,12 +92,7 @@ module DOM
     #
     # @yieldparam event [Event] The event
     def addListener(type, capture = false)
-      klass = if defined? self.class::EVENT_TARGET_CLASS
-                self.class::EVENT_TARGET_CLASS
-              else
-                Hash
-              end
-      method = `function(e){#{ yield Event.new(`e`, klass)}}`
+      method = `function(e){#{ yield Event.new(`e`)}}`
 
       @listeners       ||= {}
       @listeners[type] ||= []

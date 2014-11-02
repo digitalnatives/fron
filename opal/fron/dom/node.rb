@@ -3,10 +3,20 @@ require 'native'
 module DOM
   # Node
   class NODE
-    EVENT_TARGET_CLASS = self
-
     include Events
     include Comparable
+
+    # Returns the ruby instance associated to the node,
+    # or creates a new instance if there is none.
+    #
+    # @param node [Native] The node
+    #
+    # @return [DOM::NODE] The ruby node
+    def self.fromNode(node)
+      instance = `#{node}._instance || false`
+      return instance if instance && instance.is_a?(DOM::NODE)
+      new node
+    end
 
     # Initializes the node with the given native node
     #
@@ -15,6 +25,7 @@ module DOM
       fail 'A node must be provided!' unless node
       fail 'Not a HTML Node given!' unless `#{node} instanceof Node`
       @el = node
+      `#{@el}._instance = #{self}`
     end
 
     # Clones the node without child nodes
@@ -36,7 +47,7 @@ module DOM
     # @return [DOM::NODE] The parent node
     def parentNode
       el = `#{@el}.parentNode || false`
-      el ? DOM::NODE.new(el) : nil
+      el ? DOM::NODE.fromNode(el) : nil
     end
 
     # Returns the parent element
@@ -44,7 +55,7 @@ module DOM
     # @return [DOM::NODE] The parent element
     def parent
       el = `#{@el}.parentElement || false`
-      el ? DOM::NODE.new(el) : nil
+      el ? DOM::Element.fromNode(el) : nil
     end
 
     # Removes all the child nodes

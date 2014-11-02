@@ -45,7 +45,7 @@ describe TestNode do
 
     it 'should return a new NODE' do
       subject >> body
-      subject.parent.class.should eq DOM::NODE
+      subject.parent.should be_a DOM::NODE
     end
   end
 
@@ -56,7 +56,7 @@ describe TestNode do
 
     it 'should return a new NODE' do
       subject >> body
-      subject.parentNode.class.should eq DOM::NODE
+      subject.parentNode.should be_a DOM::NODE
     end
   end
 
