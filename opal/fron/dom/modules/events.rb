@@ -13,11 +13,17 @@ module DOM
     # @param type [String] The type
     # @param data [Hash] The data
     def trigger(type, data = {})
+      data = if data.is_a?(Event)
+               data.instance_variable_get('@event')
+             elsif data.respond_to?(:to_json)
+               `JSON.parse(#{data.to_json})`
+             end
       %x{
         var event = document.createEvent("HTMLEvents");
         event.initEvent(#{type}, true, true);
-        for (key in #{data}) {
-          value = #{data}[key];
+        dat = #{data};
+        for (key in dat) {
+          value = dat[key];
           event[key] = value;
         }
         #{@el}.dispatchEvent(event);

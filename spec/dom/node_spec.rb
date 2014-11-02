@@ -182,7 +182,7 @@ describe TestNode do
 
   describe 'index' do
     it 'should return index (position) of the node' do
-      el << DOM::Text.new('Test')
+      el << DOM::Element.new('test')
       subject >> el
       subject.index.should eq 1
     end

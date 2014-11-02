@@ -30,7 +30,7 @@ module DOM
     # @param cls [String] The class
     # @param value [Boolean] The value
     def toggleClass(cls, value = nil)
-      if value || (!value && !hasClass(cls))
+      if value || (value.nil? && !hasClass(cls))
         addClass cls
       else
         removeClass cls

@@ -5,8 +5,9 @@ module DOM
   class NodeList
     include Enumerable
     extend Forwardable
+    attr_reader :nodes
 
-    def_delegators :@nodes, :length, :include?, :each, :index, :[]
+    def_delegators :@nodes, :length, :include?, :each, :index, :[], :to_a, :last, :empty?
 
     # Initializes the node list
     #

@@ -30,8 +30,8 @@ describe SuperComponent do
 
   it 'should inherit components in order' do
     components.should_not be nil
-    components[0].should eq [:text, 'text', nil]
-    components[1].should eq [:title, 'title', nil]
+    components[0].should eq [:text, 'text']
+    components[1].should eq [:title, 'title']
   end
 end
 
@@ -43,11 +43,11 @@ describe InheritedComponent do
 
   it 'should inherit components' do
     components.should_not be nil
-    components[0].should eq [:text, 'text', nil]
+    components[0].should eq [:text, 'text']
   end
 
   it 'should inherit events' do
     events.should_not be nil
-    events[0].should eq [:click, :render, nil]
+    events[0].should eq [:click, :render]
   end
 end

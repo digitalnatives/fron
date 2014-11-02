@@ -16,9 +16,12 @@ module Fron
       def self.component(registry)
         registry.each do |args|
           arguments = args.dup
+          name = args[0]
           block = arguments.last.is_a?(Proc) ? arguments.pop : nil
-          define_singleton_method args[0] do
-            instance_variable_get("@#{args[0]}")
+          unless respond_to?(name)
+            define_singleton_method name do
+              instance_variable_get("@#{name}")
+            end
           end
           component(*arguments, &block)
         end

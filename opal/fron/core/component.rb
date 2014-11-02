@@ -22,7 +22,8 @@ module Fron
         methods.each do |name|
           instance_variable_set "@#{name}", []
           metaDef name do |*args, &block|
-            instance_variable_get("@#{name}") << (args << block)
+            args << block if block_given?
+            instance_variable_get("@#{name}") << args
           end
         end
       end
@@ -55,7 +56,7 @@ module Fron
 
     # Initalizs the component
     #
-    # @param args [Array] The arguments
+    # @param tag [String] The tagname
     def initialize(tag = nil)
       klass = self.class
 

@@ -160,6 +160,13 @@ module DOM
       stopPropagation
     end
 
+    # Returns whether the default was prevented or not
+    #
+    # @return [Boolean] True if it has false if not
+    def defaultPrevented?
+      `#{@event}.defaultPrevented`
+    end
+
     # Prevents the default action of the event
     def preventDefault
       `#{@event}.preventDefault()`

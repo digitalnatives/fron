@@ -49,6 +49,29 @@ module DOM
       `#{clientRect}.height`
     end
 
+    # Returns the top scroll position of the element
+    #
+    # @return [Number] The height
+    def scrollTop
+      `#{@el}.scrollTop`
+    end
+
+    # Returns the left scroll position of the element
+    #
+    # @return [Number] The height
+    def scrollLeft
+      `#{@el}.scrollLeft`
+    end
+
+    # Returns whether or not the element covers the given position
+    #
+    # @param pos [Point] The point
+    #
+    # @return [Boolean] True if covers false if not
+    def cover?(pos)
+      (left...(left + width)).cover?(pos.x) && (top...(top + height)).cover?(pos.y)
+    end
+
     private
 
     # Gets the bounding client rect of element.

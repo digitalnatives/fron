@@ -186,5 +186,45 @@ module DOM
     def id
       self['id']
     end
+
+    # Returns the next element sibling
+    #
+    # @return [DOM::Element] The element
+    def next
+      value = `#{@el}.nextElementSibling || false`
+      value ? DOM::Element.fromNode(value) : nil
+    end
+
+    # Returns if the element has the given attribute
+    #
+    # @param name [String] The attribute
+    #
+    # @return [Boolean] True / False
+    def attribute?(name)
+      `#{@el}.hasAttribute(#{name})`
+    end
+
+    # Removes the given attribute
+    #
+    # @param name [String] The attributes name
+    def removeAttribute(name)
+      `#{@el}.removeAttribute(#{name})`
+    end
+
+    # Finds all of the elements matching the selector.
+    #
+    # @param selector [String] The selector
+    #
+    # @return [NodeList] The elements
+    def findAll(selector)
+      DOM::NodeList.new `Array.prototype.slice.call(#{@el}.querySelectorAll(#{selector}))`
+    end
+
+    # Returns if the element is visible or not
+    #
+    # @return [Boolean] True if visible, false if not
+    def visible?
+      @style.display != 'none'
+    end
   end
 end

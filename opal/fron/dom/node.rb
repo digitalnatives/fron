@@ -154,9 +154,10 @@ module DOM
 
     # Returns the index of the node
     #
-    # @return [Numeric] The index
+    # @return [Integer] Zero based index
     def index
-      parent.children.index self
+      return nil unless parent
+      NodeList.new(`Array.prototype.slice.call(#{@el}.parentNode.children)`).index self
     end
 
     # Gets the native node from the given object
