@@ -16,13 +16,7 @@ module Fron
       def self.component(registry)
         registry.each do |args|
           arguments = args.dup
-          name = args[0]
           block = arguments.last.is_a?(Proc) ? arguments.pop : nil
-          unless respond_to?(name)
-            define_singleton_method name do
-              instance_variable_get("@#{name}")
-            end
-          end
           component(*arguments, &block)
         end
       end
@@ -31,13 +25,17 @@ module Fron
       #
       # @param name [String] The name of the component
       # @param comp [Class] The component
-      # @param options [Hash] The options
       # @param block [Proc] The block to eval on the new component
-      def component(name, comp, options, &block)
-        component = comp.is_a?(Class) ? comp.new(nil, options, @model) : Component.new(comp, options, @model)
+      def component(name, comp, &block)
+        component = comp.is_a?(Class) ? comp.new(nil) : Component.new(comp)
         component.instance_eval(&block) if block
         self << component
         instance_variable_set "@#{name}", component
+
+        return if respond_to?(name)
+        define_singleton_method name do
+          instance_variable_get("@#{name}")
+        end
       end
     end
   end
