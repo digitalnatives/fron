@@ -4,4 +4,4 @@
 * Removed **model** relation from **Component**
 * Removed **options** argument from **Component**
 * Refactored **component** and **on** DSLs in **Component** into **Behaviours**
-* Removed **Controller**, **Router**, **Model** and **Application** 
+* Removed **Controller**, **Router**, **Model** and **Application** because we are moving away from an MVC style framework
