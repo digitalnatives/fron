@@ -37,16 +37,16 @@ describe RouteComponent do
   context 'Matching hash' do
     it 'should call the method' do
       subject.should receive(:something)
-      DOM::Window.hash = 'something'
-      DOM::Window.trigger 'hashchange'
+      DOM::Window.state = 'something'
+      DOM::Window.trigger 'popstate'
     end
   end
 
   context 'Parameters' do
     it 'should call the method with matches' do
       subject.should receive(:card).with 'id'
-      DOM::Window.hash = 'cards/id'
-      DOM::Window.trigger 'hashchange'
+      DOM::Window.state = 'cards/id'
+      DOM::Window.trigger 'popstate'
     end
   end
 end

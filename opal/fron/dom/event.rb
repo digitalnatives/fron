@@ -1,3 +1,4 @@
+# rubocop:disable MethodName
 module DOM
   # Event
   class Event
@@ -104,6 +105,13 @@ module DOM
     # @param event [Event] The native event
     def initialize(event)
       @event = event
+    end
+
+    # Runs missing method calls
+    #
+    # @param name [String] The name of the method
+    def method_missing(name)
+      `#{@event}[#{name}]`
     end
 
     # Returns the string represenation of the pressed key

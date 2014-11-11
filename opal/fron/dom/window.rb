@@ -4,6 +4,22 @@ module DOM
     extend Events
     @el = `window`
 
+    # Sets the url via pushState
+    #
+    # @param url [String] The url
+    def self.state=(url)
+      return if url == state
+      `window.history.pushState({},'',#{url})`
+      timeout { trigger 'popstate' }
+    end
+
+    # Returns the locations pathname as state
+    #
+    # @return [String] The pathname
+    def self.state
+      `window.location.pathname`
+    end
+
     # Returns the locations hash
     #
     # @return [String] The hash
