@@ -1,4 +1,5 @@
 # Fron
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/digitalnatives/fron?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/digitalnatives/fron.svg?branch=master)](https://travis-ci.org/digitalnatives/fron)
 [![Code Climate](https://codeclimate.com/github/digitalnatives/fron/badges/gpa.svg)](https://codeclimate.com/github/digitalnatives/fron)
 [![Inline docs](http://inch-ci.org/github/digitalnatives/fron.svg?branch=master)](http://inch-ci.org/github/digitalnatives/fron)
