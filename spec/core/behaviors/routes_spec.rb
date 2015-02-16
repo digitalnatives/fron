@@ -37,16 +37,14 @@ describe RouteComponent do
   context 'Matching hash' do
     it 'should call the method' do
       subject.should receive(:something)
-      DOM::Window.state = 'something'
-      DOM::Window.trigger 'popstate'
+      Fron::Behaviors::Routes.handleHashChange('something')
     end
   end
 
   context 'Parameters' do
     it 'should call the method with matches' do
       subject.should receive(:card).with 'id'
-      DOM::Window.state = 'cards/id'
-      DOM::Window.trigger 'popstate'
+      Fron::Behaviors::Routes.handleHashChange('cards/id')
     end
   end
 end

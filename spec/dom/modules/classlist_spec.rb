@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::ClassList do
-
   let(:element) { DOM::Element.new 'div' }
   subject { element['class'] }
 

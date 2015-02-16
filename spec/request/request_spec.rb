@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fron::Request do
-
   subject { described_class.new 'url' }
   let(:request) {
     %x{

@@ -6,7 +6,6 @@ class TestEventable
 end
 
 describe Fron::Eventable do
-
   subject { described_class }
   let(:events) { subject.instance_variable_get '@events' }
   let(:instance) { TestEventable.new }

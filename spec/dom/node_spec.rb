@@ -6,7 +6,6 @@ class TestNode < DOM::NODE
 end
 
 describe TestNode do
-
   let(:el)   { DOM::Element.new('div') }
   let(:body) { DOM::Document.body }
   subject    { described_class.new `document.createElement('div')` }
@@ -17,7 +16,6 @@ describe TestNode do
   end
 
   describe '#dup' do
-
     let(:node) { subject.dup }
 
     it 'should clone the node' do

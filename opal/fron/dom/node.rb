@@ -60,7 +60,7 @@ module DOM
 
     # Removes all the child nodes
     def empty
-      children.each { |node| node.remove! }
+      children.each(&:remove!)
     end
 
     # Returns if the node is empty or not

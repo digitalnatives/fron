@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Dimensions do
-
   let(:element) { DOM::Element.new 'div' }
 
   before do

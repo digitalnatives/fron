@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Events do
-
   let(:element) { DOM::Element.new 'div' }
   subject { element.instance_variable_get '@listeners' }
 

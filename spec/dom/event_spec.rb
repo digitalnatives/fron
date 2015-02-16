@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Event do
-
   subject { described_class.new data }
   let(:target) { DOM::Element.new('div') }
 

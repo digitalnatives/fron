@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fron::Logger do
-
   subject { described_class.new }
 
   before do

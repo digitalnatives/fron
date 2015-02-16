@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Window do
-
   subject { described_class }
 
   describe '#hash' do

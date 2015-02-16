@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Fragment do
-
   subject { described_class.new }
 
   describe '#initailize' do

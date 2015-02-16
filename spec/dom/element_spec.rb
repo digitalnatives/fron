@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Element do
-
   subject  { described_class.new 'div' }
   let(:el) { subject.instance_variable_get('@el') }
   let(:a)  { described_class.new 'a' }

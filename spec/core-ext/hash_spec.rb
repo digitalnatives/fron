@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hash do
-
   subject { { a: 'test', b: 'user' } }
 
   describe '#toQueryString' do

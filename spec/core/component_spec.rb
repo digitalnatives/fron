@@ -10,7 +10,6 @@ class TestComponent < Fron::Component
 end
 
 describe Fron::Component do
-
   subject  { TestComponent.new }
 
   let(:listeners) { subject.instance_variable_get '@listeners' }
@@ -18,7 +17,6 @@ describe Fron::Component do
   let(:events) { subject.instance_variable_get('@on') }
 
   describe 'DSL' do
-
     subject { TestComponent }
 
     describe '#tag' do

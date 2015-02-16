@@ -1,6 +1,5 @@
 AllCops:
   Exclude:
-    - spec/spec_helper.rb
     - vendor/**/*
 
 VariableName:
@@ -40,4 +39,13 @@ CyclomaticComplexity:
   Enabled: false
 
 RegexpLiteral:
+  Enabled: false
+
+AbcSize:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
+EmptyElse:
   Enabled: false

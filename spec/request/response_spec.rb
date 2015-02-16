@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fron::Response do
-
   let(:headers) { 'Content-Type: application/json' }
   let(:status)  { 200 }
   let(:body)    { '<div></div>' }

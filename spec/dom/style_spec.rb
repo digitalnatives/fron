@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Style do
-
   subject { DOM::Element.new 'div' }
   let(:el) { subject.instance_variable_get('@el') }
 

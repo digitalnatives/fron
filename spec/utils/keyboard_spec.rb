@@ -7,7 +7,6 @@ class TestKeyboard < Fron::Keyboard
 end
 
 describe TestKeyboard do
-
   describe Fron::Keyboard do
     it 'should work on its own' do
       Fron::Keyboard.new.should be_a Fron::Keyboard
@@ -15,7 +14,6 @@ describe TestKeyboard do
   end
 
   describe 'DSL' do
-
     subject { described_class }
 
     describe '#sc' do
@@ -38,13 +36,12 @@ describe TestKeyboard do
 
   describe 'Events' do
     it 'should handle keydown' do
-      subject.should receive(:onKeydown)
-      DOM::Document.body.trigger 'keydown'
+      subject
+      DOM::Document.body.listeners[:keydown].count.should eq 1
     end
   end
 
   describe '#onKeydown' do
-
     let(:event) { DOM::Event.new `{ctrlKey: true, altKey: true, shiftKey: true, keyCode: 38}` }
     let(:shortcut) { { parts: %w(ctrl alt shift up) } }
 
