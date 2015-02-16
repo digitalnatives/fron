@@ -13,8 +13,8 @@ describe DOM::Element do
 
       it 'should add classes' do
         el = described_class.new('div.test.help')
-        el.hasClass('test').should be true
-        el.hasClass('help').should be true
+        el.has_class('test').should be true
+        el.has_class('help').should be true
       end
 
       it 'should set the id' do

@@ -2,7 +2,7 @@
 module Kernel
   # Requests an animation frame from the browser
   # and runs the givel block if given.
-  def requestAnimationFrame
+  def request_animation_frame
     return unless block_given?
     return unless `!!window.requestAnimationFrame`
     `window.requestAnimationFrame(function(){ #{yield} })`

@@ -9,7 +9,7 @@ module DOM
     # Returns the active element
     #
     # @return [DOM::Element] The element
-    def self.activeElement
+    def self.active_element
       find ':focus'
     end
 

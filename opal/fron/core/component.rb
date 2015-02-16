@@ -21,7 +21,7 @@ module Fron
 
         methods.each do |name|
           instance_variable_set "@#{name}", []
-          metaDef name do |*args, &block|
+          meta_def name do |*args, &block|
             args << block if block_given?
             instance_variable_get("@#{name}") << args
           end
@@ -38,8 +38,8 @@ module Fron
         # Copy registries
         @behaviors.values.reduce(&:+).each do |type|
           next unless (var = instance_variable_get("@#{type}"))
-          instVar = subclass.instance_variable_get("@#{type}") || []
-          subclass.instance_variable_set("@#{type}", instVar.concat(var))
+          inst_var = subclass.instance_variable_get("@#{type}") || []
+          subclass.instance_variable_set("@#{type}", inst_var.concat(var))
         end
       end
 

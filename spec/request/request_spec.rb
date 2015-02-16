@@ -9,7 +9,7 @@ describe Fron::Request do
       send: function(){this.sent = true}}
     }
   }
-  let(:data) { double :data, toQueryString: '', toFormData: true }
+  let(:data) { Hash.new }
 
   before do
     subject.instance_variable_set('@request', request)
@@ -17,7 +17,7 @@ describe Fron::Request do
 
   describe '#request' do
     it 'should raise if the rquest is already running' do
-      allow(subject).to receive(:readyState).and_return 1
+      allow(subject).to receive(:ready_state).and_return 1
       expect(proc { subject.request }).to raise_error
     end
 
@@ -31,14 +31,14 @@ describe Fron::Request do
       expect(`#{request}.sent`).to be true
     end
 
-    it 'should call #toQueryString on data if it is a GET' do
-      expect(data).to receive(:toQueryString)
+    it 'should call #to_query_string on data if it is a GET' do
+      expect(data).to receive(:to_query_string)
       expect(data).not_to receive(:to_json)
       subject.get data
     end
 
     it 'should call #to_json on data if it is a GET' do
-      expect(data).not_to receive(:toQueryString)
+      expect(data).not_to receive(:to_query_string)
       expect(data).to receive(:to_json)
       subject.post data
     end

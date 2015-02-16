@@ -37,14 +37,14 @@ describe RouteComponent do
   context 'Matching hash' do
     it 'should call the method' do
       subject.should receive(:something)
-      Fron::Behaviors::Routes.handleHashChange('something')
+      Fron::Behaviors::Routes.handle_hash_change('something')
     end
   end
 
   context 'Parameters' do
     it 'should call the method with matches' do
       subject.should receive(:card).with 'id'
-      Fron::Behaviors::Routes.handleHashChange('cards/id')
+      Fron::Behaviors::Routes.handle_hash_change('cards/id')
     end
   end
 end

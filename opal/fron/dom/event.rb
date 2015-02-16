@@ -145,7 +145,7 @@ module DOM
     #
     # @return [DOM::NODE] The target
     def target
-      DOM::Element.fromNode `#{@event}.target`
+      DOM::Element.from_node `#{@event}.target`
     end
 
     # Returns the character code of the pressed key

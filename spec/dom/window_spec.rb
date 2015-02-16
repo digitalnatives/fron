@@ -19,13 +19,13 @@ describe DOM::Window do
 
   describe 'scrollY' do
     it 'should return the vertical scroll position' do
-      subject.scrollY.should eq 0
+      subject.scroll_y.should eq 0
     end
   end
 
   describe 'scrollX' do
     it 'should return the horizontal scroll position' do
-      subject.scrollX.should eq 0
+      subject.scroll_x.should eq 0
     end
   end
 end

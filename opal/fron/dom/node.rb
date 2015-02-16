@@ -12,7 +12,7 @@ module DOM
     # @param node [Native] The node
     #
     # @return [DOM::NODE] The ruby node
-    def self.fromNode(node)
+    def self.from_node(node)
       instance = `#{node}._instance || false`
       return instance if instance && instance.is_a?(DOM::NODE)
       new node
@@ -45,9 +45,9 @@ module DOM
     # Returns the parent node
     #
     # @return [DOM::NODE] The parent node
-    def parentNode
+    def parent_node
       el = `#{@el}.parentNode || false`
-      el ? DOM::NODE.fromNode(el) : nil
+      el ? DOM::NODE.from_node(el) : nil
     end
 
     # Returns the parent element
@@ -55,7 +55,7 @@ module DOM
     # @return [DOM::NODE] The parent element
     def parent
       el = `#{@el}.parentElement || false`
-      el ? DOM::Element.fromNode(el) : nil
+      el ? DOM::Element.from_node(el) : nil
     end
 
     # Removes all the child nodes
@@ -81,7 +81,7 @@ module DOM
     #
     # @param el [DOM::NODE] The element
     def remove(el)
-      `#{@el}.removeChild(#{NODE.getElement el})`
+      `#{@el}.removeChild(#{NODE.get_element el})`
     end
 
     # Removes self from parent node
@@ -94,23 +94,23 @@ module DOM
     #
     # @param other [DOM::NODE] The other node
     def <<(other)
-      `#{@el}.appendChild(#{NODE.getElement other})`
+      `#{@el}.appendChild(#{NODE.get_element other})`
     end
 
     # Inserts self into other node
     #
     # @param other [DOM::NODE] The other node
     def >>(other)
-      `#{NODE.getElement other}.appendChild(#{@el})`
+      `#{NODE.get_element other}.appendChild(#{@el})`
     end
 
     # Inserts the given node before the other given node
     #
     # @param what [DOM::NODE] The node to insert
     # @param where [DOM::NODE] The other node
-    def insertBefore(what, where)
+    def insert_before(what, where)
       return what >> self unless where # Fir for firefox...
-      `#{@el}.insertBefore(#{NODE.getElement what},#{NODE.getElement where})`
+      `#{@el}.insertBefore(#{NODE.get_element what},#{NODE.get_element where})`
     end
 
     # Returns the text content of the node
@@ -138,7 +138,7 @@ module DOM
     #
     # @return [Boolean] True if the same false if not
     def ==(other)
-      `#{NODE.getElement(other)} === #{@el}`
+      `#{NODE.get_element(other)} === #{@el}`
     end
 
     # Compars self position with other node
@@ -165,7 +165,7 @@ module DOM
     # @param obj [Object] The object
     #
     # @return [Native] The native node
-    def self.getElement(obj)
+    def self.get_element(obj)
       if `#{obj} instanceof Node`
         obj
       elsif obj.is_a?(NODE)

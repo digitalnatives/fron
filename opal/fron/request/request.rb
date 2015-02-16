@@ -13,7 +13,7 @@ module Fron
       @url = url
       @headers = headers
       @request = `new XMLHttpRequest()`
-      `#{@request}.addEventListener('readystatechange' , function(){#{handleStateChange}})`
+      `#{@request}.addEventListener('readystatechange' , function(){#{handle_state_change}})`
       self
     end
 
@@ -24,15 +24,15 @@ module Fron
     #
     # @yieldparam response [Response] The response
     def request(method = 'GET', data = nil, &callback)
-      if readyState == 0 || readyState == 4
+      if ready_state == 0 || ready_state == 4
         @callback = callback
         if method.upcase == 'GET' && data
-          `#{@request}.open(#{method},#{@url + '?' + data.toQueryString})`
-          setHeaders
+          `#{@request}.open(#{method},#{@url + '?' + data.to_query_string.to_s})`
+          set_headers
           `#{@request}.send()`
         else
           `#{@request}.open(#{method},#{@url})`
-          setHeaders
+          set_headers
           `#{@request}.send(#{data.to_json if data})`
         end
       else
@@ -70,7 +70,7 @@ module Fron
     private
 
     # Sets the headers
-    def setHeaders
+    def set_headers
       @headers.each_pair do |header, value|
         `#{@request}.setRequestHeader(#{header},#{value})`
       end
@@ -79,13 +79,13 @@ module Fron
     # Returns the ready state of the request
     #
     # @return [Numeric] The ready state
-    def readyState
+    def ready_state
       `#{@request}.readyState`
     end
 
     # Handles the hash change
-    def handleStateChange
-      return unless readyState == 4
+    def handle_state_change
+      return unless ready_state == 4
       response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
       @callback.call response if @callback
     end

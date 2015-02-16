@@ -37,14 +37,14 @@ module DOM
     # Returns the Y scroll position of the window
     #
     # @return [Numeric] The position
-    def self.scrollY
+    def self.scroll_y
       `window.scrollY || document.documentElement.scrollTop`
     end
 
     # Returns the X scroll position of the window
     #
     # @return [Numeric] The position
-    def self.scrollX
+    def self.scroll_x
       `window.scrollX || document.documentElement.scrollTop`
     end
   end

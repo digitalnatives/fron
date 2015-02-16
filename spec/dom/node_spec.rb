@@ -47,14 +47,14 @@ describe TestNode do
     end
   end
 
-  describe '#parentNode' do
+  describe '#parent_node' do
     it 'should return nil if there is no parent node' do
-      subject.parentNode.should eq nil
+      subject.parent_node.should eq nil
     end
 
     it 'should return a new NODE' do
       subject >> body
-      subject.parentNode.should be_a DOM::NODE
+      subject.parent_node.should be_a DOM::NODE
     end
   end
 
@@ -113,7 +113,7 @@ describe TestNode do
     end
   end
 
-  describe '#insertBefore' do
+  describe '#insert_before' do
     let(:otherEl) { DOM::Element.new 'div' }
 
     it 'should insert given node before the other given node' do

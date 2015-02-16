@@ -19,7 +19,7 @@ module Fron
       # Handles hash change event
       #
       # @param hash [String] The hash
-      def self.handleHashChange(hash)
+      def self.handle_hash_change(hash)
         routes = @routes.select { |route_| route_[:path] =~ hash }
         routes.each do |route|
           matches = hash.match route[:path]
@@ -34,7 +34,7 @@ module Fron
         base.register self, [:route]
 
         return if @initialized
-        DOM::Window.on('popstate') { handleHashChange DOM::Window.state }
+        DOM::Window.on('popstate') { handle_hash_change DOM::Window.state }
         @routes = []
         @initialized = true
       end

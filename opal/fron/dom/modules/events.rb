@@ -36,7 +36,7 @@ module DOM
     #
     # @yieldparam event [Event] The event
     def on!(type, &listener)
-      addListener type, true, &listener
+      add_listener type, true, &listener
     end
 
     # Listens on the given type of event without capture
@@ -45,7 +45,7 @@ module DOM
     #
     # @yieldparam event [Event] The event
     def on(type, &listener)
-      addListener type, &listener
+      add_listener type, &listener
     end
 
     # Removes events
@@ -61,10 +61,10 @@ module DOM
 
       if type.nil?
         @listeners.keys.each do |ltype|
-          removeListeners ltype
+          remove_listeners ltype
         end
       elsif method.nil?
-        removeListeners type
+        remove_listeners type
       else
         return unless @listeners[type].index(method)
         @listeners[type].delete method
@@ -97,7 +97,7 @@ module DOM
     # @return [Function] The native function for later removal
     #
     # @yieldparam event [Event] The event
-    def addListener(type, capture = false)
+    def add_listener(type, capture = false)
       method = `function(e){#{ yield Event.new(`e`)}}`
 
       @listeners       ||= {}
@@ -111,7 +111,7 @@ module DOM
     # Removes all events with the given type
     #
     # @param type [String] The type
-    def removeListeners(type)
+    def remove_listeners(type)
       @listeners[type].each do |method|
         @listeners[type].delete method
         `#{@el}.removeEventListener(#{type},#{method})`

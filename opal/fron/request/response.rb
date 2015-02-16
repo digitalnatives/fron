@@ -24,7 +24,7 @@ module Fron
     # Returns the content type of the response
     #
     # @return [String] The content type
-    def contentType
+    def content_type
       @headers['Content-Type']
     end
 

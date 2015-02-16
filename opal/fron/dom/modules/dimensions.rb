@@ -11,55 +11,55 @@ module DOM
     #
     # @return [Number] The top position
     def top
-      `#{clientRect}.top` + Window.scrollY
+      `#{client_rect}.top` + Window.scroll_y
     end
 
     # Returns the left position of the element
     #
     # @return [Number] The left position
     def left
-      `#{clientRect}.left` + Window.scrollX
+      `#{client_rect}.left` + Window.scroll_x
     end
 
     # Returns the right position of the element
     #
     # @return [Number] The right position
     def right
-      `#{clientRect}.right` + Window.scrollX
+      `#{client_rect}.right` + Window.scroll_x
     end
 
     # Returns the bottom position of the element
     #
     # @return [Number] The bottom position
     def bottom
-      `#{clientRect}.bottom` + Window.scrollY
+      `#{client_rect}.bottom` + Window.scroll_y
     end
 
     # Returns the width of the element
     #
     # @return [Number] The width
     def width
-      `#{clientRect}.width`
+      `#{client_rect}.width`
     end
 
     # Returns the height of the element
     #
     # @return [Number] The height
     def height
-      `#{clientRect}.height`
+      `#{client_rect}.height`
     end
 
     # Returns the top scroll position of the element
     #
     # @return [Number] The height
-    def scrollTop
+    def scroll_top
       `#{@el}.scrollTop`
     end
 
     # Returns the left scroll position of the element
     #
     # @return [Number] The height
-    def scrollLeft
+    def scroll_teft
       `#{@el}.scrollLeft`
     end
 
@@ -77,7 +77,7 @@ module DOM
     # Gets the bounding client rect of element.
     #
     # @return [Hash] The rect
-    def clientRect
+    def client_rect
       `#{@el}.getBoundingClientRect()`
     end
   end

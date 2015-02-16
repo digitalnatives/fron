@@ -36,7 +36,7 @@ module DOM
           when '#'
             self['id'] = value
           when '.'
-            addClass value
+            add_class value
           end
           ''
         end
@@ -102,7 +102,7 @@ module DOM
     # @return [DOM::Element] The element
     def find(selector)
       value = `#{@el}.querySelector(#{selector}) || false`
-      value ? DOM::Element.fromNode(value) : nil
+      value ? DOM::Element.from_node(value) : nil
     end
 
     # Returns the elements innerHTML
@@ -192,7 +192,7 @@ module DOM
     # @return [DOM::Element] The element
     def next
       value = `#{@el}.nextElementSibling || false`
-      value ? DOM::Element.fromNode(value) : nil
+      value ? DOM::Element.from_node(value) : nil
     end
 
     # Returns if the element has the given attribute
@@ -207,7 +207,7 @@ module DOM
     # Removes the given attribute
     #
     # @param name [String] The attributes name
-    def removeAttribute(name)
+    def remove_attribute(name)
       `#{@el}.removeAttribute(#{name})`
     end
 
@@ -216,7 +216,7 @@ module DOM
     # @param selector [String] The selector
     #
     # @return [NodeList] The elements
-    def findAll(selector)
+    def find_all(selector)
       DOM::NodeList.new `Array.prototype.slice.call(#{@el}.querySelectorAll(#{selector}))`
     end
 

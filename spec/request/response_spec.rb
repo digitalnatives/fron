@@ -37,9 +37,9 @@ describe Fron::Response do
     end
   end
 
-  describe '#contentType' do
+  describe '#content_type' do
     it 'should return content type' do
-      subject.contentType.should eq 'application/json'
+      subject.content_type.should eq 'application/json'
     end
   end
 end

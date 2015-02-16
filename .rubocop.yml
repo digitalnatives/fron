@@ -3,10 +3,10 @@ AllCops:
     - vendor/**/*
 
 VariableName:
-  EnforcedStyle: camelCase
+  EnforcedStyle: snake_case
 
 MethodName:
-  EnforcedStyle: camelCase
+  EnforcedStyle: snake_case
 
 HandleExceptions:
   Enabled: false
@@ -48,4 +48,7 @@ PerceivedComplexity:
   Enabled: false
 
 EmptyElse:
+  Enabled: false
+
+PredicateName:
   Enabled: false

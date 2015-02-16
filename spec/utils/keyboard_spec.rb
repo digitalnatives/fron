@@ -41,33 +41,33 @@ describe TestKeyboard do
     end
   end
 
-  describe '#onKeydown' do
+  describe '#keydown' do
     let(:event) { DOM::Event.new `{ctrlKey: true, altKey: true, shiftKey: true, keyCode: 38}` }
     let(:shortcut) { { parts: %w(ctrl alt shift up) } }
 
     it 'should match shortcuts to the combo' do
       described_class.instance_variable_set('@shortcuts', [{ parts: [] }, shortcut])
-      subject.should receive(:handleShortcut).with shortcut
+      subject.should receive(:handle_shortcut).with shortcut
       event.should receive(:stop)
-      subject.onKeydown event
+      subject.keydown event
     end
   end
 
-  describe 'handleShortcut' do
+  describe 'handle_shortcut' do
     it 'should run block if block given' do
       sc = { block: proc {} }
       subject.should receive(:instance_exec)
-      subject.handleShortcut sc
+      subject.handle_shortcut sc
     end
 
     it 'should call action method if given' do
       subject.should receive(:test)
-      subject.handleShortcut action: :test
+      subject.handle_shortcut action: :test
     end
 
     it 'should warn if method is not exists' do
       subject.should receive(:warn)
-      subject.handleShortcut action: :test2, parts: %w(a b)
+      subject.handle_shortcut action: :test2, parts: %w(a b)
     end
   end
 end
