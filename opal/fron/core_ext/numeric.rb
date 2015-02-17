@@ -10,12 +10,10 @@ class Numeric
     [[self, max].min, min].max
   end
 
-  # Rounds itself to the given number of decimals
+  # Returns the px representation
   #
-  # @param decimals [Numeric] The number of decimals
-  #
-  # @return [Float] The rounded value
-  def round(decimals = 0)
-    `#{self}.toFixed(#{decimals})`.to_f
+  # @return [String] The px
+  def px
+    "#{round}px"
   end
 end

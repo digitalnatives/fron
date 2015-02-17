@@ -34,9 +34,14 @@ module Fron
         base.register self, [:route]
 
         return if @initialized
-        DOM::Window.on('popstate') { handle_hash_change DOM::Window.state }
-        @routes = []
         @initialized = true
+        @routes = []
+        listen
+      end
+
+      # Listen on events (maily for tests)
+      def self.listen
+        DOM::Window.on('popstate') { handle_hash_change DOM::Window.state }
       end
 
       # Registers routes from the registry

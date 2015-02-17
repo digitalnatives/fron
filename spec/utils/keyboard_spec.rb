@@ -7,6 +7,8 @@ class TestKeyboard < Fron::Keyboard
 end
 
 describe TestKeyboard do
+  let(:event) { DOM::Event.new `{ctrlKey: true, altKey: true, shiftKey: true, keyCode: 38}` }
+
   describe Fron::Keyboard do
     it 'should work on its own' do
       Fron::Keyboard.new.should be_a Fron::Keyboard
@@ -36,13 +38,13 @@ describe TestKeyboard do
 
   describe 'Events' do
     it 'should handle keydown' do
-      subject
+      subject.should receive(:keydown)
       DOM::Document.body.listeners[:keydown].count.should eq 1
+      DOM::Document.body.listeners[:keydown][0].call {}
     end
   end
 
   describe '#keydown' do
-    let(:event) { DOM::Event.new `{ctrlKey: true, altKey: true, shiftKey: true, keyCode: 38}` }
     let(:shortcut) { { parts: %w(ctrl alt shift up) } }
 
     it 'should match shortcuts to the combo' do

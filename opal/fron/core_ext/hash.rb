@@ -31,7 +31,7 @@ class Hash
       other_key = other[key]
       next if self_key == other_key
       if self_key.respond_to?(:deep_diff) && other_key.respond_to?(:deep_diff)
-        diff[key] = self_key.deepDiff(other_key)
+        diff[key] = self_key.deep_diff(other_key)
       else
         diff[key] = [self_key, other_key]
       end
