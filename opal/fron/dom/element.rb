@@ -73,7 +73,7 @@ module DOM
 
     # Shows the element
     def show
-      @style.display = 'block'
+      @style.display = ''
     end
 
     # Returns the value of the attribute with the given name
@@ -82,7 +82,7 @@ module DOM
     #
     # @return [String] The value
     def [](name)
-      `#{@el}.getAttribute(#{name})`
+      `#{@el}.getAttribute(#{name}) || Opal.nil`
     end
 
     # Sets the value of the attribute with the given name with the given value
@@ -101,8 +101,7 @@ module DOM
     #
     # @return [DOM::Element] The element
     def find(selector)
-      value = `#{@el}.querySelector(#{selector}) || false`
-      value ? DOM::Element.from_node(value) : nil
+      DOM::Element.from_node `#{@el}.querySelector(#{selector}) || Opal.nil`
     end
 
     # Returns the elements innerHTML
@@ -191,8 +190,7 @@ module DOM
     #
     # @return [DOM::Element] The element
     def next
-      value = `#{@el}.nextElementSibling || false`
-      value ? DOM::Element.from_node(value) : nil
+      DOM::Element.from_node `#{@el}.nextElementSibling || Opal.nil`
     end
 
     # Returns if the element has the given attribute
@@ -218,13 +216,6 @@ module DOM
     # @return [NodeList] The elements
     def find_all(selector)
       DOM::NodeList.new `Array.prototype.slice.call(#{@el}.querySelectorAll(#{selector}))`
-    end
-
-    # Returns if the element is visible or not
-    #
-    # @return [Boolean] True if visible, false if not
-    def visible?
-      @style.display != 'none'
     end
   end
 end

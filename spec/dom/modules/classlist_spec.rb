@@ -28,7 +28,7 @@ describe DOM::ClassList do
 
     it 'should add multiple classes' do
       element.remove_class 'test', 'help'
-      subject.should eq ''
+      subject.should eq nil
     end
   end
 
@@ -50,7 +50,7 @@ describe DOM::ClassList do
 
     it 'should remove class if the element has the given class' do
       element.toggle_class 'test'
-      subject.should eq ''
+      subject.should eq nil
     end
 
     it 'should add class if the element does not have the given class' do
@@ -65,7 +65,7 @@ describe DOM::ClassList do
 
     it 'should remove class if the second argument if false' do
       element.toggle_class 'test', false
-      subject.should eq ''
+      subject.should eq nil
     end
   end
 end

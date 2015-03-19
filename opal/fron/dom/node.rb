@@ -13,7 +13,8 @@ module DOM
     #
     # @return [DOM::NODE] The ruby node
     def self.from_node(node)
-      instance = `#{node}._instance || false`
+      return nil unless node
+      instance = `#{node}._instance || Opal.nil`
       return instance if instance && instance.is_a?(DOM::NODE)
       new node
     end

@@ -63,7 +63,7 @@ describe DOM::Element do
   describe '#show' do
     it 'should show the element' do
       subject.show
-      subject.style.display.should eq 'block'
+      subject.style.display.should eq ''
     end
   end
 

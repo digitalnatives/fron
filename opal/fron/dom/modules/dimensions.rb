@@ -72,6 +72,29 @@ module DOM
       (left...(left + width)).cover?(pos.x) && (top...(top + height)).cover?(pos.y)
     end
 
+    # Returns if the element is visible or not.
+    #
+    # The element is visible if:
+    # * The size is 0
+    #   * display: none
+    #   * Element not in the dom
+    #   * Width & Height set to 0
+    # * It is outside of the viewport
+    #
+    # The following is not checked because the element is still visible in a sense
+    # because it has a width & height but it is transparent.
+    # * opacity: 0
+    # * visibility: hidden
+    #
+    # @return [Boolean] True if visible, false if not
+    def visible?
+      size_visible  = width > 0 && height > 0
+      vert_visible  = ((`#{client_rect}.top` + height) > 0) && `#{client_rect}.top` < `window.innerHeight`
+      horiz_visible = ((`#{client_rect}.left` + width) > 0) && `#{client_rect}.left` < `window.innerWidth`
+
+      size_visible && vert_visible && horiz_visible
+    end
+
     private
 
     # Gets the bounding client rect of element.
