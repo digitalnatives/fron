@@ -58,6 +58,15 @@ describe TestNode do
     end
   end
 
+  describe '#empty' do
+    it 'should remove all children' do
+      subject << el
+      expect {
+        subject.empty
+      }.to change { el.parent }.from(subject).to nil
+    end
+  end
+
   describe '#empty?' do
     it 'should return true for no children' do
       subject.empty?.should be true

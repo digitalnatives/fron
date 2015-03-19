@@ -1,5 +1,4 @@
 require 'native'
-
 module DOM
   # Dimensions module for returning node like elements position on the screen.
   #
@@ -59,7 +58,7 @@ module DOM
     # Returns the left scroll position of the element
     #
     # @return [Number] The height
-    def scroll_teft
+    def scroll_left
       `#{@el}.scrollLeft`
     end
 

@@ -12,7 +12,7 @@ Bundler::GemHelper.install_tasks
 QualityControl::Rubycritic.directories += %w(opal)
 QualityControl::Yard.threshold = 100
 QualityControl::OpalRspec.files = /^opal\/fron\/.*\.rb/
-QualityControl::OpalRspec.threshold = 90
+QualityControl::OpalRspec.threshold = 98
 
 QualityControl.tasks += %w(
   syntax:ruby

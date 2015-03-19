@@ -47,16 +47,14 @@ module DOM
     #
     # @return [DOM::NODE] The parent node
     def parent_node
-      el = `#{@el}.parentNode || false`
-      el ? DOM::NODE.from_node(el) : nil
+      DOM::Element.from_node `#{@el}.parentNode || Opal.nil`
     end
 
     # Returns the parent element
     #
     # @return [DOM::NODE] The parent element
     def parent
-      el = `#{@el}.parentElement || false`
-      el ? DOM::Element.from_node(el) : nil
+      DOM::Element.from_node `#{@el}.parentElement || Opal.nil`
     end
 
     # Removes all the child nodes

@@ -15,35 +15,70 @@ describe DOM::Event do
         screenY: 6,
         clientX: 7,
         clientY: 8,
+        button: 3,
         altKey: true,
         shiftKey: false,
         ctrlKey: true,
         metaKey: false,
+        dataTransfer: [],
+        missing: 'missing',
+        defaultPrevented: true,
         preventDefault: function(){return 1},
         stopPropagation: function(){return 2},
-        stopImmediatePropagation: function(){},
+        stopImmediatePropagation: function(){ return 3 },
         target: #{target.instance_variable_get('@el')}
       }
     }
   }
 
   describe '#stop' do
-    it 'should call stopPropagation and preventDefault' do
-      expect(subject).to receive(:stopPropagation).once
-      expect(subject).to receive(:preventDefault).once
+    it 'should call stop_propagation and prevent_default' do
+      expect(subject).to receive(:stop_propagation).once
+      expect(subject).to receive(:prevent_default).once
+      expect(subject).to receive(:stop_immediate_propagation).once
       subject.stop
     end
   end
 
-  describe '#stopPropagation' do
-    it 'should call stopPropagation of the event' do
-      subject.stopPropagation.should eq 2
+  describe '#data_transfer' do
+    it 'should return data_transfer' do
+      subject.data_transfer.should be_an Array
     end
   end
 
-  describe '#preventDefault' do
-    it 'should call preventDefault of the event' do
-      subject.preventDefault.should eq 1
+  describe '#button' do
+    it 'should return button' do
+      subject.button.should eq 3
+    end
+  end
+
+  describe '#default_prevented?' do
+    it 'should return default_prevented?' do
+      subject.default_prevented?.should eq true
+    end
+  end
+
+  describe '#stop_immediate_propagation' do
+    it 'should call stop_immediate_propagation of the event' do
+      subject.stop_immediate_propagation.should eq 3
+    end
+  end
+
+  describe '#method_missing' do
+    it 'should return the given attribute of the event' do
+      subject.missing.should eq 'missing'
+    end
+  end
+
+  describe '#stop_propagation' do
+    it 'should call stop_propagation of the event' do
+      subject.stop_propagation.should eq 2
+    end
+  end
+
+  describe '#prevent_default' do
+    it 'should call prevent_default of the event' do
+      subject.prevent_default.should eq 1
     end
   end
 
@@ -53,51 +88,51 @@ describe DOM::Event do
     end
   end
 
-  describe '#charCode' do
-    it 'should return the charCode' do
-      subject.charCode.should eq 1
+  describe '#char_code' do
+    it 'should return the char_code' do
+      subject.char_code.should eq 1
     end
   end
 
-  describe '#keyCode' do
-    it 'should return the keyCode' do
-      subject.keyCode.should eq 2
+  describe '#key_code' do
+    it 'should return the key_code' do
+      subject.key_code.should eq 2
     end
   end
 
-  describe '#pageX' do
-    it 'should return the pageX' do
-      subject.pageX.should eq 3
+  describe '#page_x' do
+    it 'should return the page_x' do
+      subject.page_x.should eq 3
     end
   end
 
-  describe '#pageY' do
-    it 'should return the pageY' do
-      subject.pageY.should eq 4
+  describe '#page_y' do
+    it 'should return the page_y' do
+      subject.page_y.should eq 4
     end
   end
 
-  describe '#screenX' do
-    it 'should return the screenX' do
-      subject.screenX.should eq 5
+  describe '#screen_x' do
+    it 'should return the screen_x' do
+      subject.screen_x.should eq 5
     end
   end
 
-  describe '#screenY' do
-    it 'should return the screenY' do
-      subject.screenY.should eq 6
+  describe '#screen_y' do
+    it 'should return the screen_y' do
+      subject.screen_y.should eq 6
     end
   end
 
-  describe '#clientX' do
-    it 'should return the clientX' do
-      subject.clientX.should eq 7
+  describe '#client_x' do
+    it 'should return the client_x' do
+      subject.client_x.should eq 7
     end
   end
 
-  describe '#clientY' do
-    it 'should return the clientY' do
-      subject.clientY.should eq 8
+  describe '#client_y' do
+    it 'should return the client_y' do
+      subject.client_y.should eq 8
     end
   end
 

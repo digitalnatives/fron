@@ -16,6 +16,25 @@ describe DOM::Dimensions do
     subject.remove!
   end
 
+  describe '#scroll_top' do
+    it 'should return the scroll position' do
+      subject.scroll_top.should eq 0
+    end
+  end
+
+  describe '#scroll_left' do
+    it 'should return the scroll position' do
+      subject.scroll_left.should eq 0
+    end
+  end
+
+  describe '#cover?' do
+    let(:pos) { double x: 62, y: 82 }
+    it 'should return the true if it covers' do
+      subject.cover?(pos).should eq true
+    end
+  end
+
   describe '#top' do
     it 'should return the top position' do
       subject.top.should eq 40

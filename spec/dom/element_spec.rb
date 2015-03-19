@@ -54,6 +54,20 @@ describe DOM::Element do
     end
   end
 
+  describe '#disabled' do
+    it 'should return the disabled state of the element' do
+      `#{el}.disabled = true`
+      subject.disabled.should eq true
+    end
+  end
+
+  describe '#disabled=' do
+    it 'should set the disabled state of the element' do
+      subject.disabled = true
+      `#{el}.disabled`.should eq true
+    end
+  end
+
   describe '#hide' do
     it 'should hide the element' do
       subject.hide
@@ -99,6 +113,27 @@ describe DOM::Element do
     end
   end
 
+  describe '#files' do
+    it 'sohuld return the files' do
+      `#{el}.files = []`
+      subject.files.should be_an Array
+    end
+  end
+
+  describe '#focus' do
+    async 'should focus the elmenent' do
+      subject >> DOM::Document.body
+      subject[:tabindex] = 1
+      subject.on :focus do
+        run_async do
+          true.should eq true
+          subject.remove!
+        end
+      end
+      subject.focus
+    end
+  end
+
   describe '#find' do
     it 'should find a descendant element' do
       a >> subject
@@ -107,6 +142,18 @@ describe DOM::Element do
 
     it 'should return nil if no element is found' do
       subject.find('p').should eq nil
+    end
+  end
+
+  describe '#next' do
+    it 'should find the next descendant element' do
+      a >> subject
+      a2 >> subject
+      a.next.should eq a2
+    end
+
+    it 'should return nil if no element is found' do
+      subject.next.should eq nil
     end
   end
 

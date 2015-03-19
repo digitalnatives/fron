@@ -1,4 +1,3 @@
-# rubocop:disable MethodName
 module DOM
   # Event
   class Event
@@ -118,19 +117,19 @@ module DOM
     #
     # @return [String] The pressed key
     def key
-      return SPECIAL_KEYS[keyCode] if SPECIAL_KEYS[keyCode]
-      `String.fromCharCode(#{keyCode}).toLowerCase()`
+      return SPECIAL_KEYS[key_code] if SPECIAL_KEYS[key_code]
+      `String.fromCharCode(#{key_code}).toLowerCase()`
     end
 
     # Stops the immediate propagation of the event
-    def stopImmediatePropagation
+    def stop_immediate_propagation
       `#{@event}.stopImmediatePropagation()`
     end
 
     # Returns the native dataTransfrer object
     #
     # @return [Object] The object
-    def dataTransfer
+    def data_transfer
       Native `#{@event}.dataTransfer`
     end
 
@@ -151,79 +150,80 @@ module DOM
     # Returns the character code of the pressed key
     #
     # @return [Numeric] The code
-    def charCode
+    def char_code
       `#{@event}.charCode`
     end
 
     # Returns the key code of the pressed key
     #
     # @return [Numeric] The code
-    def keyCode
+    def key_code
       `#{@event}.keyCode`
     end
 
     # Stops the event
     def stop
-      preventDefault
-      stopPropagation
+      prevent_default
+      stop_immediate_propagation
+      stop_propagation
     end
 
     # Returns whether the default was prevented or not
     #
     # @return [Boolean] True if it has false if not
-    def defaultPrevented?
+    def default_prevented?
       `#{@event}.defaultPrevented`
     end
 
     # Prevents the default action of the event
-    def preventDefault
+    def prevent_default
       `#{@event}.preventDefault()`
     end
 
     # Stops the propagation of the event
-    def stopPropagation
+    def stop_propagation
       `#{@event}.stopPropagation()`
     end
 
     # Returns the pageX coordinate of the event
     #
     # @return [Numeric] The coordinate
-    def pageX
+    def page_x
       `#{@event}.pageX`
     end
 
     # Returns the pageY coordinate of the event
     #
     # @return [Numeric] The coordinate
-    def pageY
+    def page_y
       `#{@event}.pageY`
     end
 
     # Returns the screenX coordinate of the event
     #
     # @return [Numeric] The coordinate
-    def screenX
+    def screen_x
       `#{@event}.screenX`
     end
 
     # Returns the screenY coordinate of the event
     #
     # @return [Numeric] The coordinate
-    def screenY
+    def screen_y
       `#{@event}.screenY`
     end
 
     # Returns the clientX coordinate of the event
     #
     # @return [Numeric] The coordinate
-    def clientX
+    def client_x
       `#{@event}.clientX`
     end
 
     # Returns the clientY coordinate of the event
     #
     # @return [Numeric] The coordinate
-    def clientY
+    def client_y
       `#{@event}.clientY`
     end
 
