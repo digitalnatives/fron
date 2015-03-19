@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Hash do
-  let(:base) { { a: 'test', b: 'asd', c: { test: 'asd' } } }
+  let(:base)  { { a: 'test', b: 'asd', c: { test: 'asd' } } }
   let(:other) { { a: 'test', b: 'user', c: { test: 'wtf' } } }
-  let(:diff) { { b: %w(asd user), c: { test: %w(asd wtf) } } }
+  let(:diff)  { { b: %w(asd user), c: { test: %w(asd wtf) } } }
 
   subject { { a: 'test', b: 'user' } }
 

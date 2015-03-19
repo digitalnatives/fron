@@ -4,6 +4,7 @@ describe DOM::Element do
   subject  { described_class.new 'div' }
   let(:el) { subject.instance_variable_get('@el') }
   let(:a)  { described_class.new 'a' }
+  let(:a2) { described_class.new 'a' }
 
   describe '#initailize' do
     context 'string argument' do
@@ -81,6 +82,23 @@ describe DOM::Element do
     end
   end
 
+  describe '#attribute?' do
+    it 'should return true if there is an attribute flase if not' do
+      subject['test'] = 'data'
+      subject.attribute?(:test).should eq true
+      subject.attribute?(:some).should eq false
+    end
+  end
+
+  describe '#remove_attribute' do
+    it 'should remove attribute' do
+      subject[:test] = 'data'
+      expect {
+        subject.remove_attribute(:test)
+      }.to change { subject.attribute?(:test) }.from(true).to(false)
+    end
+  end
+
   describe '#find' do
     it 'should find a descendant element' do
       a >> subject
@@ -89,6 +107,14 @@ describe DOM::Element do
 
     it 'should return nil if no element is found' do
       subject.find('p').should eq nil
+    end
+  end
+
+  describe '#find_all' do
+    it 'should find all descendant elements' do
+      a >> subject
+      a2 >> subject
+      subject.find_all('a').count.should eq 2
     end
   end
 
