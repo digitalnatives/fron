@@ -3,7 +3,12 @@ require 'json'
 module Fron
   # Request
   class Request
+    extend Eventable
+    extend Forwardable
+
     attr_accessor :url, :headers
+
+    def_delegators :class, :trigger
 
     # Initialies the request
     #
@@ -26,15 +31,15 @@ module Fron
     def request(method = 'GET', data = nil, &callback)
       if ready_state == 0 || ready_state == 4
         @callback = callback
-        if method.upcase == 'GET' && data
-          `#{@request}.open(#{method},#{@url + '?' + data.to_query_string.to_s})`
-          set_headers
-          `#{@request}.send()`
+        if method.upcase == 'UPLOAD'
+          send 'POST', @url, data.to_form_data
+        elsif method.upcase == 'GET' && data
+          send method, @url + '?' + data.to_query_string.to_s, nil
         else
-          `#{@request}.open(#{method},#{@url})`
-          set_headers
-          `#{@request}.send(#{data.to_json if data})`
+          data = data.to_json if data
+          send method, @url, data
         end
+        trigger :loading
       else
         fail 'The request is already running!'
       end
@@ -69,6 +74,19 @@ module Fron
 
     private
 
+    # Sends the given data to the given URL
+    # with the given method
+    #
+    # @param method [String] The method
+    # @param url [String] The URL
+    # @param data [*] The data
+    def send(method, url, data)
+      `#{@request}.open(#{method}, #{url})`
+      `#{@request}.withCredentials = true`
+      set_headers
+      `#{@request}.send(#{data})`
+    end
+
     # Sets the headers
     def set_headers
       @headers.each_pair do |header, value|
@@ -86,8 +104,12 @@ module Fron
     # Handles the hash change
     def handle_state_change
       return unless ready_state == 4
-      response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
-      @callback.call response if @callback
+      begin
+        response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
+        @callback.call response if @callback
+      ensure
+        trigger :loaded
+      end
     end
   end
 end

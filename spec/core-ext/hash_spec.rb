@@ -24,4 +24,11 @@ describe Hash do
       base.deep_diff(other).should eq diff
     end
   end
+
+  describe '#difference' do
+    it 'should return the difference of the two objects' do
+      (base - other).should eq b: 'asd', c: { test: 'asd' }
+      (other - base).should eq b: 'user', c: { test: 'wtf' }
+    end
+  end
 end

@@ -11,6 +11,17 @@ module Fron
       attr_reader :tagname
       attr_reader :behaviors
 
+      # Creates a new class with the specific tag
+      #
+      # @param tag [String] The tag
+      #
+      # @return [Fron::Component] The new component
+      def create(tag)
+        klass = Class.new self
+        klass.tag tag
+        klass
+      end
+
       # Register a behavior
       #
       # @param behavior [Module] The behavior

@@ -19,6 +19,13 @@ describe Fron::Component do
   describe 'DSL' do
     subject { TestComponent }
 
+    describe '#create' do
+      it 'should create class' do
+        test = subject.create('test')
+        test.should < subject
+      end
+    end
+
     describe '#tag' do
       it 'should set the tagname' do
         subject.tag 'td'

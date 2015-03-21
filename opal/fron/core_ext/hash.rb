@@ -1,5 +1,16 @@
 # Hash
 class Hash
+  # Returns the difference from the other object
+  #
+  # @param other [Hash] The other hash
+  #
+  # @return [Hash] The difference
+  def difference(other)
+    Hash[to_a - other.to_a]
+  end
+
+  alias_method :-, :difference
+
   # Converts the hash into an url encoded query string
   #
   # @return [String] the query string
