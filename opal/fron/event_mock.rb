@@ -3,6 +3,11 @@ require 'fron/js/syntetic_event'
 # Event Mock module for mocking events
 module EventMock
   class << self
+    # Sets / gets the whether or not
+    # log event triggers
+    #
+    # @param value [Boolean] The verbosity
+    # @return [Boolean] The verbosity
     attr_accessor :verbose
 
     # Triggers a syntetic event.

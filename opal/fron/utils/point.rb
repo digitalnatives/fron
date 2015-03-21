@@ -26,7 +26,7 @@ module Fron
 
     # Returns the difference from an other point.
     #
-    # @param point [Core::Point] The point to caluclate the difference from
+    # @param other [Core::Point] The point to caluclate the difference from
     #
     # @return [Core::Point] The difference
     def -(other)

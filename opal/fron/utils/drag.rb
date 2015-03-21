@@ -6,7 +6,10 @@ module Fron
     include Fron::Eventable
     extend  Fron::Eventable
 
+    # @return [DOM::Element] The base of the drag
     attr_reader :base
+
+    # @return [DOM::Element] The documents body
     attr_reader :body
 
     IS_TOUCH = `'ontouchstart' in window  && !window._phantom`
