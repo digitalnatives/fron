@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/gdotdesign/quality-control.git
-  revision: d081e25e391155ed8b51dd80a32741c9077e5794
+  revision: 1035bd82c6df8882d831060a2c7a4f89416b18ed
   ref: next
   specs:
     quality_control (0.1.2)
@@ -41,7 +41,7 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
-    equalizer (0.0.9)
+    equalizer (0.0.10)
     execjs (2.4.0)
     flay (2.4.0)
       ruby_parser (~> 3.0)
@@ -88,7 +88,7 @@ GEM
       reek (= 1.6.5)
       virtus (~> 1.0)
     sass (3.4.13)
-    scss-lint (0.34.0)
+    scss-lint (0.35.0)
       rainbow (~> 2.0)
       sass (~> 3.4.1)
     sexp_processor (4.5.0)
