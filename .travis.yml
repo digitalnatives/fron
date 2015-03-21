@@ -2,3 +2,10 @@ language: ruby
 script: bundle exec rake ci
 rvm:
   - 2.0
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/8375add4f4ffbc5b7434
+    on_success: change
+    on_failure: always
+    on_start: false
