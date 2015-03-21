@@ -1,7 +1,14 @@
 module Fron
   # Response
   class Response
-    attr_reader :body, :headers, :status
+    # @return [String] The response body
+    attr_reader :body
+
+    # @return [Hash] The response headers
+    attr_reader :headers
+
+    # @return [Numeric] The response status code
+    attr_reader :status
 
     # Initializes the response
     #
