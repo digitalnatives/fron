@@ -47,4 +47,11 @@ module Kernel
   def clear_timeout(id)
     `clearTimeout(#{id})`
   end
+
+  # Returns the logger for the application
+  #
+  # @return [Fron::Logger] The logger
+  def logger
+    @logger ||= Fron::Logger.new
+  end
 end

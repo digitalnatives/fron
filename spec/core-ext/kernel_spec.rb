@@ -48,4 +48,10 @@ describe Kernel do
       clear_timeout(0).should eq true
     end
   end
+
+  describe '#logger' do
+    it 'should return logger' do
+      logger.should be_a Fron::Logger
+    end
+  end
 end
