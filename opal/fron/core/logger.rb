@@ -3,7 +3,7 @@ module Fron
   class Logger
     # Sets / gets the log level
     #
-    # @param level [Symbol] The level
+    # @param value [Symbol] The level
     # @return [Symbol] The level
     attr_accessor :level
 
