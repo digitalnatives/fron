@@ -1,7 +1,7 @@
 module DOM
   # Element
   #
-  # @todo Describe the element creation ways here
+  # TODO: Describe the element creation ways here
   class Element < NODE
     extend ElementAccessor
     include Attributes
