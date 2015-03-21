@@ -245,4 +245,11 @@ describe DOM::Element do
       subject.id.should eq 'test'
     end
   end
+
+  describe '#path' do
+    it 'should return the path' do
+      a >> subject
+      a.path.should eq 'div a'
+    end
+  end
 end

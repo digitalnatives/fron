@@ -151,5 +151,18 @@ module DOM
     def include?(other)
       `#{@el}.contains(#{DOM::NODE.get_element(other)})`
     end
+
+    # Returns the path of the elemnt
+    #
+    # @return [String] The path
+    def path
+      element = self
+      items = [element.tag]
+      while element.parent
+        items.unshift element.parent.tag
+        element = element.parent
+      end
+      items.join ' '
+    end
   end
 end

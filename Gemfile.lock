@@ -15,7 +15,7 @@ GIT
 PATH
   remote: .
   specs:
-    fron (1.0.0)
+    fron (0.2.0)
       opal (~> 0.7.0)
 
 GEM
