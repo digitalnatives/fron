@@ -120,20 +120,6 @@ describe DOM::Element do
     end
   end
 
-  describe '#focus' do
-    async 'should focus the elmenent' do
-      subject >> DOM::Document.body
-      subject[:tabindex] = 1
-      subject.on :focus do
-        run_async do
-          true.should eq true
-          subject.remove!
-        end
-      end
-      subject.focus
-    end
-  end
-
   describe '#find' do
     it 'should find a descendant element' do
       a >> subject
@@ -146,7 +132,7 @@ describe DOM::Element do
   end
 
   describe '#next' do
-    it 'should find the next descendant element' do
+    it 'should find the next element' do
       a >> subject
       a2 >> subject
       a.next.should eq a2
@@ -157,11 +143,37 @@ describe DOM::Element do
     end
   end
 
+  describe '#previous' do
+    it 'should find the previous element' do
+      a >> subject
+      a2 >> subject
+      a2.previous.should eq a
+    end
+
+    it 'should return nil if no element is found' do
+      subject.previous.should eq nil
+    end
+  end
+
   describe '#find_all' do
     it 'should find all descendant elements' do
       a >> subject
       a2 >> subject
       subject.find_all('a').count.should eq 2
+    end
+  end
+
+  describe '#include?' do
+    it 'should return true' do
+      a >> subject
+      subject.include?(a).should eq true
+      subject.include?(a2).should eq false
+    end
+  end
+
+  describe '#blur' do
+    it 'should blur the element' do
+      subject.blur
     end
   end
 
@@ -184,7 +196,7 @@ describe DOM::Element do
       subject << a
       subject.empty
       subject.children.length.should eq 0
-      subject.html.should eq ''
+      subject.html.should eq nil
     end
   end
 

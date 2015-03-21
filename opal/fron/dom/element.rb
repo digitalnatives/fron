@@ -3,6 +3,8 @@ module DOM
   #
   # @todo Describe the element creation ways here
   class Element < NODE
+    extend ElementAccessor
+    include Attributes
     include ClassList
     include Dimensions
 
@@ -16,6 +18,16 @@ module DOM
 
     # Modifier regexp
     MODIFIER_REGEXP    = /(#|\.)(.+?)(?=#|\.| |$)/
+
+    element_accessor :value
+    element_accessor :innerHTML, as: :html
+
+    element_accessor :readonly, default: false
+    element_accessor :checked,  default: false
+    element_accessor :disabled, default: false
+
+    element_method :focus
+    element_method :blur
 
     # Initializes a new elment based on the data
     #
@@ -76,95 +88,6 @@ module DOM
       @style.display = ''
     end
 
-    # Returns the value of the attribute with the given name
-    #
-    # @param name [String] The name of the attribute
-    #
-    # @return [String] The value
-    def [](name)
-      `#{@el}.getAttribute(#{name}) || Opal.nil`
-    end
-
-    # Sets the value of the attribute with the given name with the given value
-    #
-    # @param name [String] The name
-    # @param value [String] The value
-    #
-    # @return [type] [description]
-    def []=(name, value)
-      `#{@el}.setAttribute(#{name},#{value})`
-    end
-
-    # Returns the element matching the given selector or nil
-    #
-    # @param selector [String] The selector
-    #
-    # @return [DOM::Element] The element
-    def find(selector)
-      DOM::Element.from_node `#{@el}.querySelector(#{selector}) || Opal.nil`
-    end
-
-    # Returns the elements innerHTML
-    #
-    # @return [String] The html
-    def html
-      `#{@el}.innerHTML`
-    end
-
-    # Sets the elements innerHTML
-    #
-    # @param value [String] The html
-    def html=(value)
-      `#{@el}.innerHTML = #{value}`
-    end
-
-    # Returns the elements value
-    #
-    # @return [String] The value
-    def value
-      `#{@el}.value`
-    end
-
-    # Sets the elements value
-    #
-    # @param value [String] The value
-    def value=(value)
-      `#{@el}.value = #{value}`
-    end
-
-    # Returns the elements checked state
-    #
-    # @return [Boolean] True if checked false if not
-    def checked
-      `!!#{@el}.checked`
-    end
-
-    # Sets the elements checked state
-    #
-    # @param value [Boolean] The state
-    def checked=(value)
-      `#{@el}.checked = #{value}`
-    end
-
-    # Returns the disabled innerHTML
-    #
-    # @return [String] True if disabled false if not
-    def disabled
-      `#{@el}.disabled`
-    end
-
-    # Sets the elements disabled state
-    #
-    # @param value [Boolean] The state
-    def disabled=(value)
-      `#{@el}.disabled = #{value}`
-    end
-
-    # Focuses the element
-    def focus
-      `#{@el}.focus()`
-    end
-
     # Return the files of the element
     #
     # @return [Array] The files
@@ -186,27 +109,13 @@ module DOM
       self['id']
     end
 
-    # Returns the next element sibling
+    # Returns the element matching the given selector or nil
+    #
+    # @param selector [String] The selector
     #
     # @return [DOM::Element] The element
-    def next
-      DOM::Element.from_node `#{@el}.nextElementSibling || Opal.nil`
-    end
-
-    # Returns if the element has the given attribute
-    #
-    # @param name [String] The attribute
-    #
-    # @return [Boolean] True / False
-    def attribute?(name)
-      `#{@el}.hasAttribute(#{name})`
-    end
-
-    # Removes the given attribute
-    #
-    # @param name [String] The attributes name
-    def remove_attribute(name)
-      `#{@el}.removeAttribute(#{name})`
+    def find(selector)
+      DOM::Element.from_node `#{@el}.querySelector(#{selector}) || Opal.nil`
     end
 
     # Finds all of the elements matching the selector.
@@ -216,6 +125,30 @@ module DOM
     # @return [NodeList] The elements
     def find_all(selector)
       DOM::NodeList.new `Array.prototype.slice.call(#{@el}.querySelectorAll(#{selector}))`
+    end
+
+    # Returns the next element sibling
+    #
+    # @return [DOM::Element] The element
+    def next
+      DOM::Element.from_node `#{@el}.nextElementSibling || Opal.nil`
+    end
+
+    # Returns the previous element sibling
+    #
+    # @return [DOM::Element] The element
+    def previous
+      DOM::Element.from_node `#{@el}.previousElementSibling || Opal.nil`
+    end
+
+    # Returns whether or not the given node
+    # is inside the node.
+    #
+    # @param other [DOM::NODE] The other node
+    #
+    # @return [Boolean] True if contains false if not
+    def include?(other)
+      `#{@el}.contains(#{DOM::NODE.get_element(other)})`
     end
   end
 end
