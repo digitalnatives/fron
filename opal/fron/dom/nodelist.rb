@@ -5,6 +5,8 @@ module DOM
   class NodeList
     include Enumerable
     extend Forwardable
+
+    # @return [Array] The nodes
     attr_reader :nodes
 
     def_delegators :@nodes, :length, :include?, :each, :index, :[], :to_a, :last, :empty?

@@ -5,10 +5,11 @@ require 'fron/core/behaviors/routes'
 module Fron
   # Component
   class Component < DOM::Element
-    attr_reader :model
-
     class << self
+      # @return [String] The tagname of the component
       attr_reader :tagname
+
+      # @return [Hash] The hash of behaviors
       attr_reader :behaviors
 
       # Creates a new class with the specific tag

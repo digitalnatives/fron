@@ -6,6 +6,7 @@ module DOM
   # * Shorthand *on* and *on!* for non capture / capture
   # * Triggering event dynamically
   module Events
+    # @return [Hash] The listeners in a hash
     attr_reader :listeners
 
     # Triggers an event with the given type and data
