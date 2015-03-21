@@ -8,6 +8,7 @@ module DOM
     include ClassList
     include Dimensions
 
+    # @return [Style] The style object
     attr_reader :style
 
     # Attribute regexp

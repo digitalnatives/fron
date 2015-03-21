@@ -6,7 +6,17 @@ module Fron
     extend Eventable
     extend Forwardable
 
-    attr_accessor :url, :headers
+    # Sets / gets the URL
+    #
+    # @param value [String] The URL
+    # @return [String] The URL
+    attr_accessor :url
+
+    # Sets / gets the headers for the request
+    #
+    # @param value [Hash] The headers
+    # @return [Hash] The headers
+    attr_accessor :headers
 
     def_delegators :class, :trigger
 

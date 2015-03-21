@@ -2,6 +2,7 @@ module Fron
   # Keyboard class that handles matcing keyp presses to shortcuts.
   class Keyboard
     class << self
+      # @return [Array] The data for the shortcuts
       attr_reader :shortcuts
 
       # Delimeters to separate shortcut parts
