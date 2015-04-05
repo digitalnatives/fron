@@ -13,8 +13,7 @@ describe Fron::Component do
   subject  { TestComponent.new }
 
   let(:listeners) { subject.instance_variable_get '@listeners' }
-  let(:components) { subject.instance_variable_get('@component') }
-  let(:events) { subject.instance_variable_get('@on') }
+  let(:registry) { subject.instance_variable_get('@registry') }
 
   describe 'DSL' do
     subject { TestComponent }
@@ -34,22 +33,18 @@ describe Fron::Component do
     end
 
     describe '#on' do
-      it 'should create events array' do
-        subject.on :click, :test
-        events.should_not be nil
-      end
-
-      it 'should push event into the events array' do
-        subject.on :click, :test
-        events.length.should be 2
+      it 'should add to registry' do
+        expect {
+          subject.on :click, :test
+        }.to change { registry.count }.by 1
       end
     end
 
     describe '#component' do
       it 'should create components array' do
-        subject.component :test, 'test'
-        components.should_not be nil
-        components.length.should be 1
+        expect {
+          subject.component :test, 'test'
+        }.to change { registry.count }.by 1
       end
 
       it 'should create attr_reader for component' do
@@ -65,7 +60,7 @@ describe Fron::Component do
     end
 
     it 'should apply events' do
-      listeners[:click].length.should eq 2
+      listeners[:click].length.should eq 1
     end
 
     it 'should create components' do

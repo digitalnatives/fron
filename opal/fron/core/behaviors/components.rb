@@ -12,13 +12,11 @@ module Fron
 
       # Creates components from the registry
       #
-      # @param registry [Array] Registry of components
-      def self.component(registry)
-        registry.each do |args|
-          arguments = args.dup
-          block = arguments.last.is_a?(Proc) ? arguments.pop : nil
-          component(*arguments, &block)
-        end
+      # @param item [Array] Component directive
+      def self.component(item)
+        arguments = item.dup
+        block = arguments.last.is_a?(Proc) ? arguments.pop : nil
+        component(*arguments, &block)
       end
 
       # Creates a child component

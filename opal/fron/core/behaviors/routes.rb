@@ -46,13 +46,11 @@ module Fron
 
       # Registers routes from the registry
       #
-      # @param registry [Array] The routes
-      def self.route(registry)
-        registry.each do |item|
-          path, action = item
-          fail "There is no method #{action} on #{self}" unless respond_to? action
-          Routes.register path, action, self
-        end
+      # @param item [Array] The route
+      def self.route(item)
+        path, action = item
+        fail "There is no method #{action} on #{self}" unless respond_to? action
+        Routes.register path, action, self
       end
     end
   end

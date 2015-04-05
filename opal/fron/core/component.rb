@@ -9,8 +9,8 @@ module Fron
       # @return [String] The tagname of the component
       attr_reader :tagname
 
-      # @return [Hash] The hash of behaviors
-      attr_reader :behaviors
+      # @return [Array] The registry of behaviors
+      attr_reader :registry
 
       # Creates a new class with the specific tag
       #
@@ -28,14 +28,13 @@ module Fron
       # @param behavior [Module] The behavior
       # @param methods [Array] The methods to register
       def register(behavior, methods)
-        @behaviors ||= {}
-        @behaviors[behavior] = methods
+        @registry ||= []
 
         methods.each do |name|
-          instance_variable_set "@#{name}", []
           meta_def name do |*args, &block|
+            args.unshift behavior.method(name)
             args << block if block_given?
-            instance_variable_get("@#{name}") << args
+            @registry << args
           end
         end
       end
@@ -45,14 +44,7 @@ module Fron
       # @param subclass [Class] The subclass
       def inherited(subclass)
         # Copy behaviours
-        subclass.instance_variable_set '@behaviors', @behaviors.dup
-
-        # Copy registries
-        @behaviors.values.reduce(&:+).each do |type|
-          next unless (var = instance_variable_get("@#{type}"))
-          inst_var = subclass.instance_variable_get("@#{type}") || []
-          subclass.instance_variable_set("@#{type}", inst_var.concat(var))
-        end
+        subclass.instance_variable_set '@registry', @registry.dup
       end
 
       # Sets the tag name of the component
@@ -74,12 +66,8 @@ module Fron
 
       super tag || klass.tagname || klass.name.split('::').last
 
-      klass.behaviors.each do |mod, methods|
-        methods.each do |name|
-          next unless mod.respond_to?(name)
-          registry = self.class.instance_variable_get("@#{name}")
-          instance_exec registry, &mod.method(name)
-        end
+      klass.registry.each do |item|
+        instance_exec item[1..-1], &item.first
       end
     end
   end

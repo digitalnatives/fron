@@ -26,28 +26,23 @@ end
 describe SuperComponent do
   subject { described_class }
 
-  let(:components) { subject.instance_variable_get('@component') }
+  let(:registry) { subject.instance_variable_get('@registry') }
 
-  it 'should inherit components in order' do
-    components.should_not be nil
-    components[0].should eq [:text, 'text']
-    components[1].should eq [:title, 'title']
+  it 'should inherit registry in order' do
+    registry.should_not be nil
+    registry[0][1..-1].should eq [:text, 'text']
+    registry[2][1..-1].should eq [:title, 'title']
   end
 end
 
 describe InheritedComponent do
   subject { described_class }
 
-  let(:components) { subject.instance_variable_get('@component') }
-  let(:events) { subject.instance_variable_get('@on') }
+  let(:registry) { subject.instance_variable_get('@registry') }
 
-  it 'should inherit components' do
-    components.should_not be nil
-    components[0].should eq [:text, 'text']
-  end
-
-  it 'should inherit events' do
-    events.should_not be nil
-    events[0].should eq [:click, :render]
+  it 'should inherit registry' do
+    registry.should_not be nil
+    registry[0][1..-1].should eq [:text, 'text']
+    registry[1][1..-1].should eq [:click, :render]
   end
 end
