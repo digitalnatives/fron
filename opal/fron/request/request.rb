@@ -38,21 +38,21 @@ module Fron
     # @param data [Hash] The data
     #
     # @yieldparam response [Response] The response
-    def request(method = 'GET', data = nil, &callback)
-      if ready_state == 0 || ready_state == 4
-        @callback = callback
-        if method.upcase == 'UPLOAD'
-          send 'POST', @url, data.to_form_data
-        elsif method.upcase == 'GET' && data
-          send method, @url + '?' + data.to_query_string.to_s, nil
-        else
-          data = data.to_json if data
-          send method, @url, data
-        end
-        trigger :loading
+    def request(method = 'GET', data = {}, &callback)
+      fail 'The request is already running!' if (ready_state != 0 && ready_state != 4)
+      method = method.upcase
+      @callback = callback
+
+      case method
+      when 'UPLOAD'
+        send 'POST', @url, data.to_form_data
+      when 'GET'
+        send method, "#{@url}?#{data.to_query_string}"
       else
-        fail 'The request is already running!'
+        send method, @url, data.to_json
       end
+
+      trigger :loading
     end
 
     # Runs a GET request
@@ -90,7 +90,7 @@ module Fron
     # @param method [String] The method
     # @param url [String] The URL
     # @param data [*] The data
-    def send(method, url, data)
+    def send(method, url, data = nil)
       `#{@request}.open(#{method}, #{url})`
       `#{@request}.withCredentials = true`
       set_headers

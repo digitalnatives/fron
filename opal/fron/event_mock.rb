@@ -10,6 +10,8 @@ module EventMock
     # @return [Boolean] The verbosity
     attr_accessor :verbose
 
+    attr_accessor :mock
+
     # Triggers a syntetic event.
     #
     # @param element [DOM::Element] The element
@@ -41,14 +43,22 @@ module EventMock
 
     # Mocks triggers on DOM::Events
     def mock_events
-      DOM::Events.alias_method :old_trigger, :trigger
-      DOM::Events.define_method :trigger do |type, data = {}|
-        puts "Triggered syntetic event \"#{type}\" for \"#{path}\"" if EventMock.verbose
-        EventMock.trigger_event self, type, data
-      end
+      @mock = true
       yield
     ensure
-      DOM::Events.alias_method :trigger, :old_trigger
+      @mock = false
+    end
+  end
+end
+
+module DOM
+  module Events
+    alias_method :old_trigger, :trigger
+
+    def trigger(type, data = {})
+      return old_trigger(type, data) if EventMock.mock
+      puts "Triggered syntetic event \"#{type}\" for \"#{path}\"" if EventMock.verbose
+      EventMock.trigger_event self, type, data
     end
   end
 end

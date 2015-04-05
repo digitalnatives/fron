@@ -18,4 +18,4 @@ SynteticEvent.prototype.preventDefault = function(){
   this.defaultPrevented = true;
 };
 
-window.SynteticEvent = SynteticEvent
+window.SynteticEvent = SynteticEvent;
