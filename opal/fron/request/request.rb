@@ -43,14 +43,16 @@ module Fron
       method = method.upcase
       @callback = callback
 
-      case method
+      args = case method
       when 'UPLOAD'
-        send 'POST', @url, data.to_form_data
+        ['POST', @url, data.to_form_data]
       when 'GET'
-        send method, "#{@url}?#{data.to_query_string}"
+        [method, "#{@url}?#{data.to_query_string}"]
       else
-        send method, @url, data.to_json
+        [method, @url, data.to_json]
       end
+
+      send *args
 
       trigger :loading
     end
