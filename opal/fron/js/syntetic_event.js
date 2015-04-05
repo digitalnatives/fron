@@ -1,4 +1,4 @@
-window.SynteticEvent = function(target, data){
+var SynteticEvent = function(target, data){
   this.immediatePropagate = true;
   this.defaultPrevented = false;
   this.propagate = true;
@@ -17,3 +17,5 @@ SynteticEvent.prototype.stopPropagation = function(){
 SynteticEvent.prototype.preventDefault = function(){
   this.defaultPrevented = true;
 };
+
+window.SynteticEvent = SynteticEvent
