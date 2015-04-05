@@ -58,13 +58,9 @@ module Fron
     # @param shortcut [Hash] The shortcut
     def handle_shortcut(shortcut)
       action = shortcut[:action]
-      if shortcut[:block]
-        instance_exec(&shortcut[:block])
-      elsif respond_to? action
-        send action
-      else
-        warn self.class.name + " - shortcut #{shortcut[:parts].join('+')}:#{action} is not implemented!"
-      end
+      return instance_exec(&shortcut[:block]) if shortcut[:block]
+      return send(action) if respond_to? action
+      warn self.class.name + " - shortcut #{shortcut[:parts].join('+')}:#{action} is not implemented!"
     end
   end
 end

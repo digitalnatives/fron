@@ -39,20 +39,20 @@ module Fron
     #
     # @yieldparam response [Response] The response
     def request(method = 'GET', data = {}, &callback)
-      fail 'The request is already running!' if (ready_state != 0 && ready_state != 4)
+      fail 'The request is already running!' if ready_state != 0 && ready_state != 4
       method = method.upcase
       @callback = callback
 
       args = case method
-      when 'UPLOAD'
-        ['POST', @url, data.to_form_data]
-      when 'GET'
-        [method, "#{@url}?#{data.to_query_string}"]
-      else
-        [method, @url, data.to_json]
-      end
+             when 'UPLOAD'
+               ['POST', @url, data.to_form_data]
+             when 'GET'
+               [method, "#{@url}?#{data.to_query_string}"]
+             else
+               [method, @url, data.to_json]
+             end
 
-      send *args
+      send(*args)
 
       trigger :loading
     end

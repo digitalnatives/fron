@@ -52,6 +52,7 @@ module EventMock
 end
 
 module DOM
+  # Events
   module Events
     alias_method :old_trigger, :trigger
 

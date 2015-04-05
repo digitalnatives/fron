@@ -4,6 +4,7 @@ module DOM
   # TODO: Describe the element creation ways here
   class Element < NODE
     extend ElementAccessor
+
     include Attributes
     include ClassList
     include Dimensions
