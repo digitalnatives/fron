@@ -119,8 +119,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  execjs
+  execjs (~> 2.4.0)
   fron!
   opal-rspec (~> 0.4.0)
   quality_control!
-  rake
+  rake (~> 10.4.2)
