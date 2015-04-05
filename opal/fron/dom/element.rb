@@ -157,6 +157,11 @@ module DOM
 
     private
 
+    # Applies attributes from the given string.
+    #
+    # @param string [String] The string
+    #
+    # @return [String] The string without the attributes
     def apply_attributes(string)
       string.gsub ATTRIBUTE_REGEXP do |match|
         key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
@@ -165,6 +170,11 @@ module DOM
       end
     end
 
+    # Applies modifiers from the given string.
+    #
+    # @param string [String] The string
+    #
+    # @return [String] The string without the modifiers
     def apply_modifiers(string)
       string.gsub MODIFIER_REGEXP do |match|
         type, value = match.match(MODIFIER_REGEXP).to_a[1..2]

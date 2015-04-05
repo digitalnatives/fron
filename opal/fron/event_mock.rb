@@ -10,6 +10,11 @@ module EventMock
     # @return [Boolean] The verbosity
     attr_accessor :verbose
 
+    # Sets / gets the whether or not
+    # to mock events.
+    #
+    # @param value [Boolean] To mock or not
+    # @return [Boolean] The value
     attr_accessor :mock
 
     # Triggers a syntetic event.
@@ -54,6 +59,7 @@ end
 module DOM
   # Events
   module Events
+    # The old trigger method
     alias_method :old_trigger, :trigger
 
     def trigger(type, data = {})
