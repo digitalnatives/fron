@@ -39,21 +39,10 @@ module DOM
         tag, rest = data.match(TAG_REGEXP).to_a[1..2]
         @el = `document.createElement(#{tag})`
         `#{@el}._instance = #{self}`
-        rest = rest.gsub ATTRIBUTE_REGEXP do |match|
-          key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
-          self[key] = value
-          ''
-        end
-        rest = rest.gsub MODIFIER_REGEXP do |match|
-          type, value = match.match(MODIFIER_REGEXP).to_a[1..2]
-          case type
-          when '#'
-            self['id'] = value
-          when '.'
-            add_class value
-          end
-          ''
-        end
+
+        rest = apply_attributes rest
+        rest = apply_modifiers rest
+
         if (match = rest.match(/\s(.+)$/))
           self.text = match[0].strip
         end
@@ -164,6 +153,29 @@ module DOM
         element = element.parent
       end
       items.join ' '
+    end
+
+    private
+
+    def apply_attributes(string)
+      string.gsub ATTRIBUTE_REGEXP do |match|
+        key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
+        self[key] = value
+        ''
+      end
+    end
+
+    def apply_modifiers(string)
+      string.gsub MODIFIER_REGEXP do |match|
+        type, value = match.match(MODIFIER_REGEXP).to_a[1..2]
+        case type
+        when '#'
+          self['id'] = value
+        when '.'
+          add_class value
+        end
+        ''
+      end
     end
   end
 end
