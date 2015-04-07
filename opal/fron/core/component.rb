@@ -1,6 +1,7 @@
 require 'fron/core/behaviors/components'
 require 'fron/core/behaviors/events'
 require 'fron/core/behaviors/routes'
+require 'fron/core/behaviors/style'
 
 module Fron
   # Component
@@ -57,6 +58,7 @@ module Fron
 
     include Behaviors::Components
     include Behaviors::Events
+    include Behaviors::Style
 
     # Initalizs the component
     #
