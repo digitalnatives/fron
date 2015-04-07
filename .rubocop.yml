@@ -1,6 +1,6 @@
 AllCops:
   Exclude:
-    - vendor/**/*
+    - website/**/*
 
 VariableName:
   EnforcedStyle: snake_case
