@@ -24,9 +24,10 @@ module DOM
     element_accessor :value
     element_accessor :innerHTML, as: :html
 
-    element_accessor :readonly, default: false
-    element_accessor :checked,  default: false
-    element_accessor :disabled, default: false
+    element_accessor :readonly,   default: false
+    element_accessor :checked,    default: false
+    element_accessor :disabled,   default: false
+    element_accessor :spellcheck, default: false
 
     element_method :focus
     element_method :blur

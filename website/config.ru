@@ -16,5 +16,6 @@ use Proxy
 
 run Opal::Server.new { |s|
   s.append_path 'website'
+  s.source_map = false
   s.main = 'application'
 }

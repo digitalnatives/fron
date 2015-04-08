@@ -1,5 +1,15 @@
 require 'fron'
+require 'vendor/highlight'
+require 'vendor/highlight.ruby'
 require 'vendor/marked.min'
+
+%x{
+  marked.setOptions({
+    highlight: function(code) {
+      return hljs.highlightAuto(code).value;
+    }
+  });
+}
 
 class Sidebar < Fron::Component
   class Item < Fron::Component
@@ -9,7 +19,11 @@ class Sidebar < Fron::Component
   component :title,      'sidebar-title[target=home] Fron'
   component :about,      'sidebar-item[target=intro] Introduction'
   component :dom,        'sidebar-item[target=assumptions] Assumptions'
-  component :components, 'sidebar-item[target=project-setup] Project Setup'
+  component :setup,      'sidebar-item[target=project-setup] Project Setup'
+  component :components, 'sidebar-item[target=components] Components'
+  component :components, 'sidebar-sub-item[target=events] Events'
+  component :components, 'sidebar-sub-item[target=composition] Composition'
+  component :components, 'sidebar-sub-item[target=inheritance] Inheritance'
   component :behaviors,  'sidebar-item[target=behaviors] Behaviors'
 
   style background: '#EEE',
@@ -27,14 +41,23 @@ class Sidebar < Fron::Component
           cursor: :pointer
         },
         'sidebar-item' => {
+          borderBottom: '1px solid #DDD',
           counterIncrement: :items,
+          counterReset: :subitems,
           padding: '10px 0',
           display: :block,
           '&:before' => {
             content: 'counter(items) ". "'
-          },
-          '+ sidebar-item' => {
-            borderTop: '1px solid #DDD'
+          }
+        },
+        'sidebar-sub-item' => {
+          borderBottom: '1px solid #DDD',
+          counterIncrement: :subitems,
+          padding: '10px 0',
+          paddingLeft: 10.px,
+          display: :block,
+          '&:before' => {
+            content: 'counter(items) ". " counter(subitems) ". "'
           }
         }
 
@@ -49,23 +72,41 @@ class Main < Fron::Component
   include Fron::Behaviors::Routes
 
   component :sidebar, Sidebar
-  component :container, 'container'
+  component :wrapper, :wrapper do
+    component :container, :container
+  end
 
   stylesheet 'http://fonts.googleapis.com/css?family=Open+Sans:400,600,700'
+  stylesheet 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css'
 
   style fontFamily: 'Open Sans',
         height: '100vh',
-        color: '#333',
+        color: '#444',
         display: :flex,
-        sidebar: {
-          flex: '0 0 240px',
+        a: {
+          textDecoration: :none,
+          color: '#00ACE6'
         },
-        container: {
+        sidebar: {
+          flex: '0 0 240px'
+        },
+        pre: {
+          background: '#F9F9F9',
+          padding: 20.px
+        },
+        wrapper: {
           overflow: :auto,
-          padding: 20.px,
-          flex: 1
+          padding: 40.px,
+          paddingBottom: 60.px,
+          flex: 1,
+          container: {
+            display: :block,
+            maxWidth: 900.px,
+            margin: '0 auto'
+          }
         },
         h1: {
+          lineHeight: '1em',
           marginTop: 0
         }
 
@@ -83,7 +124,7 @@ class Main < Fron::Component
   def page(page)
     return home if page == '/'
     load page do |html|
-      @container.html = html
+      @wrapper.container.html = html
     end
   end
 
