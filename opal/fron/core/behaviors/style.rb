@@ -22,8 +22,7 @@ module Fron
           # @param data [Hash] The styles
           def add_rule(tag, data)
             @rules ||= {}
-            return if @rules[tag]
-            text = data.map do |key, value|
+            style = data.each_with_object({}) do |(key, value), memo|
               if value.is_a? Hash
                 if key =~ /&/
                   add_rule key.gsub(/&/, tag), value
@@ -32,18 +31,21 @@ module Fron
                 end
                 next
               else
-                key = key.gsub(/(.)([A-Z])/, '\1-\2').downcase
-                value = value.call if value.is_a? Proc
-                "#{key}: #{value};"
+                memo[key.gsub(/(.)([A-Z])/, '\1-\2').downcase] = value.is_a?(Proc) ? value.call : value
               end
-            end.join(' ')
-            @rules[tag] = text
+            end
+            @rules[tag] ||= {}
+            @rules[tag].merge! style
             render
           end
 
           # Renders the styles
           def render
-            style.text = @rules.map { |tag, text| "#{tag} { #{text} }" }.join("\n")
+            style.text = @rules.map { |tag, data| "#{tag} { #{render_rule(data)} }" }.join("\n")
+          end
+
+          def render_rule(data)
+            data.map { |key, value| "#{key}: #{value};" }.join('')
           end
 
           # Defines a stylesheet link tag

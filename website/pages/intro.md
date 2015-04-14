@@ -7,7 +7,7 @@ for creating dynamic **composeable user interfaces** with Ruby (through Opal).
 * **Behaviors** to specify how components behave
 * **Utilities** such as **Request**, **Shortcuts** or **Drag & Drop**
 * **Testable** with **RSpec**
-* **Test Coverage** can be reported accurately
+* **Test Coverage** can be reported accurately (with source maps)
 
 ## Resources
 * Source Code: [https://github.com/digitalnatives/fron](https://github.com/digitalnatives/fron)
@@ -26,7 +26,7 @@ We chose ruby for these awesome features:
 Both of those frameworks apply the same logic that has been used to create web sites for decades, namely the MVC pattern and templates, also they are not using the DOM
 in a Rubyesque way, they treat the frontend as you would in a Rails application.
 
-Fron is different because it is not trying to be a full featured web application, it is just the **UI part** in **Ruby**.
+Fron is different because it is not trying to be a full featured web application, it is just the **fron(tend) part** in **Ruby**.
 
 ## It is used in production?
 Currently we use it in production in one of our inhouse products [Nostromo](https://nostromo.io).

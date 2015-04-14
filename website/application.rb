@@ -3,6 +3,10 @@ require 'vendor/highlight'
 require 'vendor/highlight.ruby'
 require 'vendor/marked.min'
 
+require 'examples/content_editable'
+require 'examples/my_button'
+require 'examples/icon_button'
+
 %x{
   marked.setOptions({
     highlight: function(code) {
@@ -21,9 +25,9 @@ class Sidebar < Fron::Component
   component :dom,        'sidebar-item[target=assumptions] Assumptions'
   component :setup,      'sidebar-item[target=project-setup] Project Setup'
   component :components, 'sidebar-item[target=components] Components'
-  component :components, 'sidebar-sub-item[target=events] Events'
-  component :components, 'sidebar-sub-item[target=composition] Composition'
-  component :components, 'sidebar-sub-item[target=inheritance] Inheritance'
+  component :components, 'sidebar-sub-item[target=components/inheritance] Inheritance'
+  component :components, 'sidebar-sub-item[target=components/composition] Composition'
+  component :components, 'sidebar-sub-item[target=components/events] Events'
   component :behaviors,  'sidebar-item[target=behaviors] Behaviors'
 
   style background: '#EEE',
@@ -57,14 +61,14 @@ class Sidebar < Fron::Component
           paddingLeft: 10.px,
           display: :block,
           '&:before' => {
-            content: 'counter(items) ". " counter(subitems) ". "'
+            content: 'counter(items) "." counter(subitems) ". "'
           }
         }
 
   on :click, '[target]', :navigate
 
   def navigate(event)
-    DOM::Window.state = event.target[:target]
+    DOM::Window.state = "/#{event.target[:target]}"
   end
 end
 
@@ -76,8 +80,9 @@ class Main < Fron::Component
     component :container, :container
   end
 
-  stylesheet 'http://fonts.googleapis.com/css?family=Open+Sans:400,600,700'
-  stylesheet 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css'
+  stylesheet '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+  stylesheet '//fonts.googleapis.com/css?family=Open+Sans:400,600,700'
+  stylesheet '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css'
 
   style fontFamily: 'Open Sans',
         height: '100vh',
@@ -92,6 +97,7 @@ class Main < Fron::Component
         },
         pre: {
           background: '#F9F9F9',
+          borderRadius: 5.px,
           padding: 20.px
         },
         wrapper: {
@@ -125,12 +131,15 @@ class Main < Fron::Component
     return home if page == '/'
     load page do |html|
       @wrapper.container.html = html
+      @wrapper.container.find_all('example').each do |example|
+        example << Module.const_get(example['class']).new
+      end
     end
   end
 
   def load(page)
     return yield @pages[page] if @pages[page]
-    Fron::Request.new("assets/pages#{page}.md").get do |response|
+    Fron::Request.new("/assets/pages#{page}.md").get do |response|
       @pages[page] = `marked(#{response.body})`
       yield @pages[page]
     end
