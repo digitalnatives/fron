@@ -27,7 +27,10 @@ module Fron
                 if key =~ /&/
                   add_rule key.gsub(/&/, tag), value
                 else
-                  add_rule "#{tag} #{key}", value
+                  new_value = value.dup
+                  key.split(',').each do |part|
+                    add_rule "#{tag.strip} #{part.strip}", new_value
+                  end
                 end
                 next
               else

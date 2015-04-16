@@ -5,7 +5,9 @@ require 'vendor/marked.min'
 
 require 'examples/content_editable'
 require 'examples/my_button'
+require 'examples/converter'
 require 'examples/icon_button'
+require 'examples/image_paragraph'
 
 %x{
   marked.setOptions({
@@ -22,19 +24,20 @@ class Sidebar < Fron::Component
 
   component :title,      'sidebar-title[target=home] Fron'
   component :about,      'sidebar-item[target=intro] Introduction'
-  component :dom,        'sidebar-item[target=assumptions] Assumptions'
-  component :setup,      'sidebar-item[target=project-setup] Project Setup'
+  component :dom,        'sidebar-item[target=getting-started] Getting Started'
+  component :setup,      'sidebar-item[target=the-dom] The DOM'
   component :components, 'sidebar-item[target=components] Components'
   component :components, 'sidebar-sub-item[target=components/inheritance] Inheritance'
   component :components, 'sidebar-sub-item[target=components/composition] Composition'
   component :components, 'sidebar-sub-item[target=components/events] Events'
-  component :behaviors,  'sidebar-item[target=behaviors] Behaviors'
+  component :components, 'sidebar-sub-item[target=components/routes] Routes'
+  component :behaviors,  'sidebar-item[target=utilities] Utilities'
+  component :behaviors,  'sidebar-sub-item[target=utilities/request] Request'
 
-  style background: '#EEE',
-        counterReset: :items,
+  style counterReset: :items,
         padding: 20.px,
         'sidebar-title' => {
-          borderBottom: '2px solid #DDD',
+          borderBottom: '2px solid #EEE',
           paddingBottom: 5.px,
           marginBottom: 10.px,
           display: :block,
@@ -45,7 +48,7 @@ class Sidebar < Fron::Component
           cursor: :pointer
         },
         'sidebar-item' => {
-          borderBottom: '1px solid #DDD',
+          borderBottom: '1px solid #EEE',
           counterIncrement: :items,
           counterReset: :subitems,
           padding: '10px 0',
@@ -55,7 +58,7 @@ class Sidebar < Fron::Component
           }
         },
         'sidebar-sub-item' => {
-          borderBottom: '1px solid #DDD',
+          borderBottom: '1px solid #EEE',
           counterIncrement: :subitems,
           padding: '10px 0',
           paddingLeft: 10.px,
@@ -85,15 +88,16 @@ class Main < Fron::Component
   stylesheet '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css'
 
   style fontFamily: 'Open Sans',
-        height: '100vh',
+        width: 1200.px,
+        margin: '0 auto',
         color: '#444',
-        display: :flex,
         a: {
           textDecoration: :none,
           color: '#00ACE6'
         },
         sidebar: {
-          flex: '0 0 240px'
+          width: 240.px,
+          float: :left
         },
         pre: {
           background: '#F9F9F9',
@@ -104,12 +108,8 @@ class Main < Fron::Component
           overflow: :auto,
           padding: 40.px,
           paddingBottom: 60.px,
-          flex: 1,
-          container: {
-            display: :block,
-            maxWidth: 900.px,
-            margin: '0 auto'
-          }
+          marginLeft: 240.px,
+          display: :block
         },
         h1: {
           lineHeight: '1em',
@@ -147,7 +147,9 @@ class Main < Fron::Component
 end
 
 DOM::Document.body.style.margin = 0
+DOM::Document.body.style.overflowY = :scroll
 DOM::Document.body.style.fontSize = 18.px
+DOM::Document.body.style.lineHeight = 26.px
 DOM::Document.body << Main.new
 
 DOM::Window.trigger :popstate

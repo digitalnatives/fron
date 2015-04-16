@@ -1,4 +1,4 @@
-# 2. Assumptions
+# 2. Getting Started
 This guide is for anyone who wants to get started with Fron. It's recommended to have a basic understanding of the **Ruby / JavaScript / CSS** programming languages and be familiar the **DOM**.
 
 In order to try the examples the following prerequisites must be installed:

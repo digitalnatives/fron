@@ -18,6 +18,7 @@ for creating dynamic **composeable user interfaces** with Ruby (through Opal).
 ## Why Ruby?
 We chose ruby for these awesome features:
 * It is a **mature language** (20 years)
+* Has a very good **module and class** system
 * A **coding style guide** is already present
 * **Testing** is and always have been a core part (Rspec)
 * The **tooling** is great (Rubycritic, Rubocop, Sprockets just to name a few)
