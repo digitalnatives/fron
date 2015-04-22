@@ -7,7 +7,9 @@ require 'examples/content_editable'
 require 'examples/my_button'
 require 'examples/converter'
 require 'examples/icon_button'
+require 'examples/source_reader'
 require 'examples/image_paragraph'
+require 'examples/text_area'
 
 %x{
   marked.setOptions({
@@ -31,8 +33,10 @@ class Sidebar < Fron::Component
   component :components, 'sidebar-sub-item[target=components/composition] Composition'
   component :components, 'sidebar-sub-item[target=components/events] Events'
   component :components, 'sidebar-sub-item[target=components/routes] Routes'
+  component :components, 'sidebar-sub-item[target=components/styles] Styles'
   component :behaviors,  'sidebar-item[target=utilities] Utilities'
   component :behaviors,  'sidebar-sub-item[target=utilities/request] Request'
+  component :behaviors,  'sidebar-sub-item[target=utilities/local-storage] Local Storage'
 
   style counterReset: :items,
         padding: 20.px,
@@ -146,10 +150,12 @@ class Main < Fron::Component
   end
 end
 
-DOM::Document.body.style.margin = 0
-DOM::Document.body.style.overflowY = :scroll
-DOM::Document.body.style.fontSize = 18.px
-DOM::Document.body.style.lineHeight = 26.px
+Fron::Behaviors::Style::Sheet.add_rule '*', boxSizing: 'border-box'
+Fron::Behaviors::Style::Sheet.add_rule 'body', margin: 0,
+                                               overflowY: :scroll,
+                                               fontSize: 18.px,
+                                               lineHeight: 26.px
+
 DOM::Document.body << Main.new
 
 DOM::Window.trigger :popstate
