@@ -48,7 +48,7 @@ module Fron
       #
       # @param item [Array] The route
       def self.route(item)
-        path, action = item
+        path, action = item[:args]
         fail "There is no method #{action} on #{self}" unless respond_to? action
         Routes.register path, action, self
       end

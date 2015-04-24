@@ -14,8 +14,8 @@ module Fron
       #
       # @param item [Array] Component directive
       def self.component(item)
-        arguments = item.dup
-        block = arguments.last.is_a?(Proc) ? arguments.pop : nil
+        arguments = item[:args].dup
+        block = item[:block]
         component(*arguments, &block)
       end
 

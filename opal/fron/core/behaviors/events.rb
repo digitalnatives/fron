@@ -14,10 +14,11 @@ module Fron
       #
       # @param item [Array] Registry of an event
       def self.on(item)
-        if item.length == 3
-          delegate(item[0], item[1]) { |event| send item[2], event }
+        args = item[:args]
+        if args.length == 3
+          delegate(args[0], args[1]) { |event| send args[2], event }
         else
-          on(item[0]) { |event| send item[1], event }
+          on(args[0]) { |event| send args[1], event }
         end
       end
     end

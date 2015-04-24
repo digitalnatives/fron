@@ -20,16 +20,18 @@ module Fron
           #
           # @param tag [String] The selector for the tag
           # @param data [Hash] The styles
-          def add_rule(tag, data)
+          def add_rule(tag, data, id)
             @rules ||= {}
+            @rules[tag] ||= {}
+            return if @rules[tag][id]
             style = data.each_with_object({}) do |(key, value), memo|
               if value.is_a? Hash
                 if key =~ /&/
-                  add_rule key.gsub(/&/, tag), value
+                  add_rule key.gsub(/&/, tag), value, id
                 else
                   new_value = value.dup
                   key.split(',').each do |part|
-                    add_rule "#{tag.strip} #{part.strip}", new_value
+                    add_rule "#{tag.strip} #{part.strip}", new_value, id
                   end
                 end
                 next
@@ -37,9 +39,12 @@ module Fron
                 memo[key.gsub(/(.)([A-Z])/, '\1-\2').downcase] = value.is_a?(Proc) ? value.call : value
               end
             end
-            @rules[tag] ||= {}
-            @rules[tag].merge! style
-            render
+            @rules[tag][id] = style
+            render_proc.call
+          end
+
+          def render_proc
+            @render_proc ||= RenderProc.new method(:render), true, 'Rendered styles'
           end
 
           # Renders the styles
@@ -48,7 +53,7 @@ module Fron
           end
 
           def render_rule(data)
-            data.map { |key, value| "#{key}: #{value};" }.join('')
+            data.values.reduce(&:merge!).to_h.map { |key, value| "#{key}: #{value};" }.join('')
           end
 
           # Defines a stylesheet link tag
@@ -78,8 +83,7 @@ module Fron
       #
       # @param item [Array] The styles
       def self.style(item)
-        data = item[0].to_h
-        Sheet.add_rule tag, data
+        Sheet.add_rule tag, item[:args].first, item[:id]
       end
     end
   end

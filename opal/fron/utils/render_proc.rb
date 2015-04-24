@@ -6,10 +6,11 @@ module Fron
     #
     # @param method [Method] The method
     # @param verbose [Boolean] Whether or not to log render time
-    def initialize(method, verbose)
+    def initialize(method, verbose, message)
       @running = false
       @method  = method
       @verbose = verbose
+      @message = message
     end
 
     # Runs the proc
@@ -19,7 +20,10 @@ module Fron
       request_animation_frame do
         time = Time.now
         @method.call
-        logger.info "Rendered #{@method.owner} in #{(Time.now - time) * 1000}ms" if @verbose
+        if @verbose
+          message = @message || "Rendered #{@method.owner}"
+          logger.info "[#{(Time.now - time) * 1000}ms] #{message}"
+        end
         @running = false
       end
     end

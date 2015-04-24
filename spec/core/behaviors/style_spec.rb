@@ -17,8 +17,10 @@ end
 
 describe StyleTest do
   let(:style) { DOM::Document.head.find('style') }
+  let(:method) { Fron::Behaviors::Style::Sheet.method(:render) }
 
   before do
+    allow(Fron::Behaviors::Style::Sheet).to receive(:render_proc).and_return method
     subject
   end
 

@@ -2,6 +2,7 @@ require 'fron/core/behaviors/components'
 require 'fron/core/behaviors/events'
 require 'fron/core/behaviors/routes'
 require 'fron/core/behaviors/style'
+require 'securerandom'
 
 module Fron
   # Component
@@ -33,9 +34,7 @@ module Fron
 
         methods.each do |name|
           meta_def name do |*args, &block|
-            args.unshift behavior.method(name)
-            args << block if block_given?
-            @registry << args
+            @registry << { method: behavior.method(name), args: args, block: block, id: SecureRandom.uuid }
           end
         end
       end
@@ -69,7 +68,7 @@ module Fron
       super tag || klass.tagname || klass.name.split('::').last
 
       klass.registry.each do |item|
-        instance_exec item[1..-1], &item.first
+        instance_exec item, &item[:method]
       end
     end
   end

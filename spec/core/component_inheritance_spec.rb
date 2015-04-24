@@ -30,8 +30,8 @@ describe SuperComponent do
 
   it 'should inherit registry in order' do
     registry.should_not be nil
-    registry[0][1..-1].should eq [:text, 'text']
-    registry[2][1..-1].should eq [:title, 'title']
+    registry[0][:args].should eq [:text, 'text']
+    registry[2][:args].should eq [:title, 'title']
   end
 end
 
@@ -42,7 +42,7 @@ describe InheritedComponent do
 
   it 'should inherit registry' do
     registry.should_not be nil
-    registry[0][1..-1].should eq [:text, 'text']
-    registry[1][1..-1].should eq [:click, :render]
+    registry[0][:args].should eq [:text, 'text']
+    registry[1][:args].should eq [:click, :render]
   end
 end
