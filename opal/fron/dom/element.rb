@@ -141,7 +141,7 @@ module DOM
     #
     # @return [Boolean] True if contains false if not
     def include?(other)
-      `#{@el}.contains(#{DOM::NODE.get_element(other)})`
+      `#{@el}.contains(#{DOM::NODE.get_element(other)})` || other == self
     end
 
     # Returns the path of the elemnt
