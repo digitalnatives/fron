@@ -16,4 +16,11 @@ class Numeric
   def px
     "#{round}px"
   end
+
+  # Returns the em representation
+  #
+  # @return [String] The em
+  def em
+    "#{self}em"
+  end
 end
