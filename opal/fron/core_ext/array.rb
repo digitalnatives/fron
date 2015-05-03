@@ -9,4 +9,15 @@ class Array
       yield self[i], i
     end
   end
+
+  # Sort by array in place.
+  #
+  # @param block [Proc] The block
+  #
+  # @return [Array] The array
+  def sort_by!(&block)
+    sort! do |a, b|
+      block.call(a) <=> block.call(b)
+    end
+  end
 end

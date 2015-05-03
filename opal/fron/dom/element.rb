@@ -21,6 +21,7 @@ module DOM
     # Modifier regexp
     MODIFIER_REGEXP    = /(#|\.)(.+?)(?=#|\.| |$)/
 
+    element_accessor :src
     element_accessor :value
     element_accessor :innerHTML, as: :html
 
