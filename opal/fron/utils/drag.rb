@@ -31,10 +31,11 @@ module Fron
     # Creates a new drag instance.
     #
     # @param base [DOM::Element] The element to monitor
-    def initialize(base)
+    def initialize(base, start_distance = 7)
       reset
       @base = base
       @body = DOM::Document.body
+      @start_distance = start_distance
 
       @base.on EVENTS[:down] do |event| start(event) end
     end
@@ -66,6 +67,8 @@ module Fron
       @up_method  = @body.on! EVENTS[:up]   do |evt| up(evt)  end
 
       request_animation_frame do move end
+
+      pos(event) if @start_distance == 0
     end
 
     # Runs when the pointer moves starts.
@@ -73,7 +76,7 @@ module Fron
     # @param event [Event] The event
     def pos(event)
       @position = position(event)
-      if diff.distance > 7 && !@started
+      if diff.distance >= @start_distance.to_i && !@started
         @started = true
         trigger 'start', @target
       end
@@ -128,7 +131,7 @@ module Fron
       if IS_TOUCH && event.touches
         Point.new `#{event.touches}[0].pageX`, `#{event.touches}[0].pageY`
       else
-        Point.new event.pageX, event.pageY
+        Point.new event.page_x, event.page_y
       end
     end
   end
