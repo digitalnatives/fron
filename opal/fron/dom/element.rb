@@ -34,6 +34,8 @@ module DOM
     element_method :focus
     element_method :blur
 
+    attribute_accessor :tabindex, default: nil
+
     # Initializes a new elment based on the data
     #
     # @param data [*] The data

@@ -22,4 +22,10 @@ describe Numeric do
       subject.px.should eq '1px'
     end
   end
+
+  describe '#em' do
+    it 'should return the em representation' do
+      subject.em.should eq '0.5em'
+    end
+  end
 end

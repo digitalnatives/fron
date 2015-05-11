@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DOM::Element do
-  subject  { described_class.new 'div' }
+  subject  { described_class.new 'div[tabindex=0]' }
   let(:el) { subject.instance_variable_get('@el') }
   let(:a)  { described_class.new 'a' }
   let(:a2) { described_class.new 'a' }
@@ -51,6 +51,17 @@ describe DOM::Element do
 
     it 'should return flase unless matches selector' do
       subject.matches('body').should be false
+    end
+  end
+
+  describe '#tabindex' do
+    it 'should return tabindex' do
+      subject.tabindex.should eq '0'
+    end
+
+    it 'should set tabindex' do
+      subject.tabindex = 1
+      subject[:tabindex].should eq '1'
     end
   end
 
