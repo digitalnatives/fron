@@ -11,6 +11,27 @@ module DOM
       end
     end
 
+    # Defines a attributes accessor that is delegated to the
+    # underlying elements gieven attribute.
+    #
+    # Options:
+    # * **as** - Use this instead of the attribute as identifier
+    # * **default** - Return this value if the attribute is null or undefined
+    #
+    # @param attribute [Symbol] The attribute
+    # @param options [Hash] The options
+    def attribute_accessor(attribute, options = {})
+      options = { as: attribute, default: nil }.merge!(options)
+
+      define_method options[:as] do
+        self[attribute] || options[:default]
+      end
+
+      define_method "#{options[:as]}=" do |value|
+        self[attribute] = value
+      end
+    end
+
     # Defines a property accessor that is delegated to the
     # underlying element.
     #
