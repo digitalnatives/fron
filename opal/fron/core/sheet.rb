@@ -21,23 +21,26 @@ module Fron
       #
       # @param tag [String] The selector for the tag
       # @param data [Hash] The styles
+      #
+      # BUG: https://github.com/opal/opal/issues/844
+      #      use each_with_object({}) after it's resolved
       def add_rule(tag, data, id)
         @rules ||= {}
         @rules[tag] ||= {}
         return if @rules[tag][id]
-        style = data.each_with_object({}) do |(key, value), memo|
+        style = {}
+        data.each do |key, value|
           if value.is_a? Hash
+            value['_rule_id'] ||= SecureRandom.uuid
             if key =~ /&/
-              add_rule key.gsub(/&/, tag), value, id
+              add_rule key.gsub(/&/, tag), value, value['_rule_id']
             else
-              new_value = value.dup
               key.split(',').each do |part|
-                add_rule "#{tag.strip} #{part.strip}", new_value, id
+                add_rule "#{tag.strip} #{part.strip}", value, value['_rule_id']
               end
             end
-            next
           else
-            memo[key.gsub(/(.)([A-Z])/, '\1-\2').downcase] = value
+            style[key.gsub(/(.)([A-Z])/, '\1-\2').downcase] = value
           end
         end
         @rules[tag][id] = style
@@ -54,7 +57,7 @@ module Fron
       end
 
       def render_rule(data)
-        data.values.reduce(&:merge!).to_h.map { |key, value|
+        data.values.reduce(&:merge).to_h.map { |key, value|
           val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
           "#{key}: #{val};"
         }.join('')
