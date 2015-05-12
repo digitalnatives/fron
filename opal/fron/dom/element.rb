@@ -31,6 +31,11 @@ module DOM
     element_accessor :spellcheck,      default: false
     element_accessor :contentEditable, default: false, as: :contenteditable
 
+    element_accessor :scrollTop, as: :scroll_top, default: 0
+    element_accessor :scrollLeft, as: :scroll_left, default: 0
+    element_accessor :scrollWidth, as: :scroll_width, default: 0
+    element_accessor :scrollHeight, as: :scroll_height, default: 0
+
     element_method :focus
     element_method :blur
 

@@ -48,20 +48,6 @@ module DOM
       `#{client_rect}.height`
     end
 
-    # Returns the top scroll position of the element
-    #
-    # @return [Number] The height
-    def scroll_top
-      `#{@el}.scrollTop`
-    end
-
-    # Returns the left scroll position of the element
-    #
-    # @return [Number] The height
-    def scroll_left
-      `#{@el}.scrollLeft`
-    end
-
     # Returns whether or not the element covers the given position
     #
     # @param pos [Point] The point
