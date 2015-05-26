@@ -48,7 +48,11 @@ module Fron
       end
 
       def render_proc
-        @render_proc ||= RenderProc.new method(:render), true, 'Rendered styles'
+        @render_proc ||= RenderProc.new method(:render_styles), true, 'Rendered styles'
+      end
+
+      def render_styles
+        render
       end
 
       # Renders the styles

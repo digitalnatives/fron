@@ -3,7 +3,9 @@ var SynteticEvent = function(target, data){
   this.defaultPrevented = false;
   this.propagate = true;
   this.target = target;
-  this.data = data;
+  for (var key in data) {
+    this[key] = data[key];
+  }
 };
 
 SynteticEvent.prototype.stopImmediatePropagation = function(){
