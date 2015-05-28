@@ -17,18 +17,22 @@ module DOM
     # Options:
     # * **as** - Use this instead of the attribute as identifier
     # * **default** - Return this value if the attribute is null or undefined
+    # * **coerce** - Coerse the string value of the attribute with this method
     #
     # @param attribute [Symbol] The attribute
     # @param options [Hash] The options
     def attribute_accessor(attribute, options = {})
-      options = { as: attribute, default: nil }.merge!(options)
+      options = { as: attribute, default: nil, coerce: nil }.merge!(options)
 
       define_method options[:as] do
-        self[attribute] || options[:default]
+        value = self[attribute] || options[:default]
+        next value unless options[:coerce]
+        value.send(options[:coerce])
       end
 
       define_method "#{options[:as]}=" do |value|
         self[attribute] = value
+        trigger 'attribute:changed'
       end
     end
 
