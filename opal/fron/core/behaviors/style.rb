@@ -6,10 +6,14 @@ module Fron
       #
       # @param base [Class] The class
       def self.included(base)
-        base.register self, [:style]
+        base.register self, [:style, :keyframes]
         base.meta_def :stylesheet do |url|
           Sheet.stylesheet url
         end
+      end
+
+      def self.keyframes(item)
+        Sheet.add_animation item[:args].first, item[:args][1]
       end
 
       # Defines styles for the component

@@ -57,14 +57,10 @@ module Fron
 
       # Renders the styles
       def render
-        style.text = @rules.map { |tag, data| "#{tag} { #{render_rule(data)} }" }.join("\n")
-      end
-
-      def render_rule(data)
-        data.values.reduce(&:merge).to_h.map { |key, value|
-          val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
-          "#{key}: #{val};"
-        }.join('')
+        style.text = @rules.map { |tag, data|
+          body = tag.start_with?('@') ? render_at_block(data) : render_rule(data)
+          "#{tag} { #{body} }"
+        }.join("\n")
       end
 
       # Returns the helper for the proc rendering.
@@ -76,6 +72,42 @@ module Fron
 
       def helpers(&block)
         Helpers.class_eval(&block)
+      end
+
+      def render_at_block(data)
+        data.map do |key, block|
+          body = block.map do |prop, value|
+            val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
+            "#{prop}: #{val};"
+          end.join('')
+          "#{key} { #{body} }"
+        end.join('')
+      end
+
+      def render_rule(data)
+        data.values.reduce(&:merge).to_h.map { |key, value|
+          val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
+          "#{key}: #{val};"
+        }.join('')
+      end
+
+      def add_animation(name, data)
+        @rules ||= {}
+        return if @rules["@keyframes #{name}"]
+        @rules["@keyframes #{name}"] ||= {}
+        style = {}
+        data.each do |key, value|
+          if value.is_a? Hash
+            st = {}
+            value.each do |prop, val|
+              st[prop.gsub(/(.)([A-Z])/, '\1-\2').downcase] = val
+            end
+            style[key] = st
+          else
+            style[key.gsub(/(.)([A-Z])/, '\1-\2').downcase] = value
+          end
+        end
+        @rules["@keyframes #{name}"] = style
       end
 
       # Defines a stylesheet link tag
