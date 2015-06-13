@@ -40,31 +40,26 @@ module Fron
               end
             end
           else
-            style[key.gsub(/(.)([A-Z])/, '\1-\2').downcase] = value
+            style[key] = value
           end
         end
         @rules[tag][id] = style
         render_proc.call
       end
 
+      # Returns the render proc for rendering
+      #
+      # @return [type] [description]
       def render_proc
-        @render_proc ||= RenderProc.new method(:render_styles), true, 'Rendered styles'
-      end
-
-      def render_styles
-        render
+        @render_proc ||= RenderProc.new -> { render }, true, 'Rendered styles'
       end
 
       # Renders the styles
       def render
-        style.text = @rules.map { |tag, data| "#{tag} { #{render_rule(data)} }" }.join("\n")
-      end
-
-      def render_rule(data)
-        data.values.reduce(&:merge).to_h.map { |key, value|
-          val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
-          "#{key}: #{val};"
-        }.join('')
+        style.text = @rules.map { |tag, data|
+          body = tag.start_with?('@') ? render_at_block(data) : render_rule(data)
+          "#{tag} { #{body} }"
+        }.join("\n")
       end
 
       # Returns the helper for the proc rendering.
@@ -74,8 +69,46 @@ module Fron
         @helper ||= Helpers.new
       end
 
+      # Elavulates the given block in the helper scope.
+      #
+      # @param block [Proc] The block
       def helpers(&block)
         Helpers.class_eval(&block)
+      end
+
+      # Renders an at block
+      #
+      # @param data [Hash] The data
+      def render_at_block(data)
+        data.map { |key, block| "#{key} { #{render_block(block)} }" }.join('')
+      end
+
+      # Renders a rule with multiple "versions"
+      #
+      # @param data [Hash] The data
+      def render_rule(data)
+        render_block data.values.reduce(&:merge).to_h
+      end
+
+      # Renders an block of single key, values
+      #
+      # @param data [Hash] The data
+      def render_block(block)
+        block.map do |prop, value|
+          val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
+          prop = prop.gsub(/(.)([A-Z])/, '\1-\2').downcase
+          "#{prop}: #{val};"
+        end.join('')
+      end
+
+      # Adds an animation with the given data
+      #
+      # @param name [String] The name
+      # @param data [Hash] The data
+      def add_animation(name, data)
+        @rules ||= {}
+        return if @rules["@keyframes #{name}"]
+        @rules["@keyframes #{name}"] ||= data
       end
 
       # Defines a stylesheet link tag

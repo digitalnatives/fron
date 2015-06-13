@@ -6,6 +6,9 @@ class StyleTest < Fron::Component
 
   stylesheet 'http://test.com/index.css'
 
+  keyframes 'test', from: { color: :red },
+                    to: { color: :blue }
+
   style background: :red,
         img: {
           width: 200.px
@@ -17,10 +20,8 @@ end
 
 describe StyleTest do
   let(:style) { DOM::Document.head.find('style') }
-  let(:method) { Fron::Behaviors::Style::Sheet.method(:render) }
 
   before do
-    allow(Fron::Behaviors::Style::Sheet).to receive(:render_proc).and_return method
     subject
   end
 
@@ -38,6 +39,10 @@ describe StyleTest do
 
   it 'should set css for hover' do
     style.text.should match('style-test:hover')
+  end
+
+  it 'should create keyframes rule' do
+    style.text.should match('@keyframes test')
   end
 
   it 'should create styleheet link tag' do

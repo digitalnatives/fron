@@ -6,7 +6,10 @@ module Fron
       #
       # @param base [Class] The class
       def self.included(base)
-        base.register self, [:style]
+        base.register self, [:style, :keyframes]
+        base.meta_def :keyframes do |name, data|
+          Sheet.add_animation name, data
+        end
         base.meta_def :stylesheet do |url|
           Sheet.stylesheet url
         end
