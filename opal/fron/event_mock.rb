@@ -42,6 +42,7 @@ module EventMock
         end
       end
       return unless `#{event}.propagate`
+      return unless element.respond_to?(:parent)
       return unless element.parent
       dispath_event element.parent, event, type
     end
