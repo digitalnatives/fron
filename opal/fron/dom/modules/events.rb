@@ -101,7 +101,7 @@ module DOM
     def add_listener(type, capture = false)
       method = `function(e){#{ yield Event.new(`e`)}}`
 
-      @listeners       ||= {}
+      @listeners ||= {}
       @listeners[type] ||= []
       @listeners[type] << method
 

@@ -1,4 +1,3 @@
-# rubocop:disable VariableName
 require 'math'
 
 module Fron
@@ -21,7 +20,8 @@ module Fron
     # @param x [Float] The x coordiante
     # @param y [Float] The y coordiante
     def initialize(x = 0, y = 0)
-      @x, @y = x, y
+      @x = x
+      @y = y
     end
 
     # Returns the difference from an other point.

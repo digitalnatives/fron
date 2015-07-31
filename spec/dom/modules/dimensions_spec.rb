@@ -81,7 +81,8 @@ describe DOM::Dimensions do
     end
 
     context 'not in viewport' do
-      height, width = `window.innerHeight`, `window.innerWidth`
+      height = `window.innerHeight`
+      width = `window.innerWidth`
       [
         [-80, -100],     # Top Left
         [-80, 0],        # Top

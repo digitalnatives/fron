@@ -11,9 +11,6 @@ MethodName:
 HandleExceptions:
   Enabled: false
 
-Blocks:
-  Enabled: true
-
 SingleSpaceBeforeFirstArg:
   Enabled: false
 
@@ -23,16 +20,10 @@ LineLength:
 MethodLength:
   Enabled: false
 
-Blocks:
-  Enabled: false
-
 TrivialAccessors:
   Enabled: false
 
 ClassLength:
-  Enabled: false
-
-UnneededPercentX:
   Enabled: false
 
 CyclomaticComplexity:
@@ -51,4 +42,10 @@ EmptyElse:
   Enabled: false
 
 PredicateName:
+  Enabled: false
+
+BlockDelimiters:
+  Enabled: false
+
+CommandLiteral:
   Enabled: false
