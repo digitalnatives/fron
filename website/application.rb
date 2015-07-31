@@ -150,11 +150,11 @@ class Main < Fron::Component
   end
 end
 
-Fron::Behaviors::Style::Sheet.add_rule '*', boxSizing: 'border-box'
-Fron::Behaviors::Style::Sheet.add_rule 'body', margin: 0,
-                                               overflowY: :scroll,
-                                               fontSize: 18.px,
-                                               lineHeight: 26.px
+Fron::Behaviors::Style::Sheet.add_rule '*', { boxSizing: 'border-box' }, '0'
+Fron::Behaviors::Style::Sheet.add_rule 'body', { margin: 0,
+                                                 overflowY: :scroll,
+                                                 fontSize: 18.px,
+                                                 lineHeight: 26.px }, '1'
 
 DOM::Document.body << Main.new
 
