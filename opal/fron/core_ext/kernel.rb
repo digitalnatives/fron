@@ -22,7 +22,7 @@ module Kernel
   #
   # @return [String] The user input
   def prompt(text, value)
-    `prompt(#{text}, #{value})`
+    `prompt(#{text}, #{value}) || Opal.NIL`
   end
 
   # Shows an alert window with the given text
