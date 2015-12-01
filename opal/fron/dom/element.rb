@@ -1,11 +1,15 @@
 module DOM
   # Element
   #
-  # @todo Describe the element creation ways here
+  # TODO: Describe the element creation ways here
   class Element < NODE
+    extend ElementAccessor
+
+    include Attributes
     include ClassList
     include Dimensions
 
+    # @return [Style] The style object
     attr_reader :style
 
     # Attribute regexp
@@ -17,6 +21,26 @@ module DOM
     # Modifier regexp
     MODIFIER_REGEXP    = /(#|\.)(.+?)(?=#|\.| |$)/
 
+    element_accessor :src
+    element_accessor :value
+    element_accessor :innerHTML, as: :html
+
+    element_accessor :readonly,        default: false
+    element_accessor :checked,         default: false
+    element_accessor :disabled,        default: false
+    element_accessor :spellcheck,      default: false
+    element_accessor :contentEditable, default: false, as: :contenteditable
+
+    element_accessor :scrollTop, as: :scroll_top, default: 0
+    element_accessor :scrollLeft, as: :scroll_left, default: 0
+    element_accessor :scrollWidth, as: :scroll_width, default: 0
+    element_accessor :scrollHeight, as: :scroll_height, default: 0
+
+    element_method :focus
+    element_method :blur
+
+    attribute_accessor :tabindex, default: nil
+
     # Initializes a new elment based on the data
     #
     # @param data [*] The data
@@ -25,21 +49,10 @@ module DOM
         tag, rest = data.match(TAG_REGEXP).to_a[1..2]
         @el = `document.createElement(#{tag})`
         `#{@el}._instance = #{self}`
-        rest = rest.gsub ATTRIBUTE_REGEXP do |match|
-          key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
-          self[key] = value
-          ''
-        end
-        rest = rest.gsub MODIFIER_REGEXP do |match|
-          type, value = match.match(MODIFIER_REGEXP).to_a[1..2]
-          case type
-          when '#'
-            self['id'] = value
-          when '.'
-            addClass value
-          end
-          ''
-        end
+
+        rest = apply_attributes rest
+        rest = apply_modifiers rest
+
         if (match = rest.match(/\s(.+)$/))
           self.text = match[0].strip
         end
@@ -73,97 +86,7 @@ module DOM
 
     # Shows the element
     def show
-      @style.display = 'block'
-    end
-
-    # Returns the value of the attribute with the given name
-    #
-    # @param name [String] The name of the attribute
-    #
-    # @return [String] The value
-    def [](name)
-      `#{@el}.getAttribute(#{name})`
-    end
-
-    # Sets the value of the attribute with the given name with the given value
-    #
-    # @param name [String] The name
-    # @param value [String] The value
-    #
-    # @return [type] [description]
-    def []=(name, value)
-      `#{@el}.setAttribute(#{name},#{value})`
-    end
-
-    # Returns the element matching the given selector or nil
-    #
-    # @param selector [String] The selector
-    #
-    # @return [DOM::Element] The element
-    def find(selector)
-      value = `#{@el}.querySelector(#{selector}) || false`
-      value ? DOM::Element.fromNode(value) : nil
-    end
-
-    # Returns the elements innerHTML
-    #
-    # @return [String] The html
-    def html
-      `#{@el}.innerHTML`
-    end
-
-    # Sets the elements innerHTML
-    #
-    # @param value [String] The html
-    def html=(value)
-      `#{@el}.innerHTML = #{value}`
-    end
-
-    # Returns the elements value
-    #
-    # @return [String] The value
-    def value
-      `#{@el}.value`
-    end
-
-    # Sets the elements value
-    #
-    # @param value [String] The value
-    def value=(value)
-      `#{@el}.value = #{value}`
-    end
-
-    # Returns the elements checked state
-    #
-    # @return [Boolean] True if checked false if not
-    def checked
-      `!!#{@el}.checked`
-    end
-
-    # Sets the elements checked state
-    #
-    # @param value [Boolean] The state
-    def checked=(value)
-      `#{@el}.checked = #{value}`
-    end
-
-    # Returns the disabled innerHTML
-    #
-    # @return [String] True if disabled false if not
-    def disabled
-      `#{@el}.disabled`
-    end
-
-    # Sets the elements disabled state
-    #
-    # @param value [Boolean] The state
-    def disabled=(value)
-      `#{@el}.disabled = #{value}`
-    end
-
-    # Focuses the element
-    def focus
-      `#{@el}.focus()`
+      @style.display = ''
     end
 
     # Return the files of the element
@@ -187,28 +110,13 @@ module DOM
       self['id']
     end
 
-    # Returns the next element sibling
+    # Returns the element matching the given selector or nil
+    #
+    # @param selector [String] The selector
     #
     # @return [DOM::Element] The element
-    def next
-      value = `#{@el}.nextElementSibling || false`
-      value ? DOM::Element.fromNode(value) : nil
-    end
-
-    # Returns if the element has the given attribute
-    #
-    # @param name [String] The attribute
-    #
-    # @return [Boolean] True / False
-    def attribute?(name)
-      `#{@el}.hasAttribute(#{name})`
-    end
-
-    # Removes the given attribute
-    #
-    # @param name [String] The attributes name
-    def removeAttribute(name)
-      `#{@el}.removeAttribute(#{name})`
+    def find(selector)
+      DOM::Element.from_node `#{@el}.querySelector(#{selector}) || Opal.nil`
     end
 
     # Finds all of the elements matching the selector.
@@ -216,15 +124,78 @@ module DOM
     # @param selector [String] The selector
     #
     # @return [NodeList] The elements
-    def findAll(selector)
+    def find_all(selector)
       DOM::NodeList.new `Array.prototype.slice.call(#{@el}.querySelectorAll(#{selector}))`
     end
 
-    # Returns if the element is visible or not
+    # Returns the next element sibling
     #
-    # @return [Boolean] True if visible, false if not
-    def visible?
-      @style.display != 'none'
+    # @return [DOM::Element] The element
+    def next
+      DOM::Element.from_node `#{@el}.nextElementSibling || Opal.nil`
+    end
+
+    # Returns the previous element sibling
+    #
+    # @return [DOM::Element] The element
+    def previous
+      DOM::Element.from_node `#{@el}.previousElementSibling || Opal.nil`
+    end
+
+    # Returns whether or not the given node
+    # is inside the node.
+    #
+    # @param other [DOM::NODE] The other node
+    #
+    # @return [Boolean] True if contains false if not
+    def include?(other)
+      `#{@el}.contains(#{DOM::NODE.get_element(other)})` || other == self
+    end
+
+    # Returns the path of the elemnt
+    #
+    # @return [String] The path
+    def path
+      element = self
+      items = [element.tag]
+      while element.parent
+        items.unshift element.parent.tag
+        element = element.parent
+      end
+      items.join ' '
+    end
+
+    private
+
+    # Applies attributes from the given string.
+    #
+    # @param string [String] The string
+    #
+    # @return [String] The string without the attributes
+    def apply_attributes(string)
+      string.gsub ATTRIBUTE_REGEXP do |match|
+        key, value = match.match(ATTRIBUTE_REGEXP).to_a[1..2]
+        self[key] = value
+        ''
+      end
+    end
+
+    # Applies modifiers from the given string.
+    #
+    # @param string [String] The string
+    #
+    # @return [String] The string without the modifiers
+    def apply_modifiers(string)
+      string.gsub MODIFIER_REGEXP do |match|
+        type, value = match.match(MODIFIER_REGEXP).to_a[1..2]
+        case type
+        when '#'
+          self['id'] = value
+        when '.'
+          add_class value
+        end
+        ''
+      end
     end
   end
 end

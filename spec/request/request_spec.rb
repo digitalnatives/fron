@@ -1,16 +1,17 @@
 require 'spec_helper'
 
 describe Fron::Request do
-
-  subject { described_class.new 'url' }
+  subject { described_class.new 'url', 'Content-Type' => 'application/json' }
   let(:request) {
     %x{
       return { readyState: 0,
       open: function(){this.opened = true},
-      send: function(){this.sent = true}}
+      send: function(){this.sent = true},
+      setRequestHeader: function(){},
+      getAllResponseHeaders: function(){return ''}}
     }
   }
-  let(:data) { double :data, toQueryString: '', toFormData: true }
+  let(:data) { Hash.new }
 
   before do
     subject.instance_variable_set('@request', request)
@@ -18,7 +19,7 @@ describe Fron::Request do
 
   describe '#request' do
     it 'should raise if the rquest is already running' do
-      allow(subject).to receive(:readyState).and_return 1
+      allow(subject).to receive(:ready_state).and_return 1
       expect(proc { subject.request }).to raise_error
     end
 
@@ -32,14 +33,19 @@ describe Fron::Request do
       expect(`#{request}.sent`).to be true
     end
 
-    it 'should call #toQueryString on data if it is a GET' do
-      expect(data).to receive(:toQueryString)
+    it 'should call #to_form_data on data if it is an UPLOAD' do
+      expect(data).to receive(:to_form_data)
+      subject.request 'UPLOAD', data
+    end
+
+    it 'should call #to_query_string on data if it is a GET' do
+      expect(data).to receive(:to_query_string)
       expect(data).not_to receive(:to_json)
       subject.get data
     end
 
     it 'should call #to_json on data if it is a GET' do
-      expect(data).not_to receive(:toQueryString)
+      expect(data).not_to receive(:to_query_string)
       expect(data).to receive(:to_json)
       subject.post data
     end
@@ -68,6 +74,17 @@ describe Fron::Request do
     it 'should call #request with PUT' do
       expect(subject).to receive(:request).once
       subject.put
+    end
+  end
+
+  describe '#handle_state_change' do
+    it 'should run callback' do
+      callback = proc {}
+      subject.instance_variable_set('@callback', callback)
+      callback.should receive(:call)
+      subject.should receive(:ready_state).and_return 4
+      subject.should receive(:trigger).with :loaded
+      subject.handle_state_change
     end
   end
 end

@@ -34,19 +34,26 @@ describe RouteComponent do
     Fron::Behaviors::Routes.instance_variable_set('@routes', [])
   end
 
+  context 'Events' do
+    it 'should call handle_hash_change' do
+      Fron::Behaviors::Routes.listen
+      Fron::Behaviors::Routes.should receive(:handle_hash_change)
+      DOM::Window.listeners[:popstate].count.should eq 1
+      DOM::Window.listeners[:popstate][0].call
+    end
+  end
+
   context 'Matching hash' do
     it 'should call the method' do
       subject.should receive(:something)
-      DOM::Window.state = 'something'
-      DOM::Window.trigger 'popstate'
+      Fron::Behaviors::Routes.handle_hash_change('something')
     end
   end
 
   context 'Parameters' do
     it 'should call the method with matches' do
       subject.should receive(:card).with 'id'
-      DOM::Window.state = 'cards/id'
-      DOM::Window.trigger 'popstate'
+      Fron::Behaviors::Routes.handle_hash_change('cards/id')
     end
   end
 end

@@ -1,6 +1,10 @@
 module Fron
   # Logger
   class Logger
+    # Sets / gets the log level
+    #
+    # @param value [Symbol] The level
+    # @return [Symbol] The level
     attr_accessor :level
 
     # Initailizes the logger

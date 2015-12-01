@@ -6,7 +6,6 @@ class TestNode < DOM::NODE
 end
 
 describe TestNode do
-
   let(:el)   { DOM::Element.new('div') }
   let(:body) { DOM::Document.body }
   subject    { described_class.new `document.createElement('div')` }
@@ -17,7 +16,6 @@ describe TestNode do
   end
 
   describe '#dup' do
-
     let(:node) { subject.dup }
 
     it 'should clone the node' do
@@ -49,14 +47,23 @@ describe TestNode do
     end
   end
 
-  describe '#parentNode' do
+  describe '#parent_node' do
     it 'should return nil if there is no parent node' do
-      subject.parentNode.should eq nil
+      subject.parent_node.should eq nil
     end
 
     it 'should return a new NODE' do
       subject >> body
-      subject.parentNode.should be_a DOM::NODE
+      subject.parent_node.should be_a DOM::NODE
+    end
+  end
+
+  describe '#empty' do
+    it 'should remove all children' do
+      subject << el
+      expect {
+        subject.empty
+      }.to change { el.parent }.from(subject).to nil
     end
   end
 
@@ -115,7 +122,7 @@ describe TestNode do
     end
   end
 
-  describe '#insertBefore' do
+  describe '#insert_before' do
     let(:otherEl) { DOM::Element.new 'div' }
 
     it 'should insert given node before the other given node' do

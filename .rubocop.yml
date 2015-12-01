@@ -1,19 +1,15 @@
 AllCops:
   Exclude:
-    - spec/spec_helper.rb
-    - vendor/**/*
+    - website/**/*
 
 VariableName:
-  EnforcedStyle: camelCase
+  EnforcedStyle: snake_case
 
 MethodName:
-  EnforcedStyle: camelCase
+  EnforcedStyle: snake_case
 
 HandleExceptions:
   Enabled: false
-
-Blocks:
-  Enabled: true
 
 SingleSpaceBeforeFirstArg:
   Enabled: false
@@ -24,20 +20,32 @@ LineLength:
 MethodLength:
   Enabled: false
 
-Blocks:
-  Enabled: false
-
 TrivialAccessors:
   Enabled: false
 
 ClassLength:
   Enabled: false
 
-UnneededPercentX:
-  Enabled: false
-
 CyclomaticComplexity:
   Enabled: false
 
 RegexpLiteral:
+  Enabled: false
+
+AbcSize:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
+EmptyElse:
+  Enabled: false
+
+PredicateName:
+  Enabled: false
+
+BlockDelimiters:
+  Enabled: false
+
+CommandLiteral:
   Enabled: false

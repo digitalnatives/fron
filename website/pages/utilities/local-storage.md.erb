@@ -1,0 +1,16 @@
+# 5.2. Local Storage
+
+*Notice: Only the LocalStorage is implemented, we plan to implement SessionStorage and CookieStorage with the same interface.*
+
+This utility is for storing things in [LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) you can see the API documentation [here](http://www.rubydoc.info/github/digitalnatives/fron/master/Fron/Storage/LocalStorage).
+
+It implements the following class methods:
+* **all** - Returns all keys and their values in a hash
+* **clear** - Clears all keys
+* **get(key)** - Get the value of the given key
+* **remove(key)** - Removes the given key
+* **set(key, value)** - Sets the given value to the given key
+
+As an example the contents of this textarea persists between reloads:
+
+<%= example 'TextArea' %>

@@ -1,29 +1,40 @@
 require 'fron/core/behaviors/components'
 require 'fron/core/behaviors/events'
 require 'fron/core/behaviors/routes'
+require 'fron/core/behaviors/style'
+require 'securerandom'
 
 module Fron
   # Component
   class Component < DOM::Element
-    attr_reader :model
-
     class << self
+      # @return [String] The tagname of the component
       attr_reader :tagname
-      attr_reader :behaviors
+
+      # @return [Array] The registry of behaviors
+      attr_reader :registry
+
+      # Creates a new class with the specific tag
+      #
+      # @param tag [String] The tag
+      #
+      # @return [Fron::Component] The new component
+      def create(tag)
+        klass = Class.new self
+        klass.tag tag
+        klass
+      end
 
       # Register a behavior
       #
       # @param behavior [Module] The behavior
       # @param methods [Array] The methods to register
       def register(behavior, methods)
-        @behaviors ||= {}
-        @behaviors[behavior] = methods
+        @registry ||= []
 
         methods.each do |name|
-          instance_variable_set "@#{name}", []
-          metaDef name do |*args, &block|
-            args << block if block_given?
-            instance_variable_get("@#{name}") << args
+          meta_def name do |*args, &block|
+            @registry << { method: behavior.method(name), args: args, block: block, id: SecureRandom.uuid }
           end
         end
       end
@@ -33,14 +44,7 @@ module Fron
       # @param subclass [Class] The subclass
       def inherited(subclass)
         # Copy behaviours
-        subclass.instance_variable_set '@behaviors', @behaviors.dup
-
-        # Copy registries
-        @behaviors.values.reduce(&:+).each do |type|
-          next unless (var = instance_variable_get("@#{type}"))
-          instVar = subclass.instance_variable_get("@#{type}") || []
-          subclass.instance_variable_set("@#{type}", instVar.concat(var))
-        end
+        subclass.instance_variable_set '@registry', @registry.dup
       end
 
       # Sets the tag name of the component
@@ -53,6 +57,7 @@ module Fron
 
     include Behaviors::Components
     include Behaviors::Events
+    include Behaviors::Style
 
     # Initalizs the component
     #
@@ -62,12 +67,8 @@ module Fron
 
       super tag || klass.tagname || klass.name.split('::').last
 
-      klass.behaviors.each do |mod, methods|
-        methods.each do |name|
-          next unless mod.respond_to?(name)
-          registry = self.class.instance_variable_get("@#{name}")
-          instance_exec registry, &mod.method(name)
-        end
+      klass.registry.each do |item|
+        instance_exec item, &item[:method]
       end
     end
   end

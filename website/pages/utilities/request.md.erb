@@ -1,0 +1,12 @@
+# 5.1. Request
+
+*Warning: Not all features are available yet, but it's usable.*
+
+This class is a wrapper for the [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest). You can see the API documentation [here](http://www.rubydoc.info/github/digitalnatives/fron/master/Fron/Request).
+
+As an example we want to display the first there lines of the source of this page in a component:
+
+<%= example 'SourceReader' %>
+
+As you can see we instantiated a new [**Fron::Request**](http://www.rubydoc.info/github/digitalnatives/fron/master/Fron/Request) object and called
+the **get** method to get the source which returned a [**Fron::Response**](http://www.rubydoc.info/github/digitalnatives/fron/master/Fron/Response) object.

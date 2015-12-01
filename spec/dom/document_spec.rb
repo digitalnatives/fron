@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Document do
-
   subject { DOM::Document }
 
   describe 'head' do

@@ -1,18 +1,34 @@
 require 'spec_helper'
 
 describe Hash do
+  let(:base)  { { a: 'test', b: 'asd', c: { test: 'asd' } } }
+  let(:other) { { a: 'test', b: 'user', c: { test: 'wtf' } } }
+  let(:diff)  { { b: %w(asd user), c: { test: %w(asd wtf) } } }
 
   subject { { a: 'test', b: 'user' } }
 
-  describe '#toQueryString' do
+  describe '#to_query_string' do
     it 'should return the hash in query string format' do
-      subject.toQueryString.should eq 'a=test&b=user'
+      subject.to_query_string.should eq 'a=test&b=user'
     end
   end
 
-  describe '#toFormData' do
+  describe '#to_form_data' do
     it 'should return the hash in FormData format' do
-      `#{subject.toFormData} instanceof FormData`.should be true
+      `#{subject.to_form_data} instanceof FormData`.should be true
+    end
+  end
+
+  describe '#deep_diff' do
+    it 'should return a diff of the two objects' do
+      base.deep_diff(other).should eq diff
+    end
+  end
+
+  describe '#difference' do
+    it 'should return the difference of the two objects' do
+      (base - other).should eq b: 'asd', c: { test: 'asd' }
+      (other - base).should eq b: 'user', c: { test: 'wtf' }
     end
   end
 end

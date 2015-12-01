@@ -1,7 +1,14 @@
 module Fron
   # Response
   class Response
-    attr_reader :body, :headers, :status
+    # @return [String] The response body
+    attr_reader :body
+
+    # @return [Hash] The response headers
+    attr_reader :headers
+
+    # @return [Numeric] The response status code
+    attr_reader :status
 
     # Initializes the response
     #
@@ -24,7 +31,7 @@ module Fron
     # Returns the content type of the response
     #
     # @return [String] The content type
-    def contentType
+    def content_type
       @headers['Content-Type']
     end
 

@@ -1,13 +1,27 @@
 require 'spec_helper'
 
 describe DOM::Events do
-
   let(:element) { DOM::Element.new 'div' }
   subject { element.instance_variable_get '@listeners' }
 
   describe '#on' do
     async 'should register for event' do
       listener = element.on 'click' do
+        run_async do
+          subject.should_not be nil
+          subject[:click].should_not be nil
+          subject[:click].length.should eq 1
+          subject[:click].include?(listener).should eq true
+          element.off 'click'
+        end
+      end
+      element.trigger 'click'
+    end
+  end
+
+  describe '#on!' do
+    async 'should register for event' do
+      listener = element.on! 'click' do
         run_async do
           subject.should_not be nil
           subject[:click].should_not be nil
