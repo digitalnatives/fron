@@ -42,6 +42,7 @@ module Fron
       combo << 'ctrl'  if event.ctrl?
       combo << 'shift' if event.shift?
       combo << 'alt'   if event.alt?
+      combo << 'meta'  if event.meta?
       combo.uniq!
 
       self.class.shortcuts.each do |shortcut|
