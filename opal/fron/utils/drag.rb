@@ -12,7 +12,7 @@ module Fron
     # @return [DOM::Element] The documents body
     attr_reader :body
 
-    IS_TOUCH = `'ontouchstart' in window  && !window._phantom`
+    IS_TOUCH = false
 
     if IS_TOUCH
       EVENTS = {
