@@ -23,8 +23,8 @@ module DOM
     #
     # @param node [Native] The native node
     def initialize(node = nil)
-      fail 'A node must be provided!' unless node
-      fail 'Not a HTML Node given!' unless `#{node} instanceof Node`
+      raise 'A node must be provided!' unless node
+      raise 'Not a HTML Node given!' unless `#{node} instanceof Node`
       @el = node
       `#{@el}._instance = #{self}`
     end
@@ -151,7 +151,7 @@ module DOM
     # @return [Boolean] The compareable with the other node
     def <=>(other)
       return 0 if other == self
-      fail 'Nodes not Comparable!' if other.parent != parent
+      raise 'Nodes not Comparable!' if other.parent != parent
       other.index <=> index
     end
 

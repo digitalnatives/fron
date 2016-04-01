@@ -1,5 +1,3 @@
-require 'math'
-
 module Fron
   # Simple class for point with x and y coordinates.
   class Point

@@ -3,7 +3,7 @@ require 'fron/utils/drag'
 
 describe Fron::Drag do
   let(:event)    { double(page_x: 0, page_y: 0, preventDefult: true, stop: true, target: true) }
-  let(:base)     { DOM::Element.new 'div'   }
+  let(:base)     { DOM::Element.new 'div' }
   let(:position) { double }
 
   subject        { described_class.new base }

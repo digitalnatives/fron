@@ -2,35 +2,38 @@ require 'spec_helper'
 
 describe DOM::Events do
   let(:element) { DOM::Element.new 'div' }
-  subject { element.instance_variable_get '@listeners' }
 
   describe '#on' do
-    async 'should register for event' do
+    it 'should register for event' do
+      promise = Promise.new
       listener = element.on 'click' do
-        run_async do
-          subject.should_not be nil
-          subject[:click].should_not be nil
-          subject[:click].length.should eq 1
-          subject[:click].include?(listener).should eq true
-          element.off 'click'
-        end
+        listeners = element.instance_variable_get '@listeners'
+        listeners.should_not be nil
+        listeners[:click].should_not be nil
+        listeners[:click].length.should eq 1
+        listeners[:click].include?(listener).should eq true
+        promise.resolve
+        element.off 'click'
       end
       element.trigger 'click'
+      promise
     end
   end
 
   describe '#on!' do
-    async 'should register for event' do
+    it 'should register for event' do
+      promise = Promise.new
       listener = element.on! 'click' do
-        run_async do
-          subject.should_not be nil
-          subject[:click].should_not be nil
-          subject[:click].length.should eq 1
-          subject[:click].include?(listener).should eq true
-          element.off 'click'
-        end
+        listeners = element.instance_variable_get '@listeners'
+        listeners.should_not be nil
+        listeners[:click].should_not be_nil
+        listeners[:click].length.should eq 1
+        listeners[:click].include?(listener).should eq true
+        promise.resolve
+        element.off 'click'
       end
       element.trigger 'click'
+      promise
     end
   end
 
@@ -38,50 +41,58 @@ describe DOM::Events do
     context 'two arguments' do
       it 'should unregister for event' do
         listener = element.on 'click' do end
-        subject[:click].include?(listener).should eq true
+        element.instance_variable_get('@listeners')[:click]
+          .include?(listener).should eq true
         element.off 'click', listener
-        subject[:click].include?(listener).should eq false
+        element.instance_variable_get('@listeners')[:click]
+          .include?(listener).should eq false
       end
     end
 
     context 'one argument' do
       it 'should unregister all events for type' do
         listener = element.on 'click' do end
-        subject[:click].include?(listener).should eq true
+        element.instance_variable_get('@listeners')[:click]
+          .include?(listener).should eq true
         element.off 'click'
-        subject[:click].include?(listener).should eq false
+        element.instance_variable_get('@listeners')[:click]
+          .include?(listener).should eq false
       end
     end
 
     context 'no argument' do
       it 'should unregister all events' do
         listener = element.on 'click' do end
-        subject[:click].include?(listener).should eq true
+        element.instance_variable_get('@listeners')[:click]
+          .include?(listener).should eq true
         element.off
-        subject[:click].include?(listener).should eq false
+        element.instance_variable_get('@listeners')[:click]
+          .include?(listener).should eq false
       end
     end
   end
 
   describe '#delegate' do
-    async 'should call the listener if the element matches the selector' do
+    it 'should call the listener if the element matches the selector' do
+      promise = Promise.new
       element.delegate 'click', 'div' do
-        run_async do
-          element.off 'click'
-        end
+        promise.resolve
+        element.off 'click'
       end
       element.trigger 'click'
+      promise
     end
   end
 
   describe '#trigger' do
-    async 'should trigger the event' do
+    it 'should trigger the event' do
+      promise = Promise.new
       element.on 'click' do
-        run_async do
-          element.off 'click'
-        end
+        promise.resolve
+        element.off 'click'
       end
       element.trigger 'click'
+      promise
     end
   end
 end

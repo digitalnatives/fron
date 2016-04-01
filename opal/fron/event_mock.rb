@@ -61,7 +61,7 @@ module DOM
   # Events
   module Events
     # The old trigger method
-    alias_method :old_trigger, :trigger
+    alias old_trigger trigger
 
     def trigger(type, data = {})
       return old_trigger(type, data) if EventMock.mock

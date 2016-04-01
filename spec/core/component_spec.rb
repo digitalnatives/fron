@@ -10,7 +10,7 @@ class TestComponent < Fron::Component
 end
 
 describe Fron::Component do
-  subject  { TestComponent.new }
+  subject { TestComponent.new }
 
   let(:listeners) { subject.instance_variable_get '@listeners' }
   let(:registry) { subject.instance_variable_get('@registry') }

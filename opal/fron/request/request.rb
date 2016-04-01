@@ -39,7 +39,7 @@ module Fron
     #
     # @yieldparam response [Response] The response
     def request(method = 'GET', data = {}, &callback)
-      fail 'The request is already running!' if ready_state != 0 && ready_state != 4
+      raise 'The request is already running!' if ready_state != 0 && ready_state != 4
       method = method.upcase
       @callback = callback
 

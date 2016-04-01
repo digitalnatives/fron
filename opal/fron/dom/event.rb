@@ -97,7 +97,7 @@ module DOM
       224 => 'cmd',
       57_392 => 'ctrl',
       63_289 => 'num'
-    }
+    }.freeze
 
     # Initializes the event
     #

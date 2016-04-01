@@ -15,9 +15,9 @@ class Array
   # @param block [Proc] The block
   #
   # @return [Array] The array
-  def sort_by!(&block)
+  def sort_by!
     sort! do |a, b|
-      block.call(a) <=> block.call(b)
+      yield(a) <=> yield(b)
     end
   end
 end

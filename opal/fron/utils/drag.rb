@@ -14,19 +14,19 @@ module Fron
 
     IS_TOUCH = false
 
-    if IS_TOUCH
-      EVENTS = {
-        down: 'touchstart',
-        move: 'touchmove',
-        up:   'touchend'
-      }
-    else
-      EVENTS = {
-        down: 'mousedown',
-        move: 'mousemove',
-        up:   'mouseup'
-      }
-    end
+    EVENTS = if IS_TOUCH
+               {
+                 down: 'touchstart',
+                 move: 'touchmove',
+                 up:   'touchend'
+               }
+             else
+               {
+                 down: 'mousedown',
+                 move: 'mousemove',
+                 up:   'mouseup'
+               }
+             end
 
     # Creates a new drag instance.
     #

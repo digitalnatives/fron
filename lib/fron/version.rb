@@ -1,4 +1,4 @@
 # Fron
 module Fron
-  VERSION = '0.2.0rc1'
+  VERSION = '0.2.0rc1'.freeze
 end

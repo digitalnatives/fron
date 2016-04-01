@@ -9,7 +9,7 @@ class Hash
     Hash[to_a - other.to_a]
   end
 
-  alias_method :-, :difference
+  alias - difference
 
   # Converts the hash into an url encoded query string
   #
@@ -41,11 +41,11 @@ class Hash
       self_key  = self[key]
       other_key = other[key]
       next if self_key == other_key
-      if self_key.respond_to?(:deep_diff) && other_key.respond_to?(:deep_diff)
-        diff[key] = self_key.deep_diff(other_key)
-      else
-        diff[key] = [self_key, other_key]
-      end
+      diff[key] = if self_key.respond_to?(:deep_diff) && other_key.respond_to?(:deep_diff)
+                    self_key.deep_diff(other_key)
+                  else
+                    [self_key, other_key]
+                  end
       diff
     end
   end

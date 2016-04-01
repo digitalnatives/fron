@@ -7,7 +7,10 @@ class TestKeyboard < Fron::Keyboard
 end
 
 describe TestKeyboard do
-  let(:event) { DOM::Event.new `{ctrlKey: true, altKey: true, shiftKey: true, keyCode: 38}` }
+  let(:event) {
+    DOM::Event.new `{ ctrlKey: true, altKey: true, shiftKey: true,
+                      metaKey: false, keyCode: 38 }`
+  }
 
   describe Fron::Keyboard do
     it 'should work on its own' do

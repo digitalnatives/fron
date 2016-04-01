@@ -1,4 +1,3 @@
-require 'rspec_coverage_helper'
 require 'js/mocks'
 require 'fron'
 require 'fron/event_mock'

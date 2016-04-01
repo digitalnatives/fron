@@ -68,7 +68,7 @@ module Fron
       super tag || klass.tagname || klass.name.split('::').last
 
       klass.registry.each do |item|
-        instance_exec item, &item[:method]
+        instance_exec item, &item[:method].unbind.bind(self)
       end
     end
   end

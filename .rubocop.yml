@@ -11,7 +11,7 @@ MethodName:
 HandleExceptions:
   Enabled: false
 
-SingleSpaceBeforeFirstArg:
+SpaceBeforeFirstArg:
   Enabled: false
 
 LineLength:
@@ -48,4 +48,7 @@ BlockDelimiters:
   Enabled: false
 
 CommandLiteral:
+  Enabled: false
+
+LiteralInCondition:
   Enabled: false
