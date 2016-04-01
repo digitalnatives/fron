@@ -1,7 +1,7 @@
 # rubocop:disable ModuleFunction
 
 module Fron
-  # Eventable
+  # Class for adding events to any Ruby object.
   module Eventable
     extend self
 
@@ -23,10 +23,10 @@ module Fron
     # @param event [String] The type of the event
     # @param data = {} [type] The data
     # @param triggerGlobal [Boolean] Whether or not to trigger a global event
-    def trigger(event, data = {}, triggerGlobal = true)
+    def trigger(event, data = {}, trigger_global = true)
       return unless @events
       return unless @events[event]
-      Eventable.trigger event, data, false if triggerGlobal && self != Fron::Eventable
+      Eventable.trigger event, data, false if trigger_global && self != Fron::Eventable
       @events[event].each do |block|
         block.call data
       end

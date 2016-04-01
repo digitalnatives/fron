@@ -1,7 +1,9 @@
 require 'native'
 
 module DOM
-  # Node
+  # Low level wrapper for the Node class
+  #
+  # :reek:TooManyMethods
   class NODE
     include Events
     include Comparable

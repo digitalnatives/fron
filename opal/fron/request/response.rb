@@ -1,5 +1,5 @@
 module Fron
-  # Response
+  # Class for handling responses from requests.
   class Response
     # @return [String] The response body
     attr_reader :body

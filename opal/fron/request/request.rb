@@ -1,7 +1,7 @@
 require 'json'
 
 module Fron
-  # Request
+  # Low level wrapper for the XMLHTTPRequest class
   class Request
     extend Eventable
     extend Forwardable
@@ -10,13 +10,13 @@ module Fron
     #
     # @param value [String] The URL
     # @return [String] The URL
-    attr_accessor :url
+    attr_reader :url
 
     # Sets / gets the headers for the request
     #
     # @param value [Hash] The headers
     # @return [Hash] The headers
-    attr_accessor :headers
+    attr_reader :headers
 
     def_delegators :class, :trigger
 

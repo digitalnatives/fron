@@ -1,7 +1,6 @@
 module Fron
-  # Bevahviors
   module Behaviors
-    # Components
+    # Behavior for handling routes in applications.
     module Routes
       # Register a route
       #

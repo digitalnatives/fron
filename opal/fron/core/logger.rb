@@ -1,5 +1,5 @@
 module Fron
-  # Logger
+  # Class for logging messages with a timestamp.
   class Logger
     # Sets / gets the log level
     #

@@ -5,7 +5,7 @@ require 'fron/core/behaviors/style'
 require 'securerandom'
 
 module Fron
-  # Component
+  # Base class for components.
   class Component < DOM::Element
     class << self
       # @return [String] The tagname of the component

@@ -1,13 +1,11 @@
 module Fron
   module Behaviors
-    # Style
+    # Behavior for hanlding styles on components.
     module Style
       # Runs for included classes
       #
       # @param base [Class] The class
       def self.included(base)
-        # base.register self, [:style, :keyframes]
-        #
         base.meta_def :ensure_styles! do
           styles.each do |(style, id)|
             Sheet.add_rule tagname, style, id

@@ -1,7 +1,7 @@
 module Fron
-  # Bevahviors
+  # Behaviors
   module Behaviors
-    # Events
+    # Behavior for handling events on components.
     module Events
       # Runs for included classes
       #

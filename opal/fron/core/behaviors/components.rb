@@ -1,7 +1,6 @@
 module Fron
-  # Bevahviors
   module Behaviors
-    # Components
+    # Behavior for composing and creating child components.
     module Components
       # Runs for included classes
       #
@@ -24,9 +23,12 @@ module Fron
       # @param name [String] The name of the component
       # @param comp [Class] The component
       # @param block [Proc] The block to eval on the new component
+      #
+      # :reek:TooManyStatements
       def component(name, comp, options = {}, &block)
         component = comp.is_a?(Class) ? comp.new(nil) : Component.new(comp)
         component.instance_eval(&block) if block
+
         options.each do |key, value|
           if component.respond_to?("#{key}=")
             component.send("#{key}=", value)
@@ -34,6 +36,7 @@ module Fron
             component[key] = value
           end
         end
+
         self << component
         instance_variable_set "@#{name}", component
 
