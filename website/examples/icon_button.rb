@@ -1,4 +1,4 @@
-# Extend My Button
+# Extend MyButton
 class IconButton < MyButton
   extend Forwardable
 
@@ -9,7 +9,7 @@ class IconButton < MyButton
   component :icon, :icon
   component :span, :span
 
-  # Delegate some methods
+  # Delegate methods
   def_delegators :span, :text=, :text
 
   # Style the icon, everything else is inherited

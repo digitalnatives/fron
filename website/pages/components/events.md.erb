@@ -1,15 +1,16 @@
 # 4.3. Events
-Handling events are pretty easy by using the **on** DSL method in a component: when an **event**
-happens the given **instance method** should be called.
+Handling events are pretty easy by using the **on** DSL method in a component:
+when an **event** happens on the element the given **instance method** is called.
 
 There are two ways of adding events:
-* Adding events directly to the component is used if you don't care about which child component triggered
-  the event, or the event isn't delegateable like **focus** or **blur**:
+* Adding events directly to the component is used when it's not important which
+	child component triggered the event, or the event isn't delegateable like
+	**focus** or **blur**:
   ```ruby
   on :blur, :close
   ```
-* Delegating events with a **selector** is usefull if you only want to handle events
-  that were trigger child components matching that selector.
+* Delegating events with a **selector** is usefull if we only want to handle events
+  that were trigger child components matching a specific selector.
   ```ruby
   on :click, 'button > span', :open
   ```

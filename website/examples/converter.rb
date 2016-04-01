@@ -22,21 +22,23 @@ class Converter < Fron::Component
 
   # Styling
   style background: '#F9F9F9',
-        display: :block,
+        alignItems: 'flex-end',
+        display: :flex,
         padding: 10.px,
         label: { display: :block },
-        div: { display: 'inline-block',
-               marginRight: 5.px },
+        div: { flexDirection: :column,
+               marginRight: 5.px,
+               display: :flex },
         button: { position: :relative,
                   height: 30.px,
                   top: -1.px },
         'input, span' => {
           display: 'inline-block',
           border: '1px solid #ddd',
-          padding: '5px',
           lineHeight: 20.px,
           fontSize: 14.px,
-          height: 20.px,
+          padding: 5.px,
+          height: 30.px,
           width: 200.px
         }
 

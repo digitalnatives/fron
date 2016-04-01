@@ -1,0 +1,38 @@
+# 4.5. Styles
+One of the things that makes Fron unqiue is the ability to style components
+directly on them. To achieve this we will use the **Fron::Behaviors::Style**
+module (which is automatically included into every component).
+
+Once the application is initailized all of the styles are rendered into a
+**style** tag into the head of the document.
+
+## Basic Usage
+To define styles to a **component** you only need to call the **style** DSL
+method with the object for the properties and values:
+
+<%= example 'MyBox' %>
+
+Tips on creating great style objects:
+* For numbers there is two helper modules **px** and **em**, use them often
+* Symbols can be used for non hypenated CSS values such as _block_ or _flex_
+* Any value can be a Ruby expression
+* Any value can be a lambda that is evaluated when the style is rendered
+* Use caplitalized keys. They are converted to their hypenated versions
+
+## Inheritance
+When a component extends an other component that have styles, all of the style
+definitions are copied over (this happens when the style DSL is used, otherwise
+the _ensure_styles!_ method needs to be called). Styles that are defined on the
+child component have priority over the ones defined in the parent component.
+
+Also if properties defined multiple times, only the last one will be used.
+
+<%= example 'MyBlueBox' %>
+
+## Styling Nested Components
+
+If the component have **nested components** then they can be styled by having
+a key with a selectors (like in raw CSS) and the associated value as a hash
+containing the CSS properties and values:
+
+<%= example 'MyGreenBox' %>

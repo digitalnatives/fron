@@ -3,7 +3,7 @@ class MyButton < Fron::Component
   # Set the tag
   tag 'my-button'
 
-  # When click greet the user
+  # When clicked greet the user
   on :click, :greet
 
   # Some styling...

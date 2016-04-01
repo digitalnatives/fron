@@ -1,4 +1,4 @@
-# Extend from Fron::Component
+# We start a by extending from Fron::Component
 class ContentEditable < Fron::Component
   # Set the tag
   tag 'content-editable'
@@ -22,7 +22,7 @@ class ContentEditable < Fron::Component
     self.text = 'Some default content...'
   end
 
-  # Triggers the change event
+  # Run on the blur event
   def change
     logger.info "The content is now: #{text}"
   end

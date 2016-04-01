@@ -7,7 +7,10 @@ class ImageParagraph < Fron::Component
   component :content, :content
 
   # Set Styling
-  style img: { float: :left,
+  style border: '1px solid #EEE',
+        display: :block,
+        padding: 20.px,
+        img: { float: :left,
                marginRight: 20.px },
         '&:after' => { display: :block,
                        content: '""',

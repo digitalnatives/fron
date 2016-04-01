@@ -1,11 +1,11 @@
 module Fron
   module Storage
     # Local Storage wrapper and adapter
-    module LocalStorage
+    module SessionStorage
       extend Store
 
       def self.store
-        `window.localStorage`
+        `window.sessionStorage`
       end
     end
   end

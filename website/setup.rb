@@ -3,13 +3,9 @@ require 'vendor/highlight'
 require 'vendor/highlight.ruby'
 require 'vendor/marked.min'
 
-require 'examples/content_editable'
 require 'examples/my_button'
-require 'examples/converter'
-require 'examples/icon_button'
-require 'examples/source_reader'
-require 'examples/image_paragraph'
-require 'examples/text_area'
+require 'examples/my_box'
+require_tree './examples'
 
 %x{
   marked.setOptions({
