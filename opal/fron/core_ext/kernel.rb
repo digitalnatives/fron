@@ -54,4 +54,9 @@ module Kernel
   def logger
     @logger ||= Fron::Logger.new
   end
+
+  # Produces a JavaScript stack trace in the console
+  def trace!
+    `console.trace()`
+  end
 end
