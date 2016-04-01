@@ -52,3 +52,6 @@ CommandLiteral:
 
 LiteralInCondition:
   Enabled: false
+
+MutableConstant:
+  Enabled: false

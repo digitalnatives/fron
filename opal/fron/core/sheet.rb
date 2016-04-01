@@ -44,22 +44,20 @@ module Fron
           end
         end
         @rules[tag][id] = style
-        render_proc.call
-      end
-
-      # Returns the render proc for rendering
-      #
-      # @return [type] [description]
-      def render_proc
-        @render_proc ||= RenderProc.new -> { render }, true, 'Rendered styles'
       end
 
       # Renders the styles
       def render
-        style.text = @rules.map { |tag, data|
+        imports = @stylesheets.keys
+                              .map { |url| "@import(#{url});" }
+                              .join("\n")
+
+        rules = @rules.map { |tag, data|
           body = tag.start_with?('@') ? render_at_block(data) : render_rule(data)
           "#{tag} { #{body} }"
         }.join("\n")
+
+        [imports, rules].join("\n")
       end
 
       # Returns the helper for the proc rendering.
@@ -95,10 +93,15 @@ module Fron
       # @param data [Hash] The data
       def render_block(block)
         block.map do |prop, value|
+          next if prop == '_rule_id'
           val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
           prop = prop.gsub(/(.)([A-Z])/, '\1-\2').downcase
           "#{prop}: #{val};"
         end.join('')
+      end
+
+      def render_style_tag
+        style.text = render
       end
 
       # Adds an animation with the given data
@@ -118,8 +121,6 @@ module Fron
         @stylesheets ||= {}
         return if @stylesheets[url]
         @stylesheets[url] = true
-        sheet = DOM::Element.new "link[rel=stylesheet][href=#{url}][type=text/css]"
-        sheet >> DOM::Document.head
       end
     end
   end

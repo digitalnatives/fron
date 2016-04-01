@@ -19,7 +19,7 @@ class StyleTest < Fron::Component
 end
 
 describe StyleTest do
-  let(:style) { DOM::Document.head.find('style') }
+  let(:style) { Fron::Sheet.render }
 
   before do
     subject
@@ -30,22 +30,22 @@ describe StyleTest do
   end
 
   it 'should set css for component' do
-    style.text.should match('style-test')
+    style.should match('style-test')
   end
 
   it 'should set css for sub rulest' do
-    style.text.should match('style-test img')
+    style.should match('style-test img')
   end
 
   it 'should set css for hover' do
-    style.text.should match('style-test:hover')
+    style.should match('style-test:hover')
   end
 
   it 'should create keyframes rule' do
-    style.text.should match('@keyframes test')
+    style.should match('@keyframes test')
   end
 
   it 'should create styleheet link tag' do
-    DOM::Document.head.find('link[href*="test.com"]').should_not be_nil
+    style.should match('test.com')
   end
 end

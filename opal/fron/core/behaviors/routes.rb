@@ -36,7 +36,6 @@ module Fron
         return if @initialized
         @initialized = true
         @routes = []
-        listen
       end
 
       # Listen on events (maily for tests)

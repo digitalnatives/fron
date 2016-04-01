@@ -14,6 +14,9 @@ module Fron
       # @return [Array] The registry of behaviors
       attr_reader :registry
 
+      # @return [Array] The styles for this component
+      attr_reader :styles
+
       # Creates a new class with the specific tag
       #
       # @param tag [String] The tag
@@ -31,6 +34,7 @@ module Fron
       # @param methods [Array] The methods to register
       def register(behavior, methods)
         @registry ||= []
+        @styles ||= []
 
         methods.each do |name|
           meta_def name do |*args, &block|
@@ -45,6 +49,7 @@ module Fron
       def inherited(subclass)
         # Copy behaviours
         subclass.instance_variable_set '@registry', @registry.dup
+        subclass.instance_variable_set '@styles', @styles.dup
       end
 
       # Sets the tag name of the component
@@ -52,6 +57,10 @@ module Fron
       # @param tag [String] The tag name
       def tag(tag)
         @tagname = tag
+      end
+
+      def tagname
+        @tagname || name.split('::').join('-').downcase
       end
     end
 
@@ -65,7 +74,7 @@ module Fron
     def initialize(tag = nil)
       klass = self.class
 
-      super tag || klass.tagname || klass.name.split('::').last
+      super tag || klass.tagname
 
       klass.registry.each do |item|
         instance_exec item, &item[:method].unbind.bind(self)

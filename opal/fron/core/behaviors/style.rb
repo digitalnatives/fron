@@ -6,20 +6,22 @@ module Fron
       #
       # @param base [Class] The class
       def self.included(base)
-        base.register self, [:style, :keyframes]
+        # base.register self, [:style, :keyframes]
+
+        base.meta_def :style do |item|
+          styles << [item, SecureRandom.uuid]
+          styles.each do |(style, id)|
+            Sheet.add_rule tagname, style, id
+          end
+        end
+
         base.meta_def :keyframes do |name, data|
           Sheet.add_animation name, data
         end
+
         base.meta_def :stylesheet do |url|
           Sheet.stylesheet url
         end
-      end
-
-      # Defines styles for the component
-      #
-      # @param item [Array] The styles
-      def self.style(item)
-        Sheet.add_rule tag, item[:args].first, item[:id]
       end
     end
   end

@@ -17,7 +17,7 @@ use Proxy
 
 module Helpers
   def example(klass)
-    source = File.read(File.join(File.dirname(__FILE__),"examples/#{klass.underscore}.rb"))
+    source = File.read(File.join(File.dirname(__FILE__), "examples/#{klass.underscore}.rb"))
     "<example class='#{klass}'></example>\n```ruby\n#{source}\n```"
   end
 end
