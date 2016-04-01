@@ -1,5 +1,5 @@
 module Fron
-  # Sheet
+  # Module for handling component styles
   module Sheet
     class << self
       # Helpers context class
@@ -21,43 +21,47 @@ module Fron
       #
       # @param tag [String] The selector for the tag
       # @param data [Hash] The styles
-      #
-      # BUG: https://github.com/opal/opal/issues/844
-      #      use each_with_object({}) after it's resolved
       def add_rule(tag, data, id)
         @rules ||= {}
         @rules[tag] ||= {}
-        return if @rules[tag][id]
-        style = {}
-        data.each do |key, value|
+        @rules[tag][id] ||= data.each_with_object({}) do |(key, value), style|
           if value.is_a? Hash
-            value['_rule_id'] ||= SecureRandom.uuid
-            if key =~ /&/
-              add_rule key.gsub(/&/, tag), value, value['_rule_id']
-            else
-              key.split(',').each do |part|
-                add_rule "#{tag.strip} #{part.strip}", value, value['_rule_id']
-              end
-            end
+            handle_rule_raw_hash tag, key, value
           else
             style[key] = value
           end
         end
-        @rules[tag][id] = style
+      end
+
+      def handle_rule_raw_hash(tag, key, value)
+        value['_rule_id'] ||= SecureRandom.uuid
+        id = value['_rule_id']
+        if key =~ /&/
+          add_rule key.gsub(/&/, tag), value, id
+        else
+          key.split(',').each do |part|
+            add_rule "#{tag.strip} #{part.strip}", value, id
+          end
+        end
       end
 
       # Renders the styles
       def render
-        imports = @stylesheets.keys
-                              .map { |url| "@import(#{url});" }
-                              .join("\n")
+        [render_stylesheets, render_rules].join("\n")
+      end
 
-        rules = @rules.map { |tag, data|
+      def render_rules
+        @rules.map { |tag, data|
           body = tag.start_with?('@') ? render_at_block(data) : render_rule(data)
           "#{tag} { #{body} }"
         }.join("\n")
+      end
 
-        [imports, rules].join("\n")
+      def render_stylesheets
+        @stylesheets
+          .keys
+          .map { |url| "@import(#{url});" }
+          .join("\n")
       end
 
       # Returns the helper for the proc rendering.
@@ -93,11 +97,15 @@ module Fron
       # @param data [Hash] The data
       def render_block(block)
         block.map do |prop, value|
-          next if prop == '_rule_id'
-          val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
-          prop = prop.gsub(/(.)([A-Z])/, '\1-\2').downcase
-          "#{prop}: #{val};"
+          render_property prop, value
         end.join('')
+      end
+
+      def render_property(prop, value)
+        return if prop == '_rule_id'
+        val = value.is_a?(Proc) ? helper.instance_eval(&value) : value
+        prop = prop.gsub(/(.)([A-Z])/, '\1-\2').downcase
+        "#{prop}: #{val};"
       end
 
       def render_style_tag
