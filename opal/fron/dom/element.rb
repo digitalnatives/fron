@@ -165,6 +165,13 @@ module DOM
       items.join ' '
     end
 
+    # Gets the z-index of the element
+    #
+    # @return [Number] The z-index
+    def z_index
+      `getComputedStyle(#{@el}).zIndex`.to_i
+    end
+
     private
 
     # Applies attributes from the given string.
