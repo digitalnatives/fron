@@ -2,6 +2,8 @@ module Fron
   # Module for handling component styles
   module Sheet
     class << self
+      attr_accessor :additional_styles
+
       # Helpers context class
       class Helpers
       end
@@ -47,7 +49,9 @@ module Fron
 
       # Renders the styles
       def render
-        [render_stylesheets, render_rules].join("\n")
+        [render_stylesheets,
+         additional_styles.to_s,
+         render_rules].join("\n")
       end
 
       def render_rules
@@ -59,6 +63,7 @@ module Fron
 
       def render_stylesheets
         @stylesheets
+          .to_h
           .keys
           .map { |url| "@import(#{url});" }
           .join("\n")
