@@ -32,7 +32,7 @@ module DOM
 
       define_method "#{options[:as]}=" do |value|
         self[attribute] = value
-        trigger 'attribute:changed'
+        send('_attribute_changed', attribute, value) if respond_to?(:_attribute_changed)
       end
     end
 
