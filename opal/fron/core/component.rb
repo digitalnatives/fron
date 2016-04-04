@@ -77,7 +77,7 @@ module Fron
     include Behaviors::Events
     include Behaviors::Style
 
-    TAGNAME_REGEXP = /^\w[\w\d-]+$/
+    TAGNAME_REGEXP = /^\w([\w\d-]+)*$/
 
     # Initalizs the component
     #
