@@ -83,7 +83,6 @@ module DOM
     # @param el [DOM::NODE] The element
     def remove(el)
       `#{@el}.removeChild(#{NODE.get_element el})`
-      trigger :domchange
     end
 
     # Removes self from parent node
@@ -97,7 +96,6 @@ module DOM
     # @param other [DOM::NODE] The other node
     def <<(other)
       `#{@el}.appendChild(#{NODE.get_element other})`
-      trigger :domchange
     end
 
     # Inserts self into other node
@@ -105,7 +103,6 @@ module DOM
     # @param other [DOM::NODE] The other node
     def >>(other)
       `#{NODE.get_element other}.appendChild(#{@el})`
-      trigger :domchange
     end
 
     # Inserts the given node before the other given node
@@ -115,7 +112,6 @@ module DOM
     def insert_before(what, where)
       return what >> self unless where # Fix for firefox...
       `#{@el}.insertBefore(#{NODE.get_element what},#{NODE.get_element where})`
-      trigger :domchange
     end
 
     # Returns the text content of the node
