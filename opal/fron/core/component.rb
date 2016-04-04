@@ -17,6 +17,8 @@ module Fron
       # @return [Array] The styles for this component
       attr_reader :styles
 
+      attr_reader :defaults
+
       # Creates a new class with the specific tag
       #
       # @param tag [String] The tag
@@ -43,6 +45,12 @@ module Fron
         end
       end
 
+      def defaults(data = nil)
+        return @defaults unless data
+        @defaults ||= {}
+        @defaults.merge! data
+      end
+
       # Handles inheritance
       #
       # @param subclass [Class] The subclass
@@ -50,6 +58,7 @@ module Fron
         # Copy behaviours
         subclass.instance_variable_set '@registry', @registry.dup
         subclass.instance_variable_set '@styles', @styles.dup
+        subclass.instance_variable_set '@defaults', (@defaults || {}).dup
       end
 
       # Sets the tag name of the component
@@ -68,16 +77,30 @@ module Fron
     include Behaviors::Events
     include Behaviors::Style
 
+    TAGNAME_REGEXP = /^\w[\w\d-]+$/
+
     # Initalizs the component
     #
     # @param tag [String] The tagname
-    def initialize(tag = nil)
+    def initialize(tagname = nil)
       klass = self.class
 
-      super tag || klass.tagname
+      tag = tagname || klass.tagname
+
+      raise "Invalid tag '#{tag}' for #{self}!" unless tag =~ TAGNAME_REGEXP
+
+      super tag
 
       klass.registry.each do |item|
         instance_exec item, &item[:method].unbind.bind(self)
+      end
+
+      klass.defaults.to_h.each do |key, value|
+        if respond_to?("#{key}=")
+          send "#{key}=", value
+        else
+          self[key] = value
+        end
       end
     end
   end
