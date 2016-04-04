@@ -128,6 +128,10 @@ module DOM
       DOM::NodeList.new `Array.prototype.slice.call(#{@el}.querySelectorAll(#{selector}))`
     end
 
+    def active?
+      DOM::Document.active_element == self
+    end
+
     # Returns the next element sibling
     #
     # @return [DOM::Element] The element
