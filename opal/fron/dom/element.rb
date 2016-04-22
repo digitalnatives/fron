@@ -176,6 +176,14 @@ module DOM
       `getComputedStyle(#{@el}).zIndex`.to_i
     end
 
+    # Calls the click function on the element, this is needed for
+    # file inputs to programatically open the file browser.
+    #
+    # @return [Nil] Returns nothing
+    def click
+      `#{@el}.click() || Opal.nil`
+    end
+
     private
 
     # Applies attributes from the given string.
