@@ -41,6 +41,10 @@ module Kernel
     `confirm(#{text})`
   end
 
+  def open_window(url)
+    `window.open(#{url})`
+  end
+
   # Clears the timeout with the given ID
   #
   # @param id [Numeric] The ID
