@@ -39,12 +39,8 @@ module Fron
     # @param event [DOM::Event] The event
     def keydown(event)
       return if DOM::Document.active_element
-      combo = [event.key]
-      combo << 'ctrl'  if event.ctrl?
-      combo << 'shift' if event.shift?
-      combo << 'alt'   if event.alt?
-      combo << 'meta'  if event.meta?
-      combo.uniq!
+
+      combo = Keyboard.calculate_shortcut event
 
       self.class.shortcuts.each do |shortcut|
         next unless shortcut[:parts].sort == combo.sort
@@ -52,6 +48,15 @@ module Fron
         event.stop
         break
       end
+    end
+
+    def self.calculate_shortcut(event)
+      combo = [event.key]
+      combo << 'ctrl'  if event.ctrl?
+      combo << 'shift' if event.shift?
+      combo << 'alt'   if event.alt?
+      combo << 'meta'  if event.meta?
+      combo.uniq
     end
 
     # Handles the shortcut.
