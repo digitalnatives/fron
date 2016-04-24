@@ -2,18 +2,18 @@
 class Converter < Fron::Component
   # Celsius part
   component :celcius, :div do
-    component :label, 'label Celsius: '
-    component :input, 'input[value=0]'
+    component :label, 'label', text: 'Celsius: '
+    component :input, 'input', value: 0
   end
 
   # Fahrenheit part
   component :fahrenheit, :div do
-    component :label, 'label Fahrenheit:'
-    component :result, 'span 32'
+    component :label, 'label', text: 'Fahrenheit:'
+    component :result, 'span', text: '32'
   end
 
   # Button
-  component :button, 'button Convert'
+  component :button, 'button', text: 'Convert'
 
   # We will convert on click of the button
   on :click, 'button', :convert

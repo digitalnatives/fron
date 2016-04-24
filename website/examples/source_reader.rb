@@ -4,7 +4,7 @@ class SourceReader < Fron::Component
   tag 'source-reader'
 
   # Button for initialize loading
-  component :button, 'button Load source...'
+  component :button, 'button', text: 'Load source...'
 
   # Styles
   style whiteSpace: 'pre-wrap',

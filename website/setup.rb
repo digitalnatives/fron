@@ -20,19 +20,19 @@ class Sidebar < Fron::Component
     tag 'header-item'
   end
 
-  component :title,      'sidebar-title[target=home] Fron'
-  component :about,      'sidebar-item[target=intro] Introduction'
-  component :dom,        'sidebar-item[target=getting-started] Getting Started'
-  component :setup,      'sidebar-item[target=the-dom] The DOM'
-  component :components, 'sidebar-item[target=components] Components'
-  component :components, 'sidebar-sub-item[target=components/inheritance] Inheritance'
-  component :components, 'sidebar-sub-item[target=components/composition] Composition'
-  component :components, 'sidebar-sub-item[target=components/events] Events'
-  component :components, 'sidebar-sub-item[target=components/routes] Routes'
-  component :components, 'sidebar-sub-item[target=components/styles] Styles'
-  component :behaviors,  'sidebar-item[target=utilities] Utilities'
-  component :behaviors,  'sidebar-sub-item[target=utilities/request] Request'
-  component :behaviors,  'sidebar-sub-item[target=utilities/local-storage] Local Storage'
+  component :title,      'sidebar-title', target: :home, text: 'Fron'
+  component :about,      'sidebar-item', target: 'intro', text: 'Introduction'
+  component :dom,        'sidebar-item', target: 'getting-started', text: 'Getting Started'
+  component :setup,      'sidebar-item', target: 'the-dom', text: 'The DOM'
+  component :components, 'sidebar-item', target: 'components', text: 'Components'
+  component :components, 'sidebar-sub-item', target: 'components/inheritance', text: 'Inheritance'
+  component :components, 'sidebar-sub-item', target: 'components/composition', text: 'Composition'
+  component :components, 'sidebar-sub-item', target: 'components/events', text: 'Events'
+  component :components, 'sidebar-sub-item', target: 'components/routes', text: 'Routes'
+  component :components, 'sidebar-sub-item', target: 'components/styles', text: 'Styles'
+  component :behaviors,  'sidebar-item', target: 'utilities', text: 'Utilities'
+  component :behaviors,  'sidebar-sub-item', target: 'utilities/request', text: 'Request'
+  component :behaviors,  'sidebar-sub-item', target: 'utilities/local-storage', text: 'Local Storage'
 
   style counterReset: :items,
         padding: 20.px,
@@ -82,10 +82,6 @@ class Main < Fron::Component
   component :wrapper, :wrapper do
     component :container, :container
   end
-
-  stylesheet '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
-  stylesheet '//fonts.googleapis.com/css?family=Open+Sans:400,600,700'
-  stylesheet '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css'
 
   style fontFamily: 'Open Sans',
         width: 1200.px,
@@ -153,3 +149,14 @@ Fron::Behaviors::Style::Sheet.add_rule 'body', { margin: 0,
                                                  overflowY: :scroll,
                                                  fontSize: 18.px,
                                                  lineHeight: 26.px }, '1'
+
+['//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css',
+ '//fonts.googleapis.com/css?family=Open+Sans:400,600,700',
+ '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css'
+ ].each do |url|
+  link = DOM::Element.new 'link'
+  link[:rel] = :stylesheet
+  link[:type] = 'text/css'
+  link[:href] = url
+  link >> DOM::Document.head
+end

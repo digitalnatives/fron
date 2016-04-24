@@ -1,7 +1,7 @@
 # 5. Utilities
 Fron provides a few **utility classes** by default:
 
-* **Request** - Making an handling requests
+* **Request** - Making and handling requests
 * **LocalStorage** - LocalStorage wrapper
 * **Keyboard** - Adding and handling shortcuts
 * **Drag** - Low level dragging support
