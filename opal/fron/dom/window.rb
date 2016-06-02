@@ -13,6 +13,12 @@ module DOM
       timeout { trigger 'popstate' }
     end
 
+    def self.replace_state(url)
+      return if url == state
+      `window.history.replaceState({},'',#{url})`
+      timeout { trigger 'popstate' }
+    end
+
     # Returns the locations pathname as state
     #
     # @return [String] The pathname
