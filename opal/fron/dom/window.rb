@@ -19,6 +19,14 @@ module DOM
       timeout { trigger 'popstate' }
     end
 
+    def self.width
+      `window.innerWidth`
+    end
+
+    def self.height
+      `window.innerHeight`
+    end
+
     # Returns the locations pathname as state
     #
     # @return [String] The pathname
