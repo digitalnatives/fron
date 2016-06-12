@@ -80,7 +80,7 @@ module Fron
     end
 
     def to_h
-      { x: x, y: y}
+      { x: x, y: y }
     end
   end
 end
