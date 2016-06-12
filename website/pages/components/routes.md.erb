@@ -1,0 +1,49 @@
+# 4.4. Routes
+Routing is supported in Fron via the **Fron::Behaviors::Routes** module, and
+currently is very sparse.
+
+When used in a **component**, routes can be defined in order to call an
+_instance method_ when the page location changes to match a perticular
+regular expression or string:
+
+```ruby
+class Main < Fron::Component
+  include Fron::Behaviors::Routes
+
+  route '/users', :users
+  route '/posts', :posts
+
+  def users
+    # Display users
+  end
+
+  def posts
+    # Display posts
+  end
+end
+```
+
+## Handling Parameters
+
+If capture groups are defined for the regular expression than they will be
+forwarded to the method as arguments:
+
+```ruby
+class Main < Fron::Component
+  include Fron::Behaviors::Routes
+
+  route '/users/(.*)', :show_user
+
+  def show_user(id)
+    # Display user with the given id
+  end
+end
+```
+
+Things to keep in mind when handling routes:
+* Multiple components can include this module and define routes
+* If multiple components matches a route then only one (the first) will
+  be called
+* Components that are not in the DOM can handle routes too
+* The best practice is to have one component to handle all the routes and then
+  delegate down the component tree

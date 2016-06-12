@@ -11,7 +11,7 @@ module DOM
     # Read the given file as data url
     #
     # @param file [Native] The file
-    def readAsDataURL(file)
+    def read_as_data_url(file)
       return unless file
       `#{@el}.readAsDataURL(file.native)`
     end

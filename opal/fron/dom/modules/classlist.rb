@@ -4,14 +4,14 @@ module DOM
     # Adds classes to the class list
     #
     # @param classes [Array] The classes
-    def addClass(*classes)
+    def add_class(*classes)
       classes.each { |cls| `#{@el}.classList.add(#{cls})` }
     end
 
     # Removes classes from the class list
     #
     # @param classes [Array] The classes
-    def removeClass(*classes)
+    def remove_class(*classes)
       classes.each { |cls| `#{@el}.classList.remove(#{cls})` }
     end
 
@@ -20,7 +20,7 @@ module DOM
     # @param cls [String] The class
     #
     # @return [Boolean] True if it has false if not
-    def hasClass(cls)
+    def has_class(cls)
       `#{@el}.classList.contains(#{cls})`
     end
 
@@ -29,11 +29,11 @@ module DOM
     #
     # @param cls [String] The class
     # @param value [Boolean] The value
-    def toggleClass(cls, value = nil)
-      if value || (value.nil? && !hasClass(cls))
-        addClass cls
+    def toggle_class(cls, value = nil)
+      if value || (value.nil? && !has_class(cls))
+        add_class cls
       else
-        removeClass cls
+        remove_class cls
       end
     end
   end

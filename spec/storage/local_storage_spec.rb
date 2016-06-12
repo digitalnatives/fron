@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fron::Storage::LocalStorage do
-
   subject { described_class }
 
   before do

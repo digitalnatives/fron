@@ -4,14 +4,14 @@ describe DOM::NODE do
   let(:el) { `document.createElement('div')` }
   subject { described_class.new el }
 
-  describe '#fromNode' do
+  describe '#from_node' do
     it 'should return the same instance if present' do
       subject
-      described_class.fromNode(el).should equal subject
+      described_class.from_node(el).should equal subject
     end
 
     it 'should create new instance if no instance present' do
-      described_class.fromNode(el).should be_a DOM::NODE
+      described_class.from_node(el).should be_a DOM::NODE
     end
   end
 end
@@ -37,7 +37,7 @@ describe 'Intance retaining' do
   describe 'parent' do
     it 'should return the component' do
       el.test.parent.should equal el
-      el.test.parentNode.should equal el
+      el.test.parent_node.should equal el
     end
   end
 

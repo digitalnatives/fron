@@ -1,7 +1,6 @@
 module Fron
-  # Bevahviors
   module Behaviors
-    # Components
+    # Behavior for handling routes in applications.
     module Routes
       # Register a route
       #
@@ -19,7 +18,7 @@ module Fron
       # Handles hash change event
       #
       # @param hash [String] The hash
-      def self.handleHashChange(hash)
+      def self.handle_hash_change(hash)
         routes = @routes.select { |route_| route_[:path] =~ hash }
         routes.each do |route|
           matches = hash.match route[:path]
@@ -34,20 +33,22 @@ module Fron
         base.register self, [:route]
 
         return if @initialized
-        DOM::Window.on('popstate') { handleHashChange DOM::Window.state }
-        @routes = []
         @initialized = true
+        @routes = []
+      end
+
+      # Listen on events (maily for tests)
+      def self.listen
+        DOM::Window.on('popstate') { handle_hash_change DOM::Window.state }
       end
 
       # Registers routes from the registry
       #
-      # @param registry [Array] The routes
-      def self.route(registry)
-        registry.each do |item|
-          path, action = item
-          fail "There is no method #{action} on #{self}" unless respond_to? action
-          Routes.register path, action, self
-        end
+      # @param item [Array] The route
+      def self.route(item)
+        path, action = item[:args]
+        raise "There is no method #{action} on #{self}" unless respond_to? action
+        Routes.register path, action, self
       end
     end
   end

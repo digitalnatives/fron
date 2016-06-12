@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Text do
-
   subject { described_class.new('test') }
   let(:el) { subject.instance_variable_get('@el') }
 

@@ -1,0 +1,19 @@
+# 4.1. Inheritance
+Because **components** are just **ruby classes**, that means that they can be exteded
+and reused.
+
+Let's say that there is a **Button** component that greets you when you click it,
+and we would like to have an icon before the text, but it doesn't support that:
+
+<%= example 'MyButton' %>
+
+What we can do is to create an **IconButton** component that extends the **Button** component,
+and add the functionality to that:
+
+<%= example 'IconButton' %>
+
+What we did was:
+* we extended the **Button** component so the events, styles and methods are inherited
+* we added two components one for the **icon** and one for the **text (span)**
+* we delegated the two methods **text** and **text=** in order to not break the API
+* we added some styles to the **icon** component

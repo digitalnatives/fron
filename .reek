@@ -1,4 +1,6 @@
 ---
+DuplicateMethodCall:
+  max_calls: 3
 ControlParameter:
   enabled: false
 BooleanParameter:

@@ -1,9 +1,24 @@
 require 'json'
 
 module Fron
-  # Request
+  # Low level wrapper for the XMLHTTPRequest class
   class Request
-    attr_accessor :url, :headers
+    extend Eventable
+    extend Forwardable
+
+    # Sets / gets the URL
+    #
+    # @param value [String] The URL
+    # @return [String] The URL
+    attr_reader :url
+
+    # Sets / gets the headers for the request
+    #
+    # @param value [Hash] The headers
+    # @return [Hash] The headers
+    attr_reader :headers
+
+    def_delegators :class, :trigger
 
     # Initialies the request
     #
@@ -13,7 +28,7 @@ module Fron
       @url = url
       @headers = headers
       @request = `new XMLHttpRequest()`
-      `#{@request}.addEventListener('readystatechange' , function(){#{handleStateChange}})`
+      `#{@request}.addEventListener('readystatechange' , function(){#{handle_state_change}})`
       self
     end
 
@@ -23,21 +38,23 @@ module Fron
     # @param data [Hash] The data
     #
     # @yieldparam response [Response] The response
-    def request(method = 'GET', data = nil, &callback)
-      if readyState == 0 || readyState == 4
-        @callback = callback
-        if method.upcase == 'GET' && data
-          `#{@request}.open(#{method},#{@url + '?' + data.toQueryString})`
-          setHeaders
-          `#{@request}.send()`
-        else
-          `#{@request}.open(#{method},#{@url})`
-          setHeaders
-          `#{@request}.send(#{data.to_json if data})`
-        end
-      else
-        fail 'The request is already running!'
-      end
+    def request(method = 'GET', data = {}, &callback)
+      raise 'The request is already running!' if ready_state != 0 && ready_state != 4
+      method = method.upcase
+      @callback = callback
+
+      args = case method
+             when 'UPLOAD'
+               ['POST', @url, data.to_form_data]
+             when 'GET'
+               [method, "#{@url}?#{data.to_query_string}"]
+             else
+               [method, @url, data.to_json]
+             end
+
+      send(*args)
+
+      trigger :loading
     end
 
     # Runs a GET request
@@ -69,8 +86,21 @@ module Fron
 
     private
 
+    # Sends the given data to the given URL
+    # with the given method
+    #
+    # @param method [String] The method
+    # @param url [String] The URL
+    # @param data [*] The data
+    def send(method, url, data = nil)
+      `#{@request}.open(#{method}, #{url})`
+      `#{@request}.withCredentials = true`
+      set_headers
+      `#{@request}.send(#{data})`
+    end
+
     # Sets the headers
-    def setHeaders
+    def set_headers
       @headers.each_pair do |header, value|
         `#{@request}.setRequestHeader(#{header},#{value})`
       end
@@ -79,15 +109,19 @@ module Fron
     # Returns the ready state of the request
     #
     # @return [Numeric] The ready state
-    def readyState
+    def ready_state
       `#{@request}.readyState`
     end
 
     # Handles the hash change
-    def handleStateChange
-      return unless readyState == 4
-      response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
-      @callback.call response if @callback
+    def handle_state_change
+      return unless ready_state == 4
+      begin
+        response = Response.new `#{@request}.status`, `#{@request}.response`, `#{@request}.getAllResponseHeaders()`
+        @callback.call response if @callback
+      ensure
+        trigger :loaded
+      end
     end
   end
 end

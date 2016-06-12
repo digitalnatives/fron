@@ -1,22 +1,52 @@
 require 'rubygems'
+require 'opal/rspec/rake_task'
 require 'bundler/setup'
-require 'quality_control'
-require 'quality_control/rubycritic'
-require 'quality_control/rubocop'
-require 'quality_control/yard'
-require 'quality_control/opal_rspec'
 require 'fron'
 
-Bundler::GemHelper.install_tasks
+Opal::RSpec::RakeTask.new(:spec) do |_, task|
+  task.files = FileList[ARGV[1] || 'spec/**/*_spec.rb']
+  task.timeout = 120_000
+end
 
-QualityControl::Rubycritic.directories += %w(opal)
-QualityControl::Yard.threshold = 100
-QualityControl::OpalRspec.files = /^opal\/fron\/.*\.rb/
-QualityControl::OpalRspec.threshold = 85
+desc 'Run CI Tasks'
+task :ci do
+  sh 'SPEC_OPTS="--color" rake spec'
+  sh 'rubocop lib opal spec'
+  sh 'rubycritic lib opal --mode-ci -s 94 --no-browser'
+end
 
-QualityControl.tasks += %w(
-  syntax:ruby
-  opal:rspec
-  documentation:coverage
-  rubycritic:coverage
-)
+task :build do
+  require 'sprockets'
+  require 'opal'
+  require 'execjs'
+
+  environment = Sprockets::Environment.new
+
+  Opal.paths.each do |path|
+    environment.append_path path
+  end
+
+  environment.append_path 'website'
+
+  source = environment['setup'].to_s
+
+  script = Opal::Sprockets.javascript_include_tag('setup', sprockets: environment, prefix: '/assets', debug: false)
+
+  code = script.split("\n")
+               .last
+               .gsub('<script>', '')
+               .gsub('</script>', '')
+
+  head = """
+    document = {}
+    window = {}
+    Node = {}
+    try {
+      #{source}
+    } catch(e) {
+      throw(e.stack)
+    }
+  """
+  context = ExecJS.compile (head)
+  puts context.exec(code + "; return Opal.Fron.Sheet.$render()")
+end

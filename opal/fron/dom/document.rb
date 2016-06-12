@@ -2,15 +2,18 @@ module DOM
   # This module is a wrapper for the native *document* object.
   module Document
     extend SingleForwardable
-    @doc = DOM::Element.new `document`
 
-    def_delegators :@doc, :find
+    def_delegators :doc, :find
 
     # Returns the active element
     #
     # @return [DOM::Element] The element
-    def self.activeElement
-      find ':focus'
+    def self.active_element
+      doc.find ':focus'
+    end
+
+    def self.doc
+      DOM::Element.new `document`
     end
 
     # Returns the head element

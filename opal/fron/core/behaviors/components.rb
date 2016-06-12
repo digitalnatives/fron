@@ -1,7 +1,6 @@
 module Fron
-  # Bevahviors
   module Behaviors
-    # Components
+    # Behavior for composing and creating child components.
     module Components
       # Runs for included classes
       #
@@ -12,13 +11,11 @@ module Fron
 
       # Creates components from the registry
       #
-      # @param registry [Array] Registry of components
-      def self.component(registry)
-        registry.each do |args|
-          arguments = args.dup
-          block = arguments.last.is_a?(Proc) ? arguments.pop : nil
-          component(*arguments, &block)
-        end
+      # @param item [Array] Component directive
+      def self.component(item)
+        arguments = item[:args].dup
+        block = item[:block]
+        component(*arguments, &block)
       end
 
       # Creates a child component
@@ -26,9 +23,20 @@ module Fron
       # @param name [String] The name of the component
       # @param comp [Class] The component
       # @param block [Proc] The block to eval on the new component
-      def component(name, comp, &block)
+      #
+      # :reek:TooManyStatements
+      def component(name, comp, options = {}, &block)
         component = comp.is_a?(Class) ? comp.new(nil) : Component.new(comp)
         component.instance_eval(&block) if block
+
+        options.each do |key, value|
+          if component.respond_to?("#{key}=")
+            component.send("#{key}=", value)
+          else
+            component[key] = value
+          end
+        end
+
         self << component
         instance_variable_set "@#{name}", component
 

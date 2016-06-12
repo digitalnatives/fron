@@ -1,31 +1,54 @@
 require 'fron/core/behaviors/components'
 require 'fron/core/behaviors/events'
 require 'fron/core/behaviors/routes'
+require 'fron/core/behaviors/style'
+require 'securerandom'
 
 module Fron
-  # Component
+  # Base class for components.
   class Component < DOM::Element
-    attr_reader :model
-
     class << self
+      # @return [String] The tagname of the component
       attr_reader :tagname
-      attr_reader :behaviors
+
+      # @return [Array] The registry of behaviors
+      attr_reader :registry
+
+      # @return [Array] The styles for this component
+      attr_reader :styles
+
+      attr_reader :defaults
+
+      # Creates a new class with the specific tag
+      #
+      # @param tag [String] The tag
+      #
+      # @return [Fron::Component] The new component
+      def create(tag)
+        klass = Class.new self
+        klass.tag tag
+        klass
+      end
 
       # Register a behavior
       #
       # @param behavior [Module] The behavior
       # @param methods [Array] The methods to register
       def register(behavior, methods)
-        @behaviors ||= {}
-        @behaviors[behavior] = methods
+        @registry ||= []
+        @styles ||= []
 
         methods.each do |name|
-          instance_variable_set "@#{name}", []
-          metaDef name do |*args, &block|
-            args << block if block_given?
-            instance_variable_get("@#{name}") << args
+          meta_def name do |*args, &block|
+            @registry << { method: behavior.method(name), args: args, block: block, id: SecureRandom.uuid }
           end
         end
+      end
+
+      def defaults(data = nil)
+        return @defaults unless data
+        @defaults ||= {}
+        @defaults.merge! data
       end
 
       # Handles inheritance
@@ -33,14 +56,9 @@ module Fron
       # @param subclass [Class] The subclass
       def inherited(subclass)
         # Copy behaviours
-        subclass.instance_variable_set '@behaviors', @behaviors.dup
-
-        # Copy registries
-        @behaviors.values.reduce(&:+).each do |type|
-          next unless (var = instance_variable_get("@#{type}"))
-          instVar = subclass.instance_variable_get("@#{type}") || []
-          subclass.instance_variable_set("@#{type}", instVar.concat(var))
-        end
+        subclass.instance_variable_set '@registry', @registry.dup
+        subclass.instance_variable_set '@styles', @styles.dup
+        subclass.instance_variable_set '@defaults', (@defaults || {}).dup
       end
 
       # Sets the tag name of the component
@@ -49,24 +67,39 @@ module Fron
       def tag(tag)
         @tagname = tag
       end
+
+      def tagname
+        @tagname || name.split('::').join('-').downcase
+      end
     end
 
     include Behaviors::Components
     include Behaviors::Events
+    include Behaviors::Style
+
+    TAGNAME_REGEXP = /^\w([\w\d-]+)*$/
 
     # Initalizs the component
     #
     # @param tag [String] The tagname
-    def initialize(tag = nil)
+    def initialize(tagname = nil)
       klass = self.class
 
-      super tag || klass.tagname || klass.name.split('::').last
+      tag = tagname || klass.tagname
 
-      klass.behaviors.each do |mod, methods|
-        methods.each do |name|
-          next unless mod.respond_to?(name)
-          registry = self.class.instance_variable_get("@#{name}")
-          instance_exec registry, &mod.method(name)
+      raise "Invalid tag '#{tag}' for #{self}!" unless tag =~ TAGNAME_REGEXP
+
+      super tag
+
+      klass.registry.each do |item|
+        instance_exec item, &item[:method].unbind.bind(self)
+      end
+
+      klass.defaults.to_h.each do |key, value|
+        if respond_to?("#{key}=")
+          send "#{key}=", value
+        else
+          self[key] = value
         end
       end
     end

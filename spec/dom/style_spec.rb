@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DOM::Style do
-
   subject { DOM::Element.new 'div' }
   let(:el) { subject.instance_variable_get('@el') }
 
@@ -24,7 +23,7 @@ describe DOM::Style do
     end
   end
 
-  describe '[]"'do
+  describe '[]' do
     it 'should return with the value of the given style' do
       `#{el}.style.display = 'block'`
       subject.style['display'].should eq 'block'

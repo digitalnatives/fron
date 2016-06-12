@@ -7,6 +7,10 @@ class TestKeyboard < Fron::Keyboard
 end
 
 describe TestKeyboard do
+  let(:event) {
+    DOM::Event.new `{ ctrlKey: true, altKey: true, shiftKey: true,
+                      metaKey: false, keyCode: 38 }`
+  }
 
   describe Fron::Keyboard do
     it 'should work on its own' do
@@ -15,7 +19,6 @@ describe TestKeyboard do
   end
 
   describe 'DSL' do
-
     subject { described_class }
 
     describe '#sc' do
@@ -38,39 +41,38 @@ describe TestKeyboard do
 
   describe 'Events' do
     it 'should handle keydown' do
-      subject.should receive(:onKeydown)
-      DOM::Document.body.trigger 'keydown'
+      subject.should receive(:keydown)
+      DOM::Document.body.listeners[:keydown].count.should eq 1
+      DOM::Document.body.listeners[:keydown][0].call {}
     end
   end
 
-  describe '#onKeydown' do
-
-    let(:event) { DOM::Event.new `{ctrlKey: true, altKey: true, shiftKey: true, keyCode: 38}` }
+  describe '#keydown' do
     let(:shortcut) { { parts: %w(ctrl alt shift up) } }
 
     it 'should match shortcuts to the combo' do
       described_class.instance_variable_set('@shortcuts', [{ parts: [] }, shortcut])
-      subject.should receive(:handleShortcut).with shortcut
+      subject.should receive(:handle_shortcut).with shortcut
       event.should receive(:stop)
-      subject.onKeydown event
+      subject.keydown event
     end
   end
 
-  describe 'handleShortcut' do
+  describe 'handle_shortcut' do
     it 'should run block if block given' do
       sc = { block: proc {} }
       subject.should receive(:instance_exec)
-      subject.handleShortcut sc
+      subject.handle_shortcut sc
     end
 
     it 'should call action method if given' do
       subject.should receive(:test)
-      subject.handleShortcut action: :test
+      subject.handle_shortcut action: :test
     end
 
     it 'should warn if method is not exists' do
       subject.should receive(:warn)
-      subject.handleShortcut action: :test2, parts: %w(a b)
+      subject.handle_shortcut action: :test2, parts: %w(a b)
     end
   end
 end

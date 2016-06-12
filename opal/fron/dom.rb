@@ -1,6 +1,8 @@
 require 'fron/dom/modules/events'
 require 'fron/dom/modules/classlist'
 require 'fron/dom/modules/dimensions'
+require 'fron/dom/modules/attributes'
+require 'fron/dom/modules/element_accessor'
 require 'fron/dom/nodelist'
 require 'fron/dom/style'
 require 'fron/dom/node'

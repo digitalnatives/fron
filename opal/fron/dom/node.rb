@@ -1,7 +1,9 @@
 require 'native'
 
 module DOM
-  # Node
+  # Low level wrapper for the Node class
+  #
+  # :reek:TooManyMethods
   class NODE
     include Events
     include Comparable
@@ -12,8 +14,9 @@ module DOM
     # @param node [Native] The node
     #
     # @return [DOM::NODE] The ruby node
-    def self.fromNode(node)
-      instance = `#{node}._instance || false`
+    def self.from_node(node)
+      return nil unless node
+      instance = `#{node}._instance || Opal.nil`
       return instance if instance && instance.is_a?(DOM::NODE)
       new node
     end
@@ -22,8 +25,8 @@ module DOM
     #
     # @param node [Native] The native node
     def initialize(node = nil)
-      fail 'A node must be provided!' unless node
-      fail 'Not a HTML Node given!' unless `#{node} instanceof Node`
+      raise 'A node must be provided!' unless node
+      raise 'Not a HTML Node given!' unless `#{node} instanceof Node`
       @el = node
       `#{@el}._instance = #{self}`
     end
@@ -45,22 +48,20 @@ module DOM
     # Returns the parent node
     #
     # @return [DOM::NODE] The parent node
-    def parentNode
-      el = `#{@el}.parentNode || false`
-      el ? DOM::NODE.fromNode(el) : nil
+    def parent_node
+      DOM::Element.from_node `#{@el}.parentNode || Opal.nil`
     end
 
     # Returns the parent element
     #
     # @return [DOM::NODE] The parent element
     def parent
-      el = `#{@el}.parentElement || false`
-      el ? DOM::Element.fromNode(el) : nil
+      DOM::Element.from_node `#{@el}.parentElement || Opal.nil`
     end
 
     # Removes all the child nodes
     def empty
-      children.each { |node| node.remove! }
+      children.each(&:remove!)
     end
 
     # Returns if the node is empty or not
@@ -81,7 +82,7 @@ module DOM
     #
     # @param el [DOM::NODE] The element
     def remove(el)
-      `#{@el}.removeChild(#{NODE.getElement el})`
+      `#{@el}.removeChild(#{NODE.get_element el})`
     end
 
     # Removes self from parent node
@@ -94,23 +95,23 @@ module DOM
     #
     # @param other [DOM::NODE] The other node
     def <<(other)
-      `#{@el}.appendChild(#{NODE.getElement other})`
+      `#{@el}.appendChild(#{NODE.get_element other})`
     end
 
     # Inserts self into other node
     #
     # @param other [DOM::NODE] The other node
     def >>(other)
-      `#{NODE.getElement other}.appendChild(#{@el})`
+      `#{NODE.get_element other}.appendChild(#{@el})`
     end
 
     # Inserts the given node before the other given node
     #
     # @param what [DOM::NODE] The node to insert
     # @param where [DOM::NODE] The other node
-    def insertBefore(what, where)
-      return what >> self unless where # Fir for firefox...
-      `#{@el}.insertBefore(#{NODE.getElement what},#{NODE.getElement where})`
+    def insert_before(what, where)
+      return what >> self unless where # Fix for firefox...
+      `#{@el}.insertBefore(#{NODE.get_element what},#{NODE.get_element where})`
     end
 
     # Returns the text content of the node
@@ -138,7 +139,7 @@ module DOM
     #
     # @return [Boolean] True if the same false if not
     def ==(other)
-      `#{NODE.getElement(other)} === #{@el}`
+      `#{NODE.get_element(other)} === #{@el}`
     end
 
     # Compars self position with other node
@@ -148,7 +149,7 @@ module DOM
     # @return [Boolean] The compareable with the other node
     def <=>(other)
       return 0 if other == self
-      fail 'Nodes not Comparable!' if other.parent != parent
+      raise 'Nodes not Comparable!' if other.parent != parent
       other.index <=> index
     end
 
@@ -165,7 +166,7 @@ module DOM
     # @param obj [Object] The object
     #
     # @return [Native] The native node
-    def self.getElement(obj)
+    def self.get_element(obj)
       if `#{obj} instanceof Node`
         obj
       elsif obj.is_a?(NODE)

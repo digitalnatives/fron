@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe DOM::Element do
-
-  subject  { described_class.new 'div' }
+  subject  { described_class.new 'div[tabindex=0]' }
   let(:el) { subject.instance_variable_get('@el') }
   let(:a)  { described_class.new 'a' }
+  let(:a2) { described_class.new 'a' }
 
   describe '#initailize' do
     context 'string argument' do
@@ -14,8 +14,8 @@ describe DOM::Element do
 
       it 'should add classes' do
         el = described_class.new('div.test.help')
-        el.hasClass('test').should be true
-        el.hasClass('help').should be true
+        el.has_class('test').should be true
+        el.has_class('help').should be true
       end
 
       it 'should set the id' do
@@ -54,6 +54,31 @@ describe DOM::Element do
     end
   end
 
+  describe '#tabindex' do
+    it 'should return tabindex' do
+      subject.tabindex.should eq '0'
+    end
+
+    it 'should set tabindex' do
+      subject.tabindex = 1
+      subject[:tabindex].should eq '1'
+    end
+  end
+
+  describe '#disabled' do
+    it 'should return the disabled state of the element' do
+      `#{el}.disabled = true`
+      subject.disabled.should eq true
+    end
+  end
+
+  describe '#disabled=' do
+    it 'should set the disabled state of the element' do
+      subject.disabled = true
+      `#{el}.disabled`.should eq true
+    end
+  end
+
   describe '#hide' do
     it 'should hide the element' do
       subject.hide
@@ -64,7 +89,7 @@ describe DOM::Element do
   describe '#show' do
     it 'should show the element' do
       subject.show
-      subject.style.display.should eq 'block'
+      subject.style.display.should eq ''
     end
   end
 
@@ -82,6 +107,30 @@ describe DOM::Element do
     end
   end
 
+  describe '#attribute?' do
+    it 'should return true if there is an attribute flase if not' do
+      subject['test'] = 'data'
+      subject.attribute?(:test).should eq true
+      subject.attribute?(:some).should eq false
+    end
+  end
+
+  describe '#remove_attribute' do
+    it 'should remove attribute' do
+      subject[:test] = 'data'
+      expect {
+        subject.remove_attribute(:test)
+      }.to change { subject.attribute?(:test) }.from(true).to(false)
+    end
+  end
+
+  describe '#files' do
+    it 'sohuld return the files' do
+      `#{el}.files = []`
+      subject.files.should be_an Array
+    end
+  end
+
   describe '#find' do
     it 'should find a descendant element' do
       a >> subject
@@ -90,6 +139,52 @@ describe DOM::Element do
 
     it 'should return nil if no element is found' do
       subject.find('p').should eq nil
+    end
+  end
+
+  describe '#next' do
+    it 'should find the next element' do
+      a >> subject
+      a2 >> subject
+      a.next.should eq a2
+    end
+
+    it 'should return nil if no element is found' do
+      subject.next.should eq nil
+    end
+  end
+
+  describe '#previous' do
+    it 'should find the previous element' do
+      a >> subject
+      a2 >> subject
+      a2.previous.should eq a
+    end
+
+    it 'should return nil if no element is found' do
+      subject.previous.should eq nil
+    end
+  end
+
+  describe '#find_all' do
+    it 'should find all descendant elements' do
+      a >> subject
+      a2 >> subject
+      subject.find_all('a').count.should eq 2
+    end
+  end
+
+  describe '#include?' do
+    it 'should return true' do
+      a >> subject
+      subject.include?(a).should eq true
+      subject.include?(a2).should eq false
+    end
+  end
+
+  describe '#blur' do
+    it 'should blur the element' do
+      subject.blur
     end
   end
 
@@ -112,7 +207,7 @@ describe DOM::Element do
       subject << a
       subject.empty
       subject.children.length.should eq 0
-      subject.html.should eq ''
+      subject.html.should eq nil
     end
   end
 
@@ -159,6 +254,13 @@ describe DOM::Element do
     it 'should return the id of the element' do
       `#{el}.id = 'test'`
       subject.id.should eq 'test'
+    end
+  end
+
+  describe '#path' do
+    it 'should return the path' do
+      a >> subject
+      a.path.should eq 'div a'
     end
   end
 end

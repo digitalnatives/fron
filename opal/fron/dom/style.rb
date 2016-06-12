@@ -1,5 +1,3 @@
-# rubocop:disable MethodName
-
 module DOM
   # Style
   class Style
