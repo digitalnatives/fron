@@ -184,6 +184,14 @@ module DOM
       `#{@el}.click() || Opal.nil`
     end
 
+    def scroll_into_view
+      `#{@el}.scrollIntoView()`
+    end
+
+    def scroll_into_view_if_needed
+      `#{@el}.scrollIntoViewIfNeeded()`
+    end
+
     private
 
     # Applies attributes from the given string.

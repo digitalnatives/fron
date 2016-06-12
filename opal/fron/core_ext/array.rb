@@ -20,4 +20,16 @@ class Array
       yield(a) <=> yield(b)
     end
   end
+
+  def _uniq
+    return uniq unless block_given?
+    data = uniq
+    results = []
+    data.reject do |item|
+      value = yield item
+      next true if results.include? value
+      results << value
+      false
+    end
+  end
 end

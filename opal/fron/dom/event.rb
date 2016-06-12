@@ -110,7 +110,11 @@ module DOM
     #
     # @param name [String] The name of the method
     def method_missing(name)
-      `#{@event}[#{name}]`
+      `#{@event}[#{name}] || Opal.NIL`
+    end
+
+    def data
+      JSON.from_object(`#{@event}.data`)
     end
 
     # Returns the string represenation of the pressed key

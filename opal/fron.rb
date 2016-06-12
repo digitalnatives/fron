@@ -1,4 +1,5 @@
 require 'opal'
+require 'fron/js/scroll_into_view_if_needed'
 require 'fron/core_ext'
 require 'fron/dom'
 require 'fron/core'

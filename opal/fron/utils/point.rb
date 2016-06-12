@@ -72,5 +72,15 @@ module Fron
     def to_s
       "[#{x}, #{y}]"
     end
+
+    def clamp(width, height)
+      @x = @x.clamp(0, width)
+      @y = @y.clamp(0, height)
+      self
+    end
+
+    def to_h
+      { x: x, y: y}
+    end
   end
 end
