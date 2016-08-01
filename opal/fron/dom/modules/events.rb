@@ -17,7 +17,7 @@ module DOM
       data = if data.is_a?(Event)
                data.instance_variable_get('@event')
              elsif data.respond_to?(:to_json)
-               `JSON.parse(#{data.to_json})`
+               `JSON.parse(JSON.stringify(#{data.to_n}))`
              end
       %x{
         var event = document.createEvent("HTMLEvents");
