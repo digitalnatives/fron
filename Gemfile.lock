@@ -51,6 +51,8 @@ GEM
       tilt (>= 1.4)
     opal-rspec (0.5.0)
       opal (>= 0.8.0, < 0.10)
+    opal-virtual-dom (0.3.0)
+      opal
     parser (2.3.0.7)
       ast (~> 2.2)
     powerpack (0.1.1)
@@ -104,6 +106,7 @@ DEPENDENCIES
   execjs (~> 2.6)
   fron!
   opal-rspec (~> 0.5.0)
+  opal-virtual-dom (~> 0.3.0)
   rake (~> 11.1)
   rubocop (~> 0.39.0)
   rubycritic (~> 2.8)

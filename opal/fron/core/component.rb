@@ -6,7 +6,7 @@ require 'securerandom'
 
 module Fron
   # Base class for components.
-  class Component < DOM::Element
+  class BaseComponent < DOM::Element
     class << self
       # @return [String] The tagname of the component
       attr_reader :tagname
@@ -56,8 +56,8 @@ module Fron
       # @param subclass [Class] The subclass
       def inherited(subclass)
         # Copy behaviours
-        subclass.instance_variable_set '@registry', @registry.dup
-        subclass.instance_variable_set '@styles', @styles.dup
+        subclass.instance_variable_set '@registry', (@registry || []).dup
+        subclass.instance_variable_set '@styles', (@styles || []).dup
         subclass.instance_variable_set '@defaults', (@defaults || {}).dup
       end
 
@@ -72,10 +72,6 @@ module Fron
         @tagname || name.split('::').join('-').downcase
       end
     end
-
-    include Behaviors::Components
-    include Behaviors::Events
-    include Behaviors::Style
 
     TAGNAME_REGEXP = /^\w([\w\d-]+)*$/
 
@@ -103,5 +99,11 @@ module Fron
         end
       end
     end
+  end
+
+  class Component < BaseComponent
+    include Behaviors::Components
+    include Behaviors::Events
+    include Behaviors::Style
   end
 end
